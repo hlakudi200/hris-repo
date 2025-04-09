@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/providers/auth";
 import { ConfigProvider } from "antd";
+import ToastProvider from "@/providers/toast/toast";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -66,6 +67,7 @@ export default function RootLayout({
           },
         }}
       >
+        <ToastProvider />
         <AuthProvider>
           <body>{children}</body>
         </AuthProvider>
