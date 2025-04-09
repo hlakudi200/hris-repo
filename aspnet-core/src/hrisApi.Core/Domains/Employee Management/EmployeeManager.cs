@@ -29,20 +29,16 @@ namespace hrisApi.Domains.Employee_Management
             string username,
             string password,
 
+            string EmployeeNumber,
             string ContactNo,
             DateTime DateOfBirth,
             string NationalIdNumber,
             DateTime HireDate,
             string Position,
             string Department,
-            Guid ManagerId,
-            string EmployeeNumber
-
-
-
-
-
-
+            Guid ManagerId
+            
+         
             )
         {
             var user = new User

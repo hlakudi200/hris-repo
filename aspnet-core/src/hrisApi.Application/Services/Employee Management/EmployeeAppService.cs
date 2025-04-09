@@ -59,26 +59,27 @@ namespace hrisApi.Services.Employee_Management
             string idPrefix = input.NationalIdNumber.Length >= 9 ? input.NationalIdNumber.Substring(0, 9) : input.NationalIdNumber;
             input.EmployeeNumber = $"{currentYear}/{idPrefix}";
 
-            //await _employeeManager.CreateEmployeeAsync(
-            //    input.Name,
-            //     input.Surname,
-            //     input.EmailAddress,
-            //     input.UserName,
-            //     input.Password,
-            //     input.ContactNo,
-            //     input.DateOfBirth,
-            //     input.NationalIdNumber,    
-            //     input.HireDate,    
-            //     input.Position,
-            //     input.Department,
-            //     input.ManagerId,
-            //     input.EmployeeNumber
+            Employee resultsEmployee = await _employeeManager.CreateEmployeeAsync(
+                input.Name,
+                 input.Surname,
+                 input.Email,
+                 input.Username,
+                 input.Password,
+                 input.EmployeeNumber,
+                 input.ContactNo,
+                 input.DateOfBirth,
+                 input.NationalIdNumber,
+                 input.HireDate,
+                 input.Position,
+                 input.Department,
+                 input.ManagerId
 
-            //     );
+                 );
+
+            var employeeDtoReturn = ObjectMapper.Map<EmployeeDto>(resultsEmployee);
 
 
-
-            return await base.CreateAsync(input);
+            return employeeDtoReturn;
         }
 
         public override async Task<EmployeeDto> UpdateAsync(UpdateEmployeeDto input)
@@ -204,7 +205,7 @@ namespace hrisApi.Services.Employee_Management
             await _documentRepository.DeleteAsync(input.Id);
         }
 
-        private void ValidateFileUpload(CreateEmployeeDocumentDto input )
+        private void ValidateFileUpload(CreateEmployeeDocumentDto input)
         {
             var allowedExtensions = new string[] { ".jpg", ".jped", ".png", ".pdf" };
 
