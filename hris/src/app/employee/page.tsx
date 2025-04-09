@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
+import Profile from "@/_componets/profileComponent/profile";
 
-const Employee=()=> {
-  return (
-    <div>EmployeHomes</div>
-  )
-}
+const Employee = () => {
+  return <Profile />;
+};
 
-export default Employee
+export default Employee;
