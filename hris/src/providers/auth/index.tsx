@@ -1,3 +1,5 @@
+"use client"
+
 import { useContext, useReducer } from "react";
 import { AuthReducer } from "./reducer";
 import { AuthActionContext, AuthStateContext, ILoginData, INITIAL_STATE, IUser } from "./context";
