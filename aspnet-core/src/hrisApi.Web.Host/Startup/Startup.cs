@@ -17,6 +17,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.FileProviders;
 
 namespace hrisApi.Web.Host.Startup
 {
@@ -87,12 +88,20 @@ namespace hrisApi.Web.Host.Startup
 
             app.UseCors(_defaultCorsPolicyName); // Enable CORS!
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Documents")),
+                RequestPath = "/App_Data/Documents"
+            });
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+
+           
+
 
             app.UseAbpRequestLocalization();
 
