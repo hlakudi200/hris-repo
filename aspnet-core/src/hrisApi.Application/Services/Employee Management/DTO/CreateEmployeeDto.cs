@@ -14,10 +14,18 @@ namespace hrisApi.Services.Employee_Management.DTO
     public class CreateEmployeeDto : FullAuditedEntityDto<Guid>
     {
 
-            [Required]
-            public long UserId { get; set; }
+            //[Required]
+            //public long UserId { get; set; }
 
-            public string EmployeeNumber { get; set; }
+        //public string Name { get; set; }
+        //public string Surname { get; set; }
+
+        //public string EmailAddress { get; set; }
+
+        //public string UserName { get; set; }
+
+        //public string Password { get; set; }
+        public string EmployeeNumber { get; set; }
 
             [Required]
             [Phone]
@@ -42,7 +50,7 @@ namespace hrisApi.Services.Employee_Management.DTO
             [StringLength(50)]
             public string Department { get; set; }
 
-            public Guid? ManagerId { get; set; }
+            public Guid ManagerId { get; set; }
        
 
     }
