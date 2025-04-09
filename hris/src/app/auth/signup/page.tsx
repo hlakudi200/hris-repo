@@ -39,7 +39,6 @@ const SignUp = () => {
   const handleSignUp = async (values: IApplicantSignUp) => {
     setLoading(true);
     try {
-      debugger;
       if (
         !values.username ||
         !values.name ||
