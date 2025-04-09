@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { Children, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -13,7 +13,7 @@ import { Button, Layout, Menu } from "antd";
 
 const { Header, Sider, Content } = Layout;
 
-const Employee = () => {
+const Employee = ({children}: {children:React.ReactNode}) => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
@@ -73,7 +73,7 @@ const Employee = () => {
             minHeight: 280,
           }}
         >
-          Content
+          {children}
         </Content>
       </Layout>
     </Layout>
