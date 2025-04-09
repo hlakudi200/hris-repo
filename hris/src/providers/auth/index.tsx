@@ -1,8 +1,14 @@
-"use client"
+"use client";
 
 import { useContext, useReducer } from "react";
 import { AuthReducer } from "./reducer";
-import { AuthActionContext, AuthStateContext, ILoginData, INITIAL_STATE, IUser } from "./context";
+import {
+  AuthActionContext,
+  AuthStateContext,
+  ILoginData,
+  INITIAL_STATE,
+  IUser,
+} from "./context";
 import {
   getCurrentUserError,
   getCurrentUserPending,
@@ -10,6 +16,9 @@ import {
   loginUserError,
   loginUserPending,
   loginUserSuccess,
+  signUpError,
+  signUpPending,
+  signUpSuccess,
 } from "./actions";
 import { getAxiosInstace } from "@/utils/axios-instance";
 
@@ -56,28 +65,45 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
   };
 
+  const signUp = async (user: IUser) => {
+    dispatch(signUpPending());
+    const endpoint = `/api/services/app/User/Create`;
+
+    debugger;
+    await instance
+      .post(endpoint, user)
+      .then((response) => {
+        if (response.status === 201) {
+          dispatch(signUpSuccess());
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        dispatch(signUpError());
+      });
+  };
+
   return (
     <AuthStateContext.Provider value={state}>
-        <AuthActionContext.Provider value={{loginUser, getCurrentUser}}>
-            {children}
-        </AuthActionContext.Provider>
+      <AuthActionContext.Provider value={{ loginUser, getCurrentUser, signUp }}>
+        {children}
+      </AuthActionContext.Provider>
     </AuthStateContext.Provider>
-  )
+  );
 };
 
 export const useAuthState = () => {
-    const context = useContext(AuthStateContext);
-    if (!context) {
-      throw new Error("useAuthState must be used within a AuthProvider");
-    }
-    return context;
-  };
-  
-  export const useAuthActions = () => {
-    const context = useContext(AuthActionContext);
-    if (!context) {
-      throw new Error("useAuthActions must be used within a AuthProvider");
-    }
-    return context;
-  };
-  
+  const context = useContext(AuthStateContext);
+  if (!context) {
+    throw new Error("useAuthState must be used within a AuthProvider");
+  }
+  return context;
+};
+
+export const useAuthActions = () => {
+  const context = useContext(AuthActionContext);
+  if (!context) {
+    throw new Error("useAuthActions must be used within a AuthProvider");
+  }
+  return context;
+};

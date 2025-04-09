@@ -3,7 +3,7 @@
 import { createContext } from "react";
 
 export interface IUser {
-  id: string;
+  id?: string;
   username: string;
   name: string;
   surname: string;
@@ -31,8 +31,9 @@ export interface IAuthStateContext {
 }
 
 export interface IAuthActionContext {
-  loginUser: (loginData: ILoginData) => void;
-  getCurrentUser: (jwtToken: string) => void;
+  loginUser: (loginData: ILoginData) => Promise<void>;
+  getCurrentUser: (jwtToken: string) => Promise<void>;
+  signUp: (user: IUser) => Promise<void>;
 }
 
 export const INITIAL_STATE: IAuthStateContext = {
