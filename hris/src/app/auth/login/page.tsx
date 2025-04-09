@@ -48,7 +48,7 @@ const SignIn: React.FC = () => {
           sizes="100vw"
           width={100}
           height={100}
-          style={{ objectFit: "fill", width: "100%", height: "100%" }}
+          style={{ objectFit: "cover", width: "100%", height: "100%" }}
           
         />
       </div>
