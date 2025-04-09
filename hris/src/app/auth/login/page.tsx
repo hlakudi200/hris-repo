@@ -23,7 +23,7 @@ const SignIn: React.FC = () => {
     try {
       const loginData: ILoginData = { email: email, password: password };
 
-      loginUser(loginData);
+      await loginUser(loginData);
 
       toast("Authorized", "success");
       router.push("/employee");
