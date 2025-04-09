@@ -2,7 +2,7 @@ import React from 'react'
 
 const WithAuth=()=> {
   return (
-    <div>WithAuth</div>
+    <div>WithAuths</div>
   )
 }
 

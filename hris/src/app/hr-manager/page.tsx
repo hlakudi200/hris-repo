@@ -2,7 +2,7 @@ import React from 'react'
 
 const HrManager=()=> {
   return (
-    <div>HrManager</div>
+    <div>HrManagers</div>
   )
 }
 

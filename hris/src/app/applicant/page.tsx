@@ -2,7 +2,7 @@ import React from 'react'
 
 const Applicant=()=> {
   return (
-    <div>ApplicantHome</div>
+    <div>ApplicantHomes</div>
   )
 }
 
