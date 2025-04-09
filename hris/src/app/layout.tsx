@@ -1,6 +1,6 @@
 "use client";
 import "./globals.css";
-import { ConfigProvider, theme } from "antd";
+import { ConfigProvider} from "antd";
 import React from "react";
 
 export default function RootLayout({
