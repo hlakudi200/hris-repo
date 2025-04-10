@@ -1,8 +1,9 @@
 import React from "react";
-import Profile from "@/_componets/profileComponent/profile";
+//import Profile from "@/_componets/profileComponent/profile";
+import LeaveOverview from "@/_componets/leaveOverviewComponent/leaveOverview";
 
 const Employee = () => {
-  return <Profile />;
+  return <LeaveOverview />;
 };
 
 export default Employee;
