@@ -10,6 +10,7 @@ using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
 using Abp.Runtime.Validation;
 using Abp.UI;
+using hrisApi.Authorization.Users;
 using hrisApi.Domains.Employee_Management;
 using hrisApi.Services.Employee_Management.DTO;
 using Microsoft.AspNetCore.Components;
@@ -30,6 +31,7 @@ namespace hrisApi.Services.Employee_Management
         UpdateEmployeeDto>
     {
         private readonly IRepository<EmployeeDocument, Guid> _documentRepository;
+        private readonly UserManager _userManager;
 
         private readonly EmployeeManager _employeeManager;
 
@@ -37,12 +39,14 @@ namespace hrisApi.Services.Employee_Management
         public EmployeeAppService(
             EmployeeManager employeeManager,
             IRepository<Employee, Guid> repository,
-            IRepository<EmployeeDocument, Guid> documentRepository)
+            IRepository<EmployeeDocument, Guid> documentRepository,
+            UserManager userManager)
             : base(repository)
         {
             _documentRepository = documentRepository;
             LocalizationSourceName = "hrisApi";
             _employeeManager = employeeManager;
+            _userManager = userManager;
         }
 
         public override async Task<EmployeeDto> CreateAsync(CreateEmployeeDto input)
@@ -80,8 +84,7 @@ namespace hrisApi.Services.Employee_Management
 
 
             return employeeDtoReturn;
-        }
-
+        } 
         public override async Task<EmployeeDto> UpdateAsync(UpdateEmployeeDto input)
         {
             // Check if National ID is being changed and if so, ensure it's unique
@@ -90,32 +93,77 @@ namespace hrisApi.Services.Employee_Management
             {
                 var existingEmployee = await Repository.FirstOrDefaultAsync(e =>
                     e.NationalIdNumber == input.NationalIdNumber && e.Id != input.Id);
-
                 if (existingEmployee != null)
                 {
                     throw new UserFriendlyException("Employee with this National ID already exists");
                 }
             }
 
-            return await base.UpdateAsync(input);
+            // Update employee number if National ID changed
+            if (employee.NationalIdNumber != input.NationalIdNumber)
+            {
+                string currentYear = DateTime.Now.Year.ToString();
+                string idPrefix = input.NationalIdNumber.Length >= 9 ?
+                    input.NationalIdNumber.Substring(0, 9) : input.NationalIdNumber;
+                input.EmployeeNumber = $"{currentYear}/{idPrefix}";
+            }
+
+            // Update employee using manager
+            Employee updatedEmployee = await _employeeManager.UpdateEmployeeAsync(
+                input.Id,
+                input.Name,
+                input.Surname,
+                input.Email,
+                input.Username,
+                //input.Password,
+                input.EmployeeNumber,
+                input.ContactNo,
+                input.DateOfBirth,
+                input.NationalIdNumber,
+                input.HireDate,
+                input.Position,
+                input.Department,
+                input.ManagerId
+            );
+
+            var employeeDtoReturn = ObjectMapper.Map<EmployeeDto>(updatedEmployee);
+            return employeeDtoReturn;
         }
 
         public override async Task<EmployeeDto> GetAsync(EntityDto<Guid> input)
         {
-            var employee = await Repository.GetAllIncluding(e => e.Documents)
+            var employee = await Repository
                 .FirstOrDefaultAsync(e => e.Id == input.Id);
 
-            if (employee == null)
+            var user = await _userManager.GetUserByIdAsync(employee.UserId);
+
+            if (employee == null && user == null)
             {
                 throw new UserFriendlyException("Employee not found");
             }
 
-            return ObjectMapper.Map<EmployeeDto>(employee);
+            var employeeDto = new EmployeeDto
+            {
+                Id = employee.Id,
+                FullName = user.FullName,
+                Surname = user.Surname,
+                Email = user.EmailAddress,
+                EmployeeNumber = employee.EmployeeNumber,
+                ContactNo = employee.ContactNo,
+                DateOfBirth = employee.DateOfBirth,
+                NationalIdNumber = employee.NationalIdNumber,
+                HireDate = employee.HireDate,
+                Position = employee.Position,
+                Department = employee.Department,
+                ManagerId = employee.ManagerId
+            };
+
+            return employeeDto;
         }
 
         public override async Task<PagedResultDto<EmployeeDto>> GetAllAsync(PagedEmployeeResultRequestDto input)
         {
-            var query = Repository.GetAllIncluding(e => e.Documents);
+            var query = Repository.GetAll();
 
             // Apply filtering
             if (!string.IsNullOrWhiteSpace(input.Keyword))
@@ -158,21 +206,18 @@ namespace hrisApi.Services.Employee_Management
             return new PagedResultDto<EmployeeDto>(totalCount, employeeDtos);
         }
 
-        public async Task<ListResultDto<EmployeeListDto>> GetEmployeesAsync()
-        {
-            var employees = await Repository.GetAllListAsync();
-            return new ListResultDto<EmployeeListDto>(
-                ObjectMapper.Map<List<EmployeeListDto>>(employees)
-            );
-        }
 
         //Document management methods
 
         [Route("DocumentUpload")]
         public async Task<EmployeeDocumentDto> AddDocumentAsync([FromForm] CreateEmployeeDocumentDto input)
         {
-            //var employee = await Repository.GetAsync(input.EmployeeId);
-            ValidateFileUpload(input);
+           
+
+            var FilePath = "App_Data/Docs";
+            
+                
+                ValidateFileUpload(input);
             var document = new EmployeeDocument
             {
                 File = input.File,
@@ -180,8 +225,16 @@ namespace hrisApi.Services.Employee_Management
                 FileSizeInBytes = input.File.Length,
                 FileName = input.FileName,
                 FileDescription = input.FileDescription,
+                FilePath = Path.Combine( $"{FilePath}/{input.FileName}")
+
 
             };
+
+            using (var fileStream = input.File.OpenReadStream())
+            {
+                await SaveFile(FilePath, fileStream);
+            }
+
 
             await _documentRepository.InsertAsync(document);
 
@@ -192,7 +245,7 @@ namespace hrisApi.Services.Employee_Management
         {
             var documents = await _documentRepository
                 .GetAll()
-                .Where(d => d.EmployeeId == input.Id)
+                .Where(d => d.Employee.Id == input.Id)
                 .ToListAsync();
 
             return new ListResultDto<EmployeeDocumentDto>(
@@ -220,6 +273,14 @@ namespace hrisApi.Services.Employee_Management
                 throw new UserFriendlyException("file", "File size more than 10MB, Please upload a smaller size file.");
             }
 
+        }
+
+        private async Task SaveFile(string filePath, Stream stream)
+        {
+            using (var fs = new FileStream(filePath, FileMode.Create))
+            {
+                await stream.CopyToAsync(fs);
+            }
         }
     }
 }

@@ -26,6 +26,8 @@ namespace hrisApi.Services.Employee_Management.DTO
 
         // User properties (from related User entity)
         public string FullName { get; set; }
+
+        public string Surname { get; set; }
         public string Email { get; set; }
 
         // Related documents

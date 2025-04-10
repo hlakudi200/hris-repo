@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
 using Abp.Domain.Services;
 using Abp.UI;
@@ -37,8 +38,8 @@ namespace hrisApi.Domains.Employee_Management
             string Position,
             string Department,
             Guid ManagerId
-            
-         
+
+
             )
         {
             var user = new User
@@ -60,7 +61,7 @@ namespace hrisApi.Domains.Employee_Management
 
             var employee = new Employee
             {
-              
+
                 UserId = user.Id,
                 ContactNo = ContactNo,
                 DateOfBirth = DateOfBirth,
@@ -78,5 +79,128 @@ namespace hrisApi.Domains.Employee_Management
             return employee;
 
         }
+
+
+
+        public async Task<Employee> GetAsync(Guid id)
+        {
+            var employee = await _employeeRepository.GetAsync(id);
+            if (employee == null)
+            {
+                throw new UserFriendlyException("Employee not found");
+            }
+            return employee;
+        }
+
+
+
+        public async Task<Employee> GetByIdAsync(Guid id)
+        {
+            var employee = await _employeeRepository.GetAsync(id);
+            if (employee == null)
+            {
+                throw new UserFriendlyException("Employee not found");
+            }
+
+            // Verify that the associated user exists
+            var user = await _userManager.GetUserByIdAsync(employee.UserId);
+            if (user == null)
+            {
+                throw new UserFriendlyException("Associated user record not found");
+            }
+
+            return employee;
+        }
+
+
+
+
+        public async Task<Employee> UpdateEmployeeAsync(
+            Guid id,
+            string firstName,
+            string surname,
+            string emailAddress,
+            string username,
+            //string password,
+            string EmployeeNumber,
+            string ContactNo,
+            DateTime DateOfBirth,
+            string NationalIdNumber,
+            DateTime HireDate,
+            string Position,
+            string Department,
+            Guid? ManagerId
+            )
+        {
+            // Get the employee
+            var employee = await _employeeRepository.GetAsync(id);
+            if (employee == null)
+            {
+                throw new UserFriendlyException("Employee not found");
+            }
+
+            // Update employee properties
+            employee.ContactNo = ContactNo;
+            employee.DateOfBirth = DateOfBirth;
+            employee.NationalIdNumber = NationalIdNumber;
+            employee.HireDate = HireDate;
+            employee.Position = Position;
+            employee.Department = Department;
+            employee.EmployeeNumber = EmployeeNumber;
+
+            // Update associated user
+            var user = await _userManager.GetUserByIdAsync(employee.UserId);
+            if (user == null)
+            {
+                throw new UserFriendlyException("Associated user not found");
+            }
+
+            user.Name = firstName;
+            user.Surname = surname;
+            user.EmailAddress = emailAddress;
+            user.UserName = username;
+
+            // Update user with password if provided
+            //if (!string.IsNullOrEmpty(password))
+            //{
+            //    var passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            //    var passwordChangeResult = await _userManager.ResetPasswordAsync(user, passwordResetToken, password);
+            //    if (!passwordChangeResult.Succeeded)
+            //    {
+            //        throw new UserFriendlyException("Password update failed");
+            //    }
+            //}
+
+            await _userManager.UpdateAsync(user);
+            await _employeeRepository.UpdateAsync(employee);
+
+            return employee;
+        }
+
+        public async Task<List<Employee>> GetAllAsync()
+        {
+            return await _employeeRepository.GetAllListAsync();
+        }
+
+        public async Task<List<Employee>> GetEmployeesAsync(
+            string filter = null,
+            string department = null,
+            string position = null,
+            Guid? managerId = null)
+        {
+            return await _employeeRepository.GetAllListAsync(e =>
+                (string.IsNullOrEmpty(filter) ||
+                    e.NationalIdNumber.Contains(filter) ||
+                    e.EmployeeNumber.Contains(filter) ||
+                    e.ContactNo.Contains(filter)) &&
+                (string.IsNullOrEmpty(department) || e.Department == department) &&
+                (string.IsNullOrEmpty(position) || e.Position == position) &&
+                (!managerId.HasValue || e.ManagerId == managerId)
+            );
+        }
     }
+
+
 }
+
+

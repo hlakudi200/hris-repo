@@ -3,6 +3,7 @@ using hrisApi.Authorization.Roles;
 using hrisApi.Authorization.Users;
 using hrisApi.Domains.Attendance_Management;
 using hrisApi.Domains.Employee_Management;
+using hrisApi.Domains.Payroll_Processing;
 using hrisApi.MultiTenancy;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,8 @@ public class hrisApiDbContext : AbpZeroDbContext<Tenant, Role, User, hrisApiDbCo
     public DbSet<EmployeeDocument> EmployeeDocuments { get; set; }
     public DbSet<AbsenceReport> AbsenceReports { get; set; }
     public DbSet<LeaveRequest> LeaveRequests { get; set; }
+    public DbSet<AttendanceRecord> AttendanceRecords { get; set; }
+    public DbSet<PayrollProfile> PayrollProfiles { get; set; }
     public hrisApiDbContext(DbContextOptions<hrisApiDbContext> options)
         : base(options)
     {
