@@ -46,7 +46,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const getCurrentUser = async (jwtToken: string) => {
     dispatch(getCurrentUserPending());
     const endpoint = `/api/services/app/Session/GetCurrentLoginInformations`;
-    console.log(jwtToken);
     await instance
       .get(endpoint, {
         headers: {
@@ -60,7 +59,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         dispatch(getCurrentUserError());
       });
   };
