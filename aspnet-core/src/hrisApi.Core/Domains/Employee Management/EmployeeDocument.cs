@@ -12,7 +12,7 @@ namespace hrisApi.Domains.Employee_Management
 {
     public class EmployeeDocument : FullAuditedEntity<Guid>
     {
-        public Guid EmployeeId { get; set; }
+        //public Guid EmployeeId { get; set; }
         [ForeignKey("EmployeeId")]
         public Employee Employee { get; set; }
 

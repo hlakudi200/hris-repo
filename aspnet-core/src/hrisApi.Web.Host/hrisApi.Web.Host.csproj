@@ -13,6 +13,12 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="App_Data\Documents\**" />
+    <Content Remove="App_Data\Documents\**" />
+    <EmbeddedResource Remove="App_Data\Documents\**" />
+    <None Remove="App_Data\Documents\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Remove="wwwroot\swagger\ui\index.html" />
   </ItemGroup>
   <ItemGroup>
@@ -43,6 +49,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\Documents\" />
+    <Folder Include="App_Data\Docs\" />
   </ItemGroup>
 </Project>

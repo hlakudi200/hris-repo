@@ -95,11 +95,12 @@ namespace hrisApi.Web.Host.Startup
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "C:\\Users\\Motseki Tshabalala\\Source\\Repos\\hris-repo\\aspnet-core\\src\\hrisApi.Web.Host\\App_Data\\Documents\\")),
-                RequestPath = "/App_Data/Documents"
-            });
+
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "C:\\Users\\Motseki Tshabalala\\Source\\Repos\\hris-repo\\aspnet-core\\src\\hrisApi.Web.Host\\App_Data\\Documents\\")),
+            //    RequestPath = "/App_Data/Documents"
+            //});
 
 
 

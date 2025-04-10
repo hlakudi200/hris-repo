@@ -13,24 +13,13 @@ namespace hrisApi.Services.Employee_Management.DTO
     [AutoMapTo(typeof(EmployeeDocument))]
     public class CreateEmployeeDocumentDto
     {
-        //[Required]
-        //public Guid EmployeeId { get; set; }
-
-        //public IFormFile File { get; set; }
-
-        //[Required]
-        //[StringLength(20)]
-        //public string DocumentType { get; set; }
-
-        //[Required]
-        //[StringLength(100)]
-        //public string FilePath { get; set; }
-
+      
         [Required]
         public IFormFile File { get; set; }
         [Required]
         public string FileName { get; set; }
 
         public string? FileDescription { get; set; }
+        public string FilePath { get; set; }
     }
 }
