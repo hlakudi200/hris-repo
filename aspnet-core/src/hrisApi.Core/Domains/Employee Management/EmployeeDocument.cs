@@ -16,19 +16,29 @@ namespace hrisApi.Domains.Employee_Management
         [ForeignKey("EmployeeId")]
         public Employee Employee { get; set; }
 
+        //[NotMapped]
+        //public virtual IFormFile File { get; set; }
+
+        //[Required]
+        //[StringLength(20)]
+        //public string DocumentType { get; set; } 
+
+        //[Required]
+        //[StringLength(100)]
+        //public string FilePath { get; set; }
+
+        //[Required]
+        //[DataType(DataType.Date)]
+        //public DateTime UploadDate { get; set; }
+
         [NotMapped]
-        public virtual IFormFile File { get; set; }
+        public IFormFile File { get; set; }
 
-        [Required]
-        [StringLength(20)]
-        public string DocumentType { get; set; } 
+        public string FileName { get; set; }
+        public string? FileDescription { get; set; }
+        public string FileExtension { get; set; }
+        public long FileSizeInBytes { get; set; }
 
-        [Required]
-        [StringLength(100)]
         public string FilePath { get; set; }
-
-        [Required]
-        [DataType(DataType.Date)]
-        public DateTime UploadDate { get; set; }
     }
 }
