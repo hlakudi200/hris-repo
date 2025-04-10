@@ -15,18 +15,20 @@ const SignIn: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { loginUser } = useAuthActions();
-  const { isPending, isError } = useAuthState();
+  const { isPending, isSuccess, isError } = useAuthState();
   const router = useRouter();
 
   useEffect(() => {});
   const handleSingIn = async () => {
     try {
-      const loginData: ILoginData = { email: email, password: password };
+      const loginData: ILoginData = { userNameOrEmailAddress: email, password: password };
 
       await loginUser(loginData);
 
-      toast("Authorized", "success");
-      router.push("/employee");
+      if (isSuccess){
+        toast("Authorized", "success");
+        router.push("/employee");
+      }
 
       if (isError) {
         toast("Erorr,please check your credentials", "error");
