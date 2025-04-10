@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Abp.Domain.Entities.Auditing;
+using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
+using hrisApi.Domains.Payroll_Processing;
 
-namespace hrisApi.Domains.Payroll_Processing
+namespace hrisApi.Services.PayrollTransactionService.DTO
 {
-    public class PayrollTransaction : FullAuditedEntity<Guid>
+    [AutoMap(typeof(PayrollTransaction))]
+    public class PayrollTransactionDto : EntityDto<Guid>
     {
         public Guid PayrollProfileId { get; set; }
         public DateTime PeriodStart { get; set; }
