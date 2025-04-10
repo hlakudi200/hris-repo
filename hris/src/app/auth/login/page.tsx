@@ -21,7 +21,7 @@ const SignIn: React.FC = () => {
   useEffect(() => {});
   const handleSingIn = async () => {
     try {
-      const loginData: ILoginData = { email: email, password: password };
+      const loginData: ILoginData = { userNameOrEmailAddress: email, password: password };
 
       await loginUser(loginData);
 

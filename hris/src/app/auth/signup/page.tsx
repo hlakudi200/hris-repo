@@ -59,7 +59,7 @@ const SignUp = () => {
       }
 
       const userPayload: IUser = {
-        username: values.username,
+        userName: values.username,
         name: values.name,
         surname: values.surname,
         emailAddress: values.emailAddress,

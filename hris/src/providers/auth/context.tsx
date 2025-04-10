@@ -4,16 +4,16 @@ import { createContext } from "react";
 
 export interface IUser {
   id?: string;
-  username: string;
+  userName: string;
   name: string;
   surname: string;
   emailAddress: string;
   password: string;
-  roles: IUserRole[];
+  roles?: IUserRole[];
 }
 
 export interface ILoginData {
-  email: string;
+  userNameOrEmailAddress: string;
   password: string;
 }
 
