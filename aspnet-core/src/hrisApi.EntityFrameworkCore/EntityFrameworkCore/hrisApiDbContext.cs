@@ -14,8 +14,7 @@ public class hrisApiDbContext : AbpZeroDbContext<Tenant, Role, User, hrisApiDbCo
     public DbSet<Employee> Employees { get; set; }
     public DbSet<EmployeeDocument> EmployeeDocuments { get; set; }
     public DbSet<AbsenceReport> AbsenceReports { get; set; }
-
-
+    public DbSet<LeaveRequest> LeaveRequests { get; set; }
     public hrisApiDbContext(DbContextOptions<hrisApiDbContext> options)
         : base(options)
     {
