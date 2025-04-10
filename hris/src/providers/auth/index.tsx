@@ -34,8 +34,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await instance
       .post(endpoint, loginData)
       .then((response) => {
-        getCurrentUser(response.data);
-        dispatch(loginUserSuccess(response.data));
+        getCurrentUser(response.data.result.accessToken);
+        dispatch(loginUserSuccess(response.data.result.accessToken));
       })
       .catch((error) => {
         console.error(error);
@@ -45,17 +45,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getCurrentUser = async (jwtToken: string) => {
     dispatch(getCurrentUserPending());
-    const endpoint = `/api/services/app/User/Get`;
-
+    const endpoint = `/api/services/app/Session/GetCurrentLoginInformations`;
+    console.log(jwtToken);
     await instance
       .get(endpoint, {
         headers: {
-          Authorization: jwtToken,
+          Authorization: `Bearer ${jwtToken}`,
         },
       })
       .then((response) => {
         if (response.status === 200 && response.data) {
-          const currentUser: IUser = response.data;
+          const currentUser: IUser = response.data.result.user;
           dispatch(getCurrentUserSuccess(currentUser));
         }
       })
