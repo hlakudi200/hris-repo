@@ -12,6 +12,9 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.11.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\hrisApi.Core\hrisApi.Core.csproj" />
   </ItemGroup>
 </Project>

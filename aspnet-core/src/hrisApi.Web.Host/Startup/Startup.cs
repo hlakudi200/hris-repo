@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.FileProviders;
+using hrisApi.Configurations;
 
 namespace hrisApi.Web.Host.Startup
 {
@@ -48,7 +49,7 @@ namespace hrisApi.Web.Host.Startup
             AuthConfigurer.Configure(services, _appConfiguration);
 
             services.AddSignalR();
-
+            services.Configure<SmtpSettings>(_appConfiguration.GetSection("SmtpSettings"));
             // Configure CORS for angular2 UI
             services.AddCors(
                 options => options.AddPolicy(
