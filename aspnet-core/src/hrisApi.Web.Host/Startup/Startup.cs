@@ -88,13 +88,12 @@ namespace hrisApi.Web.Host.Startup
 
             app.UseCors(_defaultCorsPolicyName); // Enable CORS!
 
-           
+
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             //app.UseStaticFiles(new StaticFileOptions
             //{
