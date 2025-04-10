@@ -14,6 +14,24 @@ namespace hrisApi.Services.Employee_Management.DTO
     [AutoMapTo(typeof(Employee))]
     public class UpdateEmployeeDto : FullAuditedEntityDto<Guid>
     {
+
+
+        [Required]
+        public DateTime DateOfBirth { get; set; }
+
+        public string Name { get; set; }
+        public string Surname { get; set; }
+
+        public string Email { get; set; }
+
+        [Required]
+        public DateTime HireDate { get; set; }
+        public string Username { get; set; }
+
+        //public string Password { get; set; }
+        public string EmployeeNumber { get; set; }
+
+
         [Phone]
         [StringLength(10, ErrorMessage = "Please make sure is 10 digits")]
         public string ContactNo { get; set; }

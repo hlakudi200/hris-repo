@@ -13,5 +13,10 @@ namespace hrisApi.Services.Employee_Management.DTO
         public string Keyword { get; set; }
         public string Department { get; set; }
         public string Sorting { get; set; }
+
+        public string EmployeeNumber { get; set; }
+        public string FullName { get; set; }
+        public string Position { get; set; }
+       
     }
 }

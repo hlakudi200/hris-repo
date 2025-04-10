@@ -1670,7 +1670,7 @@ namespace hrisApi.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("EmployeeId")
+                    b.Property<Guid?>("EmployeeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FileDescription")
@@ -2001,9 +2001,7 @@ namespace hrisApi.Migrations
                 {
                     b.HasOne("hrisApi.Domains.Employee_Management.Employee", "Employee")
                         .WithMany("Documents")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EmployeeId");
 
                     b.Navigation("Employee");
                 });
