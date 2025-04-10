@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
+using Abp.Runtime.Validation;
 using Abp.UI;
 using hrisApi.Domains.Employee_Management;
 using hrisApi.Services.Employee_Management.DTO;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 
@@ -27,13 +31,18 @@ namespace hrisApi.Services.Employee_Management
     {
         private readonly IRepository<EmployeeDocument, Guid> _documentRepository;
 
+        private readonly EmployeeManager _employeeManager;
+
+
         public EmployeeAppService(
+            EmployeeManager employeeManager,
             IRepository<Employee, Guid> repository,
             IRepository<EmployeeDocument, Guid> documentRepository)
             : base(repository)
         {
             _documentRepository = documentRepository;
             LocalizationSourceName = "hrisApi";
+            _employeeManager = employeeManager;
         }
 
         public override async Task<EmployeeDto> CreateAsync(CreateEmployeeDto input)
@@ -47,10 +56,30 @@ namespace hrisApi.Services.Employee_Management
 
             // Generate employee number (Year/first 4 digits of IdNo)
             string currentYear = DateTime.Now.Year.ToString();
-            string idPrefix = input.NationalIdNumber.Length >= 9 ? input.NationalIdNumber.Substring(6, 9) : input.NationalIdNumber;
+            string idPrefix = input.NationalIdNumber.Length >= 9 ? input.NationalIdNumber.Substring(0, 9) : input.NationalIdNumber;
             input.EmployeeNumber = $"{currentYear}/{idPrefix}";
 
-            return await base.CreateAsync(input);
+            Employee resultsEmployee = await _employeeManager.CreateEmployeeAsync(
+                input.Name,
+                 input.Surname,
+                 input.Email,
+                 input.Username,
+                 input.Password,
+                 input.EmployeeNumber,
+                 input.ContactNo,
+                 input.DateOfBirth,
+                 input.NationalIdNumber,
+                 input.HireDate,
+                 input.Position,
+                 input.Department,
+                 input.ManagerId
+
+                 );
+
+            var employeeDtoReturn = ObjectMapper.Map<EmployeeDto>(resultsEmployee);
+
+
+            return employeeDtoReturn;
         }
 
         public override async Task<EmployeeDto> UpdateAsync(UpdateEmployeeDto input)
@@ -140,16 +169,18 @@ namespace hrisApi.Services.Employee_Management
         //Document management methods
 
         [Route("DocumentUpload")]
-        public async Task<EmployeeDocumentDto> AddDocumentAsync([FromForm]CreateEmployeeDocumentDto input)
+        public async Task<EmployeeDocumentDto> AddDocumentAsync([FromForm] CreateEmployeeDocumentDto input)
         {
-            var employee = await Repository.GetAsync(input.EmployeeId);
-
+            //var employee = await Repository.GetAsync(input.EmployeeId);
+            ValidateFileUpload(input);
             var document = new EmployeeDocument
             {
-                EmployeeId = input.EmployeeId,
-                DocumentType = input.DocumentType,
-                FilePath = input.FilePath,
-                UploadDate = DateTime.Now
+                File = input.File,
+                FileExtension = Path.GetExtension(input.File.FileName),
+                FileSizeInBytes = input.File.Length,
+                FileName = input.FileName,
+                FileDescription = input.FileDescription,
+
             };
 
             await _documentRepository.InsertAsync(document);
@@ -172,6 +203,23 @@ namespace hrisApi.Services.Employee_Management
         public async Task DeleteDocumentAsync(EntityDto<Guid> input)
         {
             await _documentRepository.DeleteAsync(input.Id);
+        }
+
+        private void ValidateFileUpload(CreateEmployeeDocumentDto input)
+        {
+            var allowedExtensions = new string[] { ".jpg", ".jped", ".png", ".pdf" };
+
+
+            if (!allowedExtensions.Contains(Path.GetExtension(input.File.FileName)))
+            {
+                throw new UserFriendlyException("file", "Unsupported file extention");
+            }
+
+            if (input.File.Length > 10485760)
+            {
+                throw new UserFriendlyException("file", "File size more than 10MB, Please upload a smaller size file.");
+            }
+
         }
     }
 }
