@@ -1,3 +1,4 @@
+'use client'
 import { getAxiosInstace } from "../../utils/axios-instance"
 import { INITIAL_STATE, IAttandance, AttandanceActionContext, AttandanceStateContext } from "./context";
 import { AttandanceReducer } from "./reducer";
@@ -11,7 +12,7 @@ import axios from "axios";
 
     const getAttandances = async() => {
         dispatch(getAttandancesPending());
-        const endpoint =    `/Attandances`;
+        const endpoint =    `/AttendanceRecord`;
         await axios(endpoint)
         .then((response) => {
             dispatch(getAttandancesSuccess(response.data));
@@ -24,7 +25,7 @@ import axios from "axios";
 
     const getAttandance = async(id: string) => {
         dispatch(getAttandancePending());
-        const endpoint = `/Attandances/${id}`;
+        const endpoint = `/AttendanceRecord/${id}`;
         await instance.get(endpoint)
         .then((response) => {
             dispatch(getAttandanceSuccess(response.data));
@@ -37,7 +38,7 @@ import axios from "axios";
 
     const createAttandance = async(Attandance: IAttandance) => {
         dispatch(createAttandancePending());
-        const endpoint = `/Attandances`;
+        const endpoint = `/AttendanceRecord/Create`;
         await instance.post(endpoint, Attandance)
         .then((response) => {
             dispatch(createAttandanceSuccess(response.data));
@@ -50,7 +51,7 @@ import axios from "axios";
 
     const updateAttandance = async( Attandance: IAttandance) => {
         dispatch(updateAttandancePending());
-        const endpoint = `/Attandances/${Attandance.id}`;
+        const endpoint = `/AttendanceRecord/${Attandance.id}`;
         await instance.put(endpoint, Attandance)
         .then((response) => {
             dispatch(updateAttandanceSuccess(response.data));

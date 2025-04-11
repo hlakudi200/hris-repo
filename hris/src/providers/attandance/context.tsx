@@ -1,9 +1,9 @@
+'use client'
 import { createContext } from "react";
 
 export interface IAttandance {
-  id: string;
+  id?: string;
   employeeId: string;
-  price: number;
   projectId: string;
   clockInTime: string;
   clockOutTime: string;
