@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
+using hrisApi.Domains.Employee_Management;
+
+namespace hrisApi.Services.ProjectService.DTO
+{
+    [AutoMap(typeof(Employee))]
+    public class ProjectDto : FullAuditedEntityDto<Guid>
+    {
+        public string ProjectCode { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public ICollection<Employee>? Employees { get; set; }
+    }
+}
