@@ -48,13 +48,12 @@ export const EmployeeProvider = ({
   const getLeaves = async (employeeId: string) => {
     dispatch(getLeavesPending());
 
-    //TODO: Add endpoint
-    const endpoint: string = ``;
+    const endpoint: string = `/api/services/app/Leave/Get?Id=${employeeId}`;
 
     await instance
-      .post(endpoint, employeeId)
+      .get(endpoint)
       .then((response) => {
-        dispatch(getLeavesSuccess(response.data));
+        dispatch(getLeavesSuccess(response.data.result));
       })
       .catch((error) => {
         console.error(error);

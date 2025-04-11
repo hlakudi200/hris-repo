@@ -6,9 +6,9 @@ using hrisApi.Services.LeaveService.DTO;
 
 namespace hrisApi.Services.LeaveService
 {
-    public class LeaveRequestAppService : AsyncCrudAppService<LeaveRequest, LeaveRequestDto, Guid>, ILeaveRequestAppService
+    public class LeaveAppService : AsyncCrudAppService<Leave, LeaveDto, Guid>, ILeaveAppService
     {
-        public LeaveRequestAppService(IRepository<LeaveRequest, Guid> repository) : base(repository)
+        public LeaveAppService(IRepository<Leave, Guid> repository) : base(repository)
         {
         }
     }
