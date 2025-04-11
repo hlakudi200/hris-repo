@@ -38,7 +38,7 @@ export interface IEmployeeStateContext {
 }
 
 export interface IEmployeeActionContext {
-  getEmployee: (employeeNumber: string) => Promise<void>;
+  getEmployee: (userId: number) => Promise<void>;
   getLeaves: (employeeNumber: string) => Promise<void>;
 }
 

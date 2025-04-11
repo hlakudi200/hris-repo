@@ -3,6 +3,7 @@ import "./globals.css";
 import { AuthProvider } from "@/providers/auth";
 import { ConfigProvider } from "antd";
 import ToastProvider from "@/providers/toast/toast";
+import { EmployeeProvider } from "@/providers/employee";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,11 +15,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
   return (
     <html lang="en">
       <ConfigProvider
-
         theme={{
           token: {
             colorPrimary: "#fb9b01",
@@ -67,11 +66,13 @@ export default function RootLayout({
           },
         }}
       >
-        <ToastProvider />
-        <AuthProvider>
-          <body>{children}</body>
-        </AuthProvider>
+        <EmployeeProvider>
+          <ToastProvider />
+          <AuthProvider>
+            <body>{children}</body>
+          </AuthProvider>
+        </EmployeeProvider>
       </ConfigProvider>
-      </html>
+    </html>
   );
 }

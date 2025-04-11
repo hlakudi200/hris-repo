@@ -69,7 +69,7 @@ const SignUp = () => {
 
       await signUp(userPayload);
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
     setLoading(false);
   };
