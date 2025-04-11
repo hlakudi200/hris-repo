@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
 import { createContext } from "react";
 
 export interface IUser {
-  id?: string;
+  id?: number;
   userName: string;
   name: string;
   surname: string;
