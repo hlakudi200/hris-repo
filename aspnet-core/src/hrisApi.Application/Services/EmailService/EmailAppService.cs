@@ -8,7 +8,6 @@ using hrisApi.Services.EmailService.DTO;
 
 namespace hrisApi.Services.EmailService
 {
-    // HRIS.Application/Emails/EmailAppService.cs
     public class EmailAppService : ApplicationService
     {
         private readonly IEmailService _emailService;
