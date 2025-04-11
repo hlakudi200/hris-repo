@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace hrisApi.Migrations
 {
     /// <inheritdoc />
-    public partial class AddReimbursements : Migration
+    public partial class Dbsets : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -313,12 +313,13 @@ namespace hrisApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BonusOrCommission",
+                name: "BonusOrCommissions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PayrollTransactionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
@@ -330,9 +331,9 @@ namespace hrisApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BonusOrCommission", x => x.Id);
+                    table.PrimaryKey("PK_BonusOrCommissions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BonusOrCommission_PayrollTransactions_PayrollTransactionId",
+                        name: "FK_BonusOrCommissions_PayrollTransactions_PayrollTransactionId",
                         column: x => x.PayrollTransactionId,
                         principalTable: "PayrollTransactions",
                         principalColumn: "Id",
@@ -377,8 +378,8 @@ namespace hrisApi.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BonusOrCommission_PayrollTransactionId",
-                table: "BonusOrCommission",
+                name: "IX_BonusOrCommissions_PayrollTransactionId",
+                table: "BonusOrCommissions",
                 column: "PayrollTransactionId");
 
             migrationBuilder.CreateIndex(
@@ -432,7 +433,7 @@ namespace hrisApi.Migrations
                 name: "AttendanceRecords");
 
             migrationBuilder.DropTable(
-                name: "BonusOrCommission");
+                name: "BonusOrCommissions");
 
             migrationBuilder.DropTable(
                 name: "EmployeeDocuments");
