@@ -3,6 +3,7 @@
 import { createContext } from "react";
 
 export interface IEmployee {
+  Id: string,
   employeeNumber: string;
   userId: number;
   contactNo: string;
