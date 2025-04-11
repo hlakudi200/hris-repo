@@ -11,7 +11,7 @@ import axios from "axios";
 
     const getAttandances = async() => {
         dispatch(getAttandancesPending());
-        const endpoint =    `https://fakestoreapi.com/Attandances`;
+        const endpoint =    `/Attandances`;
         await axios(endpoint)
         .then((response) => {
             dispatch(getAttandancesSuccess(response.data));
