@@ -1,9 +1,11 @@
-
-'use client';
+"use client";
 import React from "react";
 import { Form, DatePicker, Select, Button, message } from "antd";
 import globals from "../globals.module.css";
 import moment from "moment";
+import { useEmployeeState } from "@/providers/employee";
+import { useLeaveRequestActions } from "@/providers/leaveRequest";
+import { ILeaveRequest } from "@/providers/leaveRequest/context";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -15,19 +17,24 @@ type LeaveFormValues = {
 
 const LeaveForm = () => {
   const [form] = Form.useForm<LeaveFormValues>();
+  const { currentEmployee } = useEmployeeState();
+  const { submitLeaveRequest } = useLeaveRequestActions();
 
   const onFinish = (values: LeaveFormValues) => {
-    const formatted = {
+    const request: ILeaveRequest = {
+      employeeId: currentEmployee.Id,
       leaveType: values.leaveType,
       startDate: values.dateRange[0].format("YYYY-MM-DD"),
       endDate: values.dateRange[1].format("YYYY-MM-DD"),
+      status: "pending",
     };
-    console.log("Submitted:", formatted);
+
+    submitLeaveRequest(request);
     message.success("Leave submitted successfully!");
   };
 
   return (
-    <div className={globals.OuterContainer} style={{width:"40%"}}>
+    <div className={globals.OuterContainer} style={{ width: "40%" }}>
       <div className={globals.InfoContainer}>
         <Form
           form={form}
@@ -52,7 +59,9 @@ const LeaveForm = () => {
             name="dateRange"
             rules={[{ required: true, message: "Please select date range" }]}
           >
-            <RangePicker style={{ width: "100%",height:50,borderRadius:16 }} />
+            <RangePicker
+              style={{ width: "100%", height: 50, borderRadius: 16 }}
+            />
           </Form.Item>
 
           <Form.Item>
