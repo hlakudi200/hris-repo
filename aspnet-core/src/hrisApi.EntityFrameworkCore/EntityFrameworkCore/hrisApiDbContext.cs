@@ -23,7 +23,7 @@ public class hrisApiDbContext : AbpZeroDbContext<Tenant, Role, User, hrisApiDbCo
     public DbSet<OfferLetter> offerLetters { get; set; }
     public DbSet<PayrollProfile> PayrollProfiles { get; set; }
     public DbSet<PayrollTransaction> PayrollTransactions { get; set; }
-    public DbSet<BonusOrCommission> bonusOrCommissions { get; set; }
+    public DbSet<BonusOrCommission> BonusOrCommissions { get; set; }
     public DbSet<Reimbursement> Reimbursements { get; set; }
     public hrisApiDbContext(DbContextOptions<hrisApiDbContext> options)
         : base(options)
