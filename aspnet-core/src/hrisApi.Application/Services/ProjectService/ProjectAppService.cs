@@ -1,12 +1,8 @@
-﻿using Abp.Application.Services;
-using hrisApi.Domains.Payroll_Processing;
-using hrisApi.Services.PayrollTransactionService.DTO;
-using hrisApi.Services.PayrollTransactionService;
-using System;
-using hrisApi.Services.ProjectService.DTO;
-using hrisApi.Domains.Attendance_Management;
+﻿using System;
+using Abp.Application.Services;
 using Abp.Domain.Repositories;
-using System.Threading.Tasks;
+using hrisApi.Domains.Attendance_Management;
+using hrisApi.Services.ProjectService.DTO;
 
 namespace hrisApi.Services.ProjectService
 {
@@ -16,14 +12,5 @@ namespace hrisApi.Services.ProjectService
         {
         }
 
-        public override Task<ProjectDto> CreateAsync(ProjectDto input)
-        {
-            return base.CreateAsync(input);
-        }
-
-        public override Task<ProjectDto> UpdateAsync(ProjectDto input)
-        {
-            return base.UpdateAsync(input);
-        }
     }
 }
