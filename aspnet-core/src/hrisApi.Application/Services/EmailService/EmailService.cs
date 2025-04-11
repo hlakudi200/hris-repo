@@ -36,7 +36,7 @@ namespace hrisApi.Services.EmailService
             await client.ConnectAsync(
                 _smtpSettings.Server,
                 _smtpSettings.Port,
-                SecureSocketOptions.StartTls // Explicit STARTTLS
+                SecureSocketOptions.StartTls
             );
             await client.AuthenticateAsync(_smtpSettings.Username, _smtpSettings.Password);
             await client.SendAsync(email);
