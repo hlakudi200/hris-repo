@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
+using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
 using Abp.Runtime.Validation;
 using Abp.UI;
@@ -14,6 +15,7 @@ using hrisApi.Authorization.Users;
 using hrisApi.Domains.Employee_Management;
 using hrisApi.Services.Employee_Management.DTO;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
@@ -32,11 +34,13 @@ namespace hrisApi.Services.Employee_Management
     {
         private readonly IRepository<EmployeeDocument, Guid> _documentRepository;
         private readonly UserManager _userManager;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
         private readonly EmployeeManager _employeeManager;
 
 
         public EmployeeAppService(
+            IWebHostEnvironment hostingEnvironment,
             EmployeeManager employeeManager,
             IRepository<Employee, Guid> repository,
             IRepository<EmployeeDocument, Guid> documentRepository,
@@ -47,6 +51,7 @@ namespace hrisApi.Services.Employee_Management
             LocalizationSourceName = "hrisApi";
             _employeeManager = employeeManager;
             _userManager = userManager;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public override async Task<EmployeeDto> CreateAsync(CreateEmployeeDto input)
@@ -130,6 +135,37 @@ namespace hrisApi.Services.Employee_Management
             return employeeDtoReturn;
         }
 
+
+        //New
+        public async Task<EmployeeDto> GetEmployeeByIdAsync(long userId)
+        {
+            var employee = await Repository.GetAll()
+                .Include(e => e.User)
+                .FirstOrDefaultAsync(e => e.UserId == userId);
+            if (employee == null)
+            {
+                throw new UserFriendlyException("Employee not found");
+            }
+            var user = await _userManager.GetUserByIdAsync(employee.UserId);
+            var employeeDto = new EmployeeDto
+            {
+                Id = employee.Id,
+                FullName = user.FullName,
+                Surname = user.Surname,
+                Email = user.EmailAddress,
+                EmployeeNumber = employee.EmployeeNumber,
+                ContactNo = employee.ContactNo,
+                DateOfBirth = employee.DateOfBirth,
+                NationalIdNumber = employee.NationalIdNumber,
+                HireDate = employee.HireDate,
+                Position = employee.Position,
+                Department = employee.Department,
+                ManagerId = employee.ManagerId
+            };
+            return employeeDto;
+        }
+
+
         public override async Task<EmployeeDto> GetAsync(EntityDto<Guid> input)
         {
             var employee = await Repository
@@ -160,6 +196,7 @@ namespace hrisApi.Services.Employee_Management
 
             return employeeDto;
         }
+
 
         public override async Task<PagedResultDto<EmployeeDto>> GetAllAsync(PagedEmployeeResultRequestDto input)
         {
@@ -212,67 +249,71 @@ namespace hrisApi.Services.Employee_Management
         [Route("DocumentUpload")]
         public async Task<EmployeeDocumentDto> AddDocumentAsync([FromForm] CreateEmployeeDocumentDto input)
         {
-           
-
-            var FilePath = "App_Data/Docs";
-            
-                
+            try
+            {
+                // Validate the file
                 ValidateFileUpload(input);
-            var document = new EmployeeDocument
-            {
-                File = input.File,
-                FileExtension = Path.GetExtension(input.File.FileName),
-                FileSizeInBytes = input.File.Length,
-                FileName = input.FileName,
-                FileDescription = input.FileDescription,
-                FilePath = Path.Combine( $"{FilePath}/{input.FileName}")
 
+                // Create document entity
+                var employeeDocument = new EmployeeDocument
+                {
+                    
+                    FileName = input.File.FileName,
+                    
+                    FileExtension = Path.GetExtension(input.File.FileName),
+                    FileSizeInBytes = input.File.Length,
+                    FilePath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads", "employee-documents", $"{Guid.NewGuid()}{Path.GetExtension(input.File.FileName)}")
+                };
 
-            };
+                // Create directory if it doesn't exist
+                if (!Directory.Exists(Path.GetDirectoryName(employeeDocument.FilePath)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(employeeDocument.FilePath));
+                }
 
-            using (var fileStream = input.File.OpenReadStream())
-            {
-                await SaveFile(FilePath, fileStream);
+                // Save physical file
+                using (var stream = input.File.OpenReadStream())
+                {
+                    await SaveFile(employeeDocument.FilePath, stream);
+                }
+
+                // Save to database
+                await _documentRepository.InsertAsync(employeeDocument);
+                await CurrentUnitOfWork.SaveChangesAsync();
+
+                // Map and return result
+                return ObjectMapper.Map<EmployeeDocumentDto>(employeeDocument);
             }
-
-
-            await _documentRepository.InsertAsync(document);
-
-            return ObjectMapper.Map<EmployeeDocumentDto>(document);
-        }
-
-        public async Task<ListResultDto<EmployeeDocumentDto>> GetEmployeeDocumentsAsync(EntityDto<Guid> input)
-        {
-            var documents = await _documentRepository
-                .GetAll()
-                .Where(d => d.Employee.Id == input.Id)
-                .ToListAsync();
-
-            return new ListResultDto<EmployeeDocumentDto>(
-                ObjectMapper.Map<List<EmployeeDocumentDto>>(documents)
-            );
-        }
-
-        public async Task DeleteDocumentAsync(EntityDto<Guid> input)
-        {
-            await _documentRepository.DeleteAsync(input.Id);
+            catch (UserFriendlyException ex)
+            {
+                throw ex;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Error saving employee document", ex);
+                throw new UserFriendlyException("Could not save document. Please try again.");
+            }
         }
 
         private void ValidateFileUpload(CreateEmployeeDocumentDto input)
         {
-            var allowedExtensions = new string[] { ".jpg", ".jped", ".png", ".pdf" };
+           
+            var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png", ".pdf" };
 
-
-            if (!allowedExtensions.Contains(Path.GetExtension(input.File.FileName)))
+            if (input.File == null)
             {
-                throw new UserFriendlyException("file", "Unsupported file extention");
+                throw new UserFriendlyException("file", "No file was uploaded");
             }
 
-            if (input.File.Length > 10485760)
+            if (!allowedExtensions.Contains(Path.GetExtension(input.File.FileName).ToLowerInvariant()))
             {
-                throw new UserFriendlyException("file", "File size more than 10MB, Please upload a smaller size file.");
+                throw new UserFriendlyException("file", "Unsupported file extension");
             }
 
+            if (input.File.Length > 10485760) // 10MB limit
+            {
+                throw new UserFriendlyException("file", "File size more than 10MB. Please upload a smaller size file.");
+            }
         }
 
         private async Task SaveFile(string filePath, Stream stream)
@@ -282,5 +323,49 @@ namespace hrisApi.Services.Employee_Management
                 await stream.CopyToAsync(fs);
             }
         }
+        public async Task<ListResultDto<EmployeeDocumentDto>> GetEmployeeDocumentsAsync(EntityDto<Guid> input)
+        {
+            // Input validation
+            if (input == null || input.Id == Guid.Empty)
+            {
+                throw new ArgumentException("Valid employee ID is required");
+            }
+
+            try
+            {
+                // Query documents
+                var documents = await _documentRepository
+                    .GetAllIncluding(d => d.FileName) // Include related entities if needed
+                                                      //.Where(d => d.EmployeeId == input.Id)
+                    .OrderByDescending(d => d.CreationTime)
+                    .ToListAsync();
+
+                // Map to DTOs
+                var documentDtos = ObjectMapper.Map<List<EmployeeDocumentDto>>(documents);
+
+                // Add download URLs
+                foreach (var documentDto in documentDtos)
+                {
+
+                    documentDto.DownloadUrl = $"/api/services/app/EmployeeDocument/DownloadDocument?id={documentDto.Id}";
+                }
+
+                return new ListResultDto<EmployeeDocumentDto>(documentDtos);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Error retrieving documents for employee {input.Id}", ex);
+                throw new UserFriendlyException("Could not retrieve employee documents. Please try again.");
+            }
+        }
+
+        
+
+        public async Task DeleteDocumentAsync(EntityDto<Guid> input)
+        {
+            await _documentRepository.DeleteAsync(input.Id);
+        }
+
+        
     }
 }
