@@ -7,6 +7,7 @@ export interface IAttandance {
   projectId: string;
   clockInTime: string;
   clockOutTime: string;
+  yearMonthWeek :string
   note: string;
 }
 
