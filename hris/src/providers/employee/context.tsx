@@ -26,8 +26,9 @@ export interface IEmployeeDocument {
 
 export interface ILeaves {
   annual: number;
-  familyResponsibility: number;
   sick: number;
+  study: number
+  familyResponsibility: number;
 }
 
 export interface IEmployeeStateContext {
@@ -40,7 +41,7 @@ export interface IEmployeeStateContext {
 
 export interface IEmployeeActionContext {
   getEmployee: (userId: number) => Promise<void>;
-  getLeaves: (employeeNumber: string) => Promise<void>;
+  getLeaves: (employeeId: string) => Promise<void>;
 }
 
 export const INITIAL_STATE: IEmployeeStateContext = {
