@@ -1,5 +1,5 @@
 import { createAction } from "redux-actions";
-import {IJobPostingStateContext } from "./context";
+import { IJobPostingStateContext } from "./context";
 import { IJobPosting } from "./interfaces";
 
 export enum JobPostingActionEnums {
@@ -34,7 +34,6 @@ export const getJobPostingsSuccess = createAction<
   IJobPosting[]
 >(
   JobPostingActionEnums.getJobPostingsSuccess,
-
   (JobPostings: IJobPosting[]) => ({
     isPending: false,
     isSuccess: true,

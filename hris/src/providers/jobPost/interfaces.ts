@@ -13,6 +13,20 @@ export interface IInterview {
     mode: string;
     feedback: string;
   }
+
+  export interface IJobPostingListResult {
+    totalCount: number;
+    items: IJobPosting[];
+  }
+  
+  export interface IAbpResponse<T> {
+    result: T;
+    success: boolean;
+    error: string | null;
+    unAuthorizedRequest: boolean;
+    __abp: boolean;
+  }
+  
   
   export interface IJobApplication {
     id: string;
@@ -26,11 +40,12 @@ export interface IInterview {
   
   export interface IJobPosting {
     id: string;
-    jobTitle: string;
-    jobDescription: string;
+    title: string;
+    description: string;
     location: string;
-    postingDate: string;
-    closingDate: string;
+    openDate: string;
+    closeDate: string;
     status: string;
     jobApplications ?: IJobApplication[];
   }
+
