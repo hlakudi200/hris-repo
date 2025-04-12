@@ -4,9 +4,8 @@ import React from "react";
 import {
   useEmployeeActions,
   useEmployeeState,
-  CreateEmployeeProvider,
-} from "@/providers/createEmployee/index";
-import { ICreateEmployeeRequest } from "@/providers/createEmployee/context";
+} from "@/providers/employee/index";
+import { ICreateEmployeeRequest } from "@/providers/employee/context";
 import {
   Form,
   Input,
@@ -150,17 +149,6 @@ const CreateEmployeeForm = () => {
             </div>
 
             <div style={{ display: "flex", gap: "20px" }}>
-              {/* <Form.Item
-                name="employeeNumber"
-                label="Employee Number"
-                // rules={[
-                //   { required: true, message: "Please enter employee number" },
-                // ]}
-                style={{ flex: 1 }}
-              >
-                <Input placeholder="Enter employee number" />
-              </Form.Item> */}
-
               <Form.Item
                 name="nationalIdNumber"
                 label="National ID Number"
@@ -218,14 +206,6 @@ const CreateEmployeeForm = () => {
               </Form.Item>
             </div>
 
-            {/* <Form.Item
-              name="managerId"
-              label="Manager ID"
-              rules={[{ required: false, message: "Please enter manager ID" }]}
-            >
-              <Input placeholder="Enter manager ID" />
-            </Form.Item> */}
-
             <Form.Item
               name="roleNames"
               label="Roles"
@@ -259,11 +239,7 @@ const CreateEmployeeForm = () => {
 };
 
 const CreateEmployeePage = () => {
-  return (
-    <CreateEmployeeProvider>
-      <CreateEmployeeForm />
-    </CreateEmployeeProvider>
-  );
+  return <CreateEmployeeForm />;
 };
 
 export default CreateEmployeePage;

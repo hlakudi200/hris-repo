@@ -5,9 +5,13 @@ import { EmployeeReducer } from "./reducer";
 import {
   EmployeeActionContext,
   EmployeeStateContext,
+  ICreateEmployeeRequest,
   INITIAL_STATE,
 } from "./context";
 import {
+  createEmployeeError,
+  createEmployeePending,
+  createEmployeeSuccess,
   getEmployeeError,
   getEmployeePending,
   getEmployeeSuccess,
@@ -25,18 +29,37 @@ export const EmployeeProvider = ({
   const [state, dispatch] = useReducer(EmployeeReducer, INITIAL_STATE);
   const instance = getAxiosInstace();
 
+  const createEmployee = async (employee: ICreateEmployeeRequest) => {
+    dispatch(createEmployeePending());
+
+    const endpoint = "/api/services/app/Employee/Create";
+
+    await instance
+      .post(endpoint, employee)
+      .then((response) => {
+        if (response.status === 200) {
+          dispatch(createEmployeeSuccess(response.data.result));
+        }
+      })
+
+      .catch((error) => {
+        console.error("Error creating employee:", error);
+        dispatch(
+          createEmployeeError(error.message || "Failed to create employee")
+        );
+      });
+  };
+
   const getEmployee = async (userId: number) => {
     dispatch(getEmployeePending());
 
     //TODO: Add endpoint
     const endpoint: string = `/api/services/app/Employee/GetEmployeeById?userId=${userId}`;
 
-    debugger;
     await instance
       .get(endpoint)
 
       .then((response) => {
-        debugger;
         dispatch(getEmployeeSuccess(response.data.result));
       })
       .catch((error) => {
@@ -64,7 +87,9 @@ export const EmployeeProvider = ({
 
   return (
     <EmployeeStateContext.Provider value={state}>
-      <EmployeeActionContext.Provider value={{ getEmployee, getLeaves }}>
+      <EmployeeActionContext.Provider
+        value={{ createEmployee, getEmployee, getLeaves }}
+      >
         {children}
       </EmployeeActionContext.Provider>
     </EmployeeStateContext.Provider>
