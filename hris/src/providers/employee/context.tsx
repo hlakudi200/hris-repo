@@ -16,6 +16,23 @@ export interface IEmployee {
   documents: IEmployeeDocument[];
 }
 
+export interface ICreateEmployeeRequest {
+  name: string;
+  surname: string;
+  email: string;
+  username: string;
+  password: string;
+  employeeNumber: string;
+  contactNo: string;
+  dateOfBirth: Date | string;
+  nationalIdNumber: string;
+  hireDate: Date | string;
+  position: string;
+  department: string;
+  managerId: string;
+  roleNames: string[];
+}
+
 export interface IEmployeeDocument {
   employeeId: string;
   file: File;
@@ -26,8 +43,9 @@ export interface IEmployeeDocument {
 
 export interface ILeaves {
   annual: number;
-  familyResponsibility: number;
   sick: number;
+  study: number
+  familyResponsibility: number;
 }
 
 export interface IEmployeeStateContext {
@@ -36,11 +54,13 @@ export interface IEmployeeStateContext {
   isError: boolean;
   currentEmployee?: IEmployee;
   leaves?: ILeaves;
+  errorMessage?: string;
 }
 
 export interface IEmployeeActionContext {
+  createEmployee: (employee: ICreateEmployeeRequest) => Promise<void>;
   getEmployee: (userId: number) => Promise<void>;
-  getLeaves: (employeeNumber: string) => Promise<void>;
+  getLeaves: (employeeId: string) => Promise<void>;
 }
 
 export const INITIAL_STATE: IEmployeeStateContext = {
