@@ -5,6 +5,7 @@ import { JobPostingReducer } from "./reducer";
 import { useContext, useReducer } from "react";
 import { getJobPostingsError, getJobPostingsPending, getJobPostingsSuccess, getJobPostingError, getJobPostingPending, getJobPostingSuccess, createJobPostingPending, createJobPostingError, updateJobPostingSuccess, createJobPostingSuccess, updateJobPostingPending, updateJobPostingError, deleteJobPostingPending, deleteJobPostingSuccess, deleteJobPostingError} from "./actions";
 import axios from "axios";
+import { IJobPosting } from "./interfaces";
 
  export const JobPostingProvider = ({children}: {children: React.ReactNode}) => {
     const [state, dispatch] = useReducer(JobPostingReducer, INITIAL_STATE);

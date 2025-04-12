@@ -1,5 +1,6 @@
 import { createAction } from "redux-actions";
 import {IJobPostingStateContext } from "./context";
+import { IJobPosting } from "./interfaces";
 
 export enum JobPostingActionEnums {
   getJobPostingsPending = "GET_JOBPOSTINGS_PENDING",

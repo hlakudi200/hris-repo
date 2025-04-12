@@ -1,4 +1,4 @@
-interface IInterview {
+export interface IInterview {
     id: string;
     creationTime: string;
     creatorUserId: number;
@@ -14,7 +14,7 @@ interface IInterview {
     feedback: string;
   }
   
-  interface IJobApplication {
+  export interface IJobApplication {
     id: string;
     jobPostingId: string;
     applicantName: string;
@@ -24,7 +24,7 @@ interface IInterview {
     interviews: IInterview[];
   }
   
-  interface IJobPosting {
+  export interface IJobPosting {
     id: string;
     jobTitle: string;
     jobDescription: string;

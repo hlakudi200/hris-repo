@@ -1,5 +1,6 @@
 'use client'
 import { createContext } from "react";
+import { IJobPosting } from "./interfaces";
 
 
 export interface IJobPostingStateContext {

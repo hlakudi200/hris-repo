@@ -1,0 +1,38 @@
+.OuterContainer {
+    background-color: #ded7d742;
+    width: 80%;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column; /* Changed to column to stack content + button */
+    border-width: 4px;
+    border-color: white;
+    border-style: solid;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .ContentWrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  
+  .ButtonWrapper {
+    margin: 5px;
+    text-align: center;
+  }
+  
+  .InfoContainer {
+    width: 90%;
+    background-color: white;
+    border-radius: 8px;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px
+}  
