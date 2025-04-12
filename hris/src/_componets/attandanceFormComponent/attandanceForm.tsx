@@ -32,13 +32,13 @@ const AttendanceForm = () => {
       const baseDate = moment().startOf("day");
 
       const clockInTime = baseDate.clone().set({
-        hour: values.clockIn.hour(), // Changed from hours()
-        minute: values.clockIn.minute(), // Changed from minutes()
+        hour: values.clockIn.hour(), 
+        minute: values.clockIn.minute(), 
       });
 
       let clockOutTime = baseDate.clone().set({
-        hour: values.clockOut.hour(), // Changed from hours()
-        minute: values.clockOut.minute(), // Changed from minutes()
+        hour: values.clockOut.hour(), 
+        minute: values.clockOut.minute(), 
       });
       if (clockOutTime.isBefore(clockInTime)) {
         clockOutTime = clockOutTime.add(1, "day");
@@ -57,7 +57,7 @@ const AttendanceForm = () => {
       };
 
       await createAttandance(formatted);
-      console.log("supposed to be sent")
+
       toast("Attandace recorded successfuly", "success");
     } catch (error) {
       toast("Attandace recorded unsuccessfuly, please try again", "error");
