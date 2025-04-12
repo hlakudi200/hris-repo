@@ -7,13 +7,21 @@ export interface IAttandance {
   projectId: string;
   clockInTime: string;
   clockOutTime: string;
+  yearMonthWeek :string
   note: string;
 }
 
+
+export interface IWeeklyHoursResponse {
+  result: number;
+  success: boolean;
+  error: string | null;
+  }
 export interface IAttandanceStateContext {
   isPending: boolean;
   isSuccess: boolean;
   isError: boolean;
+  weeklyHours?:IWeeklyHoursResponse
   Attandance?: IAttandance;
   Attandances?: IAttandance[];
 }
@@ -21,6 +29,7 @@ export interface IAttandanceStateContext {
 export interface IAttandanceActionContext {
   getAttandances: () => void;
   getAttandance: (id: string) => void;
+  getWeeklyHours:(employeeId:string)=>void;
   createAttandance: (Attandance: IAttandance) => void;
   updateAttandance: (Attandance: IAttandance) => void;
   deleteAttandance: (id: string) => void;

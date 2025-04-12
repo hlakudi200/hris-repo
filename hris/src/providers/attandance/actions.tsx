@@ -6,6 +6,10 @@ export enum AttandanceActionEnums {
   getAttandancesSuccess = "GET_ATTANDANCES_SUCCESS",
   getAttandancesError = "GET_ATTANDANCES_ERROR",
 
+  getWeeklyHoursPending = "GET_WEEKLYHOURS_PENDING",
+  getWeeklyHoursSuccess = "GET_WEEKLYHOURS_SUCCESS",
+  getWeeklyHoursError = "GET_WEEKLYHOURS_ERROR",
+
   getAttandancePending = "GET_ATTANDANCE_PENDING",
   getAttandanceSuccess = "GET_ATTANDANCE_SUCCESS",
   getAttandanceError = "GET_ATTANDANCE_ERROR",
@@ -49,6 +53,29 @@ export const getAttandancesError = createAction<IAttandanceStateContext>(
 );
 
 export const getAttandancePending = createAction<IAttandanceStateContext>(
+  AttandanceActionEnums.getAttandancePending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
+export const getWeeklyHoursSuccess = createAction<
+  IAttandanceStateContext,
+  number  
+>(
+  AttandanceActionEnums.getWeeklyHoursSuccess, 
+  (result: number) => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+    weeklyHours: { result } 
+  })
+);
+
+export const getWeeklyHoursError = createAction<IAttandanceStateContext>(
+    AttandanceActionEnums.getWeeklyHoursError, 
+    () => ({ isPending: false, isSuccess: false, isError: true })
+  );
+
+export const getWeeklyHoursPending = createAction<IAttandanceStateContext>(
   AttandanceActionEnums.getAttandancePending,
   () => ({ isPending: true, isSuccess: false, isError: false })
 );
