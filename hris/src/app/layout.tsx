@@ -5,7 +5,9 @@ import { ConfigProvider } from "antd";
 import ToastProvider from "@/providers/toast/toast";
 import { EmployeeProvider } from "@/providers/employee";
 import { AttandanceProvider } from "@/providers/attandance";
+
 import { JobPostingProvider } from "@/providers/jobPost";
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
