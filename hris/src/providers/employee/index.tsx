@@ -25,16 +25,19 @@ export const EmployeeProvider = ({
   const [state, dispatch] = useReducer(EmployeeReducer, INITIAL_STATE);
   const instance = getAxiosInstace();
 
-  const getEmployee = async (employeeId: string) => {
+  const getEmployee = async (userId: number) => {
     dispatch(getEmployeePending());
 
     //TODO: Add endpoint
-    const endpoint: string = ``;
+    const endpoint: string = `/api/services/app/Employee/GetEmployeeById?userId=${userId}`;
 
+    debugger;
     await instance
-      .post(endpoint, employeeId)
+      .get(endpoint)
+
       .then((response) => {
-        dispatch(getEmployeeSuccess(response.data));
+        debugger;
+        dispatch(getEmployeeSuccess(response.data.result));
       })
       .catch((error) => {
         console.error(error);

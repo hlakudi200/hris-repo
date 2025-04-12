@@ -3,6 +3,7 @@
 import { createContext } from "react";
 
 export interface IEmployee {
+  Id: string,
   employeeNumber: string;
   userId: number;
   contactNo: string;
@@ -38,7 +39,7 @@ export interface IEmployeeStateContext {
 }
 
 export interface IEmployeeActionContext {
-  getEmployee: (employeeNumber: string) => Promise<void>;
+  getEmployee: (userId: number) => Promise<void>;
   getLeaves: (employeeNumber: string) => Promise<void>;
 }
 
