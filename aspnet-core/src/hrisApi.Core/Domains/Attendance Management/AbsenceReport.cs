@@ -16,6 +16,7 @@ namespace hrisApi.Domains.Attendance_Management
         public Employee Employee { get; set; }
         public DateTime Date { get; set; }
         public string AbsenceType { get; set; }
+
     }
 
 }
