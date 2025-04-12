@@ -10,9 +10,11 @@ namespace hrisApi.Domains.Attendance_Management
         [ForeignKey("EmployeeId")]
         public Employee Employee { get; set; }
         public Guid EmployeeId { get; set; }
-        public string LeaveType { get; set; } //Vacation, Sickpublic DateTime StartDate 
+        public string LeaveType { get; set; } //Vacation, Sick
+        public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string Status { get; set; } // Pending, Approved, Rejectedpublic string Reason
+        public string Status { get; set; } // Pending, Approved, Rejected
+        public string Reason { get; set; }
 
     }
 }
