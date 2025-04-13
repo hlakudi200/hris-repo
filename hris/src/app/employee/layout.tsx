@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -10,13 +10,53 @@ import {
   ClockCircleFilled,
 } from "@ant-design/icons";
 import { Button, Layout, Menu } from "antd";
-import { EmployeeProvider } from "@/providers/employee";
+import { EmployeeProvider, useEmployeeActions } from "@/providers/employee";
 import { LeaveRequestProvider } from "@/providers/leaveRequest";
+import { ItemType, MenuItemType } from "antd/es/menu/interface";
+import { useRouter } from "next/navigation";
+import { useAuthState } from "@/providers/auth";
 
 const { Header, Sider, Content } = Layout;
 
+const siderItems: ItemType<MenuItemType>[] = [
+  {
+    key: "/employee/profile",
+    icon: <HomeOutlined />,
+    label: "Home",
+  },
+  {
+    key: "/employee/logHours",
+    icon: <ClockCircleFilled />,
+    label: "Log hours",
+  },
+  {
+    key: "/employee/leave",
+    icon: <UploadOutlined />,
+    label: "Leave",
+  },
+  {
+    key: "/employee/payroll",
+    icon: <FileFilled />,
+    label: "Payroll",
+  },
+  {
+    key: "/employee/jobPost",
+    icon: <FileSearchOutlined />,
+    label: "Job post",
+  },
+];
+
 const Employee = ({ children }: { children: React.ReactNode }) => {
+  const { currentUser } = useAuthState();
+  const { getEmployee } = useEmployeeActions();
+
+  useEffect(() => {
+    if (currentUser !== null) {
+      getEmployee(currentUser.id);
+    }
+  }, []);
   const [collapsed, setCollapsed] = useState(false);
+  const router = useRouter();
 
   return (
     <EmployeeProvider>
@@ -25,36 +65,11 @@ const Employee = ({ children }: { children: React.ReactNode }) => {
           <Sider trigger={null} collapsible collapsed={collapsed}>
             <div className="demo-logo-vertical" />
             <Menu
+              onClick={({ key }) => router.push(key)}
               theme="dark"
               mode="inline"
-              defaultSelectedKeys={["1"]}
-              items={[
-                {
-                  key: "1",
-                  icon: <HomeOutlined />,
-                  label: "Home",
-                },
-                {
-                  key: "5",
-                  icon: <ClockCircleFilled />,
-                  label: "Log hours",
-                },
-                {
-                  key: "2",
-                  icon: <UploadOutlined />,
-                  label: "Leave",
-                },
-                {
-                  key: "3",
-                  icon: <FileFilled />,
-                  label: "Payroll",
-                },
-                {
-                  key: "4",
-                  icon: <FileSearchOutlined />,
-                  label: "Job post",
-                },
-              ]}
+              defaultSelectedKeys={["profile"]}
+              items={siderItems}
             />
           </Sider>
           <Layout>
