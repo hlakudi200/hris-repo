@@ -12,9 +12,8 @@ const Profile = () => {
   const { getEmployee } = useEmployeeActions();
 
   useEffect(() => {
-    if (currentUser.id) {
-      debugger;
-      getEmployee(currentUser.id!);
+    if (currentUser !== null) {
+      getEmployee(currentUser.id);
     }
   }, []);
 
