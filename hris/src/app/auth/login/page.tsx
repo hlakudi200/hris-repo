@@ -2,7 +2,7 @@
 import { Button, Flex, Form, Input, Spin } from "antd";
 import { MailFilled } from "@ant-design/icons";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./styles.module.css";
 
 import Image from "next/image";
@@ -14,29 +14,31 @@ import { toast } from "@/providers/toast/toast";
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { loginUser } = useAuthActions();
+  const { loginUser, resetStateFlags } = useAuthActions();
   const { isPending, isSuccess, isError } = useAuthState();
   const router = useRouter();
 
-  useEffect(() => {});
   const handleSingIn = async () => {
     try {
-      const loginData: ILoginData = { userNameOrEmailAddress: email, password: password };
-
+      const loginData: ILoginData = {
+        userNameOrEmailAddress: email,
+        password: password,
+      };
       await loginUser(loginData);
-
-      if (isSuccess){
-        toast("Authorized", "success");
-        router.push("/employee");
-      }
-
-      if (isError) {
-        toast("Erorr,please check your credentials", "error");
-      }
     } catch (error) {
       toast("error", error.response?.data?.message || "An error occurred");
     }
   };
+
+  if (isSuccess) {
+    toast("Authorized", "success");
+    router.push("/employee");
+  }
+
+  if (isError) {
+    toast("Erorr,please check your credentials", "error");
+    resetStateFlags();
+  }
 
   return (
     <Flex justify="space-between" className={styles.outerContainer}>
@@ -51,7 +53,6 @@ const SignIn: React.FC = () => {
           width={100}
           height={100}
           style={{ objectFit: "cover", width: "100%", height: "100%" }}
-          
         />
       </div>
 
@@ -66,9 +67,7 @@ const SignIn: React.FC = () => {
             className={styles.logo}
           />
         </div>
-        <h1 style={{ fontSize: 50, marginBottom: 20 }}>
-          Login.
-        </h1>
+        <h1 style={{ fontSize: 50, marginBottom: 20 }}>Login.</h1>
         {isPending && (
           <Flex justify="center" style={{ marginBottom: 20 }}>
             <Spin size="large" />
