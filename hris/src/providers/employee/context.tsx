@@ -3,7 +3,7 @@
 import { createContext } from "react";
 
 export interface IEmployee {
-  Id: string,
+  Id: string;
   employeeNumber: string;
   userId: number;
   contactNo: string;
@@ -44,7 +44,7 @@ export interface IEmployeeDocument {
 export interface ILeaves {
   annual: number;
   sick: number;
-  study: number
+  study: number;
   familyResponsibility: number;
 }
 
@@ -61,6 +61,7 @@ export interface IEmployeeActionContext {
   createEmployee: (employee: ICreateEmployeeRequest) => Promise<void>;
   getEmployee: (userId: number) => Promise<void>;
   getLeaves: (employeeId: string) => Promise<void>;
+  updateEmployee: (employee: IEmployee) => Promise<void>;
 }
 
 export const INITIAL_STATE: IEmployeeStateContext = {

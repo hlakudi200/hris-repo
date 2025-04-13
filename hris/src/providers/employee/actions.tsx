@@ -13,6 +13,10 @@ export enum EmployeeActionEnums {
   getLeavesPending = "GET_LEAVES_PENDING",
   getLeavesSuccess = "GET_LEAVES_SUCCESS",
   getLeavesError = "GET_LEAVES_ERROR",
+
+  updateEmployeePending = "UPDATE_EMPLOYEE_PENDING",
+  updateEmployeeSuccess = "UPDATE_EMPLOYEE_SUCCESS",
+  updateEmployeeError = "UPDATE_EMPLOYEE_ERROR",
 }
 
 export const createEmployeePending = createAction<IEmployeeStateContext>(
@@ -76,4 +80,29 @@ export const getLeavesSuccess = createAction<IEmployeeStateContext, ILeaves>(
 export const getLeavesError = createAction<IEmployeeStateContext>(
   EmployeeActionEnums.getLeavesError,
   () => ({ isPending: false, isSuccess: false, isError: true })
+);
+
+// Add these new action creators
+
+export const updateEmployeePending = createAction<IEmployeeStateContext>(
+  EmployeeActionEnums.updateEmployeePending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+export const updateEmployeeSuccess = createAction<
+  IEmployeeStateContext,
+  IEmployee
+>(EmployeeActionEnums.updateEmployeeSuccess, (currentEmployee: IEmployee) => ({
+  isPending: false,
+  isSuccess: true,
+  isError: false,
+  currentEmployee,
+}));
+export const updateEmployeeError = createAction<IEmployeeStateContext, string>(
+  EmployeeActionEnums.updateEmployeeError,
+  (errorMessage: string) => ({
+    isPending: false,
+    isSuccess: false,
+    isError: true,
+    errorMessage,
+  })
 );
