@@ -40,6 +40,7 @@ export const INITIAL_STATE: IAuthStateContext = {
   isPending: false,
   isSuccess: false,
   isError: false,
+  currentUser: null,
 };
 
 export const AuthStateContext = createContext<IAuthStateContext>(INITIAL_STATE);

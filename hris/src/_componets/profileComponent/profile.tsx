@@ -14,11 +14,13 @@ const Profile = () => {
   const { getEmployee } = useEmployeeActions();
 
   useEffect(() => {
+
     // if (currentUser.id) {
 
     //   getEmployee(3);
     // }
     getEmployee(3);
+
   }, []);
 
   if (isPending) {
