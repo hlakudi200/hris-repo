@@ -68,7 +68,7 @@ const AttendanceForm = () => {
   return (
     <div
       className={globals.OuterContainer}
-      style={{ width: "40%", marginTop: -40 }}
+      style={{ width: "100%", marginTop: -40 }}
     >
       <div className={globals.InfoContainer}>
         <Form

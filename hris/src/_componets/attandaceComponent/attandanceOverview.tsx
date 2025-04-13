@@ -41,7 +41,7 @@ const AttendanceOverview = () => {
     const weekOfMonth = date.week() - startOfMonth.week() + 1;
     return weekOfMonth < 1 ? 1 : weekOfMonth;
   };
-
+  
   const currentWeek = getWeekOfMonth(moment());
 
   return (
