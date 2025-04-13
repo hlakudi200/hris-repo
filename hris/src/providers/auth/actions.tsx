@@ -13,6 +13,8 @@ export enum AuthActionEnums {
   signUpPending = "SIGN_UP_PENDING",
   signUpSuccess = "SIGN_UP_SUCCESS",
   signUpError = "SIGN_UP_ERROR",
+
+  resetStateFlagsAction = "RESET_STATE_FLAGS",
 }
 
 export const loginUserPending = createAction<IAuthStateContext>(
