@@ -45,8 +45,8 @@ const AttendanceOverview = () => {
   const currentWeek = getWeekOfMonth(moment());
 
   return (
-    <div className={globals.OuterContainer}>
-      <div className={globals.heading} style={{ paddingTop: 20 }}>
+    <div className={globals.OuterContainer} style={{paddingBottom:20}}>
+      <div className={globals.heading} style={{ paddingTop: 20}}>
         Attendance Overview{" "}
         <span>
           <ClockCircleFilled style={{ color: "green" }} />
@@ -63,10 +63,11 @@ const AttendanceOverview = () => {
           {isError && <Alert message="Error loading hours" type="error" />}
           {!isPending && !isError && `${weeklyHours?.result ?? 0} hours`}
         </div>
-        <div style={{ marginTop: 20 }}>
+      
+      </div>
+      <div style={{ marginTop: 20 }}>
           <Button type="primary">Record Attendance</Button>
         </div>
-      </div>
     </div>
   );
 };
