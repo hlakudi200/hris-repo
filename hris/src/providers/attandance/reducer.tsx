@@ -15,6 +15,21 @@ export const AttandanceReducer = handleActions<IAttandanceStateContext, IAttanda
         ...state,
         ...action.payload,
     }),
+    [AttandanceActionEnums.getWeeklyHoursPending]: (state, action) => ({
+        ...state,
+        ...action.payload,
+    }),
+    [AttandanceActionEnums.getWeeklyHoursSuccess]: (state, { payload }) => ({
+        ...state,
+        isPending: false,
+        isSuccess: true,
+        isError: false,
+        weeklyHours: payload.weeklyHours
+      }),
+    [AttandanceActionEnums.getWeeklyHoursError]: (state, action) => ({
+        ...state,
+        ...action.payload,
+    }),
     [AttandanceActionEnums.getAttandancePending]: (state, action) => ({
         ...state,
         ...action.payload,
