@@ -2,7 +2,7 @@
 import { Button, Flex, Form, Input, Spin } from "antd";
 import { MailFilled } from "@ant-design/icons";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 
 import Image from "next/image";
@@ -30,15 +30,17 @@ const SignIn: React.FC = () => {
     }
   };
 
-  if (isSuccess) {
-    toast("Authorized", "success");
-    router.push("/employee");
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      toast("Authorized", "success");
+      router.push("/employee");
+    }
 
-  if (isError) {
-    toast("Erorr,please check your credentials", "error");
-    resetStateFlags();
-  }
+    if (isError) {
+      toast("Erorr,please check your credentials", "error");
+      resetStateFlags();
+    }
+  }, [isSuccess, isError]);
 
   return (
     <Flex justify="space-between" className={styles.outerContainer}>
