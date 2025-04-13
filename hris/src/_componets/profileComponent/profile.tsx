@@ -6,19 +6,19 @@ import { Button, Modal, Form, Input, message } from "antd";
 import { useEmployeeActions, useEmployeeState } from "@/providers/employee";
 import globals from "../globals.module.css";
 
-//import { useAuthState } from "@/providers/auth";
+import { useAuthState } from "@/providers/auth";
 import moment from "moment";
 
 const Profile = () => {
   const { currentEmployee, isPending, isSuccess } = useEmployeeState();
-  //const { currentUser } = useAuthState();
+  const { currentUser } = useAuthState();
   const { getEmployee, updateEmployee } = useEmployeeActions();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (currentUser.id) {
+    if (currentUser !== null) {
       getEmployee(currentUser.id);
     }
   }, []);
