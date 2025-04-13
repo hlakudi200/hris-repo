@@ -9,7 +9,7 @@ const LeaveOverview = () => {
   const { getLeaves } = useEmployeeActions();
 
   //TODO: add use effect?
-   if (leaves === undefined){
+   if (leaves === undefined && currentEmployee){
      getLeaves(currentEmployee.id);
    }
 
