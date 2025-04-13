@@ -13,13 +13,11 @@ namespace hrisApi.Services.JobPostingService.DTO
     [AutoMap(typeof(JobPosting))]
     public class JobPostingDto : EntityDto<Guid>
     {
-        public Guid Id { get; set; }
-        public string JobTitle { get; set; }
-        public string JobDescription { get; set; }
-        public string Location { get; set; }
-        public DateTime PostingDate { get; set; }
-        public DateTime ClosingDate { get; set; }
-        public string Status { get; set; }
+        public string Title { get; set; }
+        public string Department { get; set; }
+        public string Description { get; set; }
+        public DateTime OpenDate { get; set; }
+        public DateTime? CloseDate { get; set; }
         public ICollection<JobApplicationDto> JobApplications { get; set; } = new List<JobApplicationDto>();
     }
 }

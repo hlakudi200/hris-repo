@@ -1635,7 +1635,7 @@ namespace hrisApi.Migrations
                     b.Property<DateTime>("ClockInTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("ClockOutTime")
+                    b.Property<DateTime>("ClockOutTime")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreationTime")
@@ -1667,6 +1667,9 @@ namespace hrisApi.Migrations
 
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("YearMonthWeek")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
