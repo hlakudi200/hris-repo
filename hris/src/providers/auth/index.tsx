@@ -55,9 +55,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       })
       .then((response) => {
         if (response.status === 200 && response.data) {
-          debugger;
           const currentUser: IUser = response.data.result.user;
-          console.log("currentUser", currentUser);
           dispatch(getCurrentUserSuccess(currentUser));
         }
       })
