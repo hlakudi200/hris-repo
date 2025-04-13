@@ -72,16 +72,16 @@ export default function RootLayout({
         }}
       >
         <AuthProvider>
-          <EmployeeProvider>
-            <ToastProvider />
-            <JobPostingProvider>
+          <ToastProvider />
+          <JobPostingProvider>
+            <EmployeeProvider>
               <AttandanceProvider>
-              <JobApplicationProvider>
+                <JobApplicationProvider>
                   <body>{children}</body>
-              </JobApplicationProvider>
+                </JobApplicationProvider>
               </AttandanceProvider>
-          </EmployeeProvider>
-            </JobPostingProvider>
+            </EmployeeProvider>
+          </JobPostingProvider>
         </AuthProvider>
       </ConfigProvider>
     </html>
