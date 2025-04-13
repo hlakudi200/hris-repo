@@ -4,18 +4,10 @@ import Profile from "@/_componets/profileComponent/profile";
 //import AttandaceOverview from "@/_componets/attandaceComponent/attandanceOverview";
 //import AttendanceForm from "@/_componets/attandanceFormComponent/attandanceForm";
 // import LeaveForm from "@/_componets/leaveFormComponet/leaveForm";
-import CreateEmployeeForm from "@/_componets/createEmployee/page";
+//import CreateEmployeeForm from "@/_componets/createEmployee/page";
 //import JobPost from "@/_componets/JobPostComponent/jobPostComponent";
 const Employee = () => {
-  return (
-    <div>
-      <Profile />
-
-      <div>
-        <CreateEmployeeForm />
-      </div>
-    </div>
-  );
+  return <Profile />;
 };
 
 export default Employee;

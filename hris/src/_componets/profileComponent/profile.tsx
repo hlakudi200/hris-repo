@@ -1,91 +1,19 @@
-// "use client";
-// import React, { useEffect } from "react";
-// import Image from "next/image";
-// import styles from "./styles/styles.module.css";
-// import { Button } from "antd";
-// import { useEmployeeActions, useEmployeeState } from "@/providers/employee";
-// import { useAuthState } from "@/providers/auth";
-
-// const Profile = () => {
-//   const { currentEmployee, isPending } = useEmployeeState();
-//   const { currentUser } = useAuthState();
-//   const { getEmployee } = useEmployeeActions();
-
-//   useEffect(() => {
-//     if (currentUser.id) {
-//       debugger;
-//       getEmployee(currentUser.id!);
-//     }
-//   }, []);
-
-//   if (isPending) {
-//     return (
-//       <div className={styles.OuterContainer}>Loading employee data...</div>
-//     );
-//   }
-
-//   if (currentEmployee === undefined) {
-//     return <div className={styles.OuterContainer}>No employee data found</div>;
-//   }
-
-//   return (
-//     <div className={styles.OuterContainer}>
-//       <div className={styles.ImgContainer}>
-//         <Image
-//           width={150}
-//           height={150}
-//           src={"/images/profile-user.png"}
-//           alt=""
-//           style={{ marginTop: 20 }}
-//         ></Image>
-//         <div
-//           style={{
-//             fontWeight: 700,
-//             fontSize: 31,
-//             color: "#726D6D",
-//             textAlign: "center",
-//           }}
-//         >
-//           {currentUser.name} {currentUser.surname}
-//         </div>
-//       </div>
-
-//       <div className={styles.InfoContainer}>
-//         <div className={styles.subheading}>Position</div>
-//         <div> {currentEmployee.position} </div>
-//         <div className={styles.subheading}>Department</div>
-//         <div>{currentEmployee.department} </div>
-//         <div className={styles.subheading}>Employee no</div>
-//         <div>{currentEmployee.employeeNumber}</div>
-//         <div className={styles.subheading}>National Id no</div>
-//         <div> {currentEmployee.nationalIdNumber}</div>
-//       </div>
-//       <div style={{ marginBottom: 20 }}>
-//         <Button type="primary">Update profile</Button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Profile;
-
-// Replace the entire file with this updated version
 "use client";
-import React, { useEffect, useState } from "react"; // Add useState
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./styles/styles.module.css";
-import { Button, Modal, Form, Input, message } from "antd"; // Add Modal, Form, Input, DatePicker, message
+import { Button, Modal, Form, Input, message } from "antd";
 import { useEmployeeActions, useEmployeeState } from "@/providers/employee";
 import { useAuthState } from "@/providers/auth";
-import moment from "moment"; // Add moment import
+import moment from "moment";
 
 const Profile = () => {
-  const { currentEmployee, isPending, isSuccess } = useEmployeeState(); // Add isSuccess
+  const { currentEmployee, isPending, isSuccess } = useEmployeeState();
   const { currentUser } = useAuthState();
-  const { getEmployee, updateEmployee } = useEmployeeActions(); // Add updateEmployee
-  const [isModalVisible, setIsModalVisible] = useState(false); // Add state for modal visibility
-  const [form] = Form.useForm(); // Add form hook
-  const [isSubmitting, setIsSubmitting] = useState(false); // Add submission state
+  const { getEmployee, updateEmployee } = useEmployeeActions();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (currentUser.id) {
@@ -93,9 +21,7 @@ const Profile = () => {
     }
   }, []);
 
-  // Add useEffect for form values
   useEffect(() => {
-    // Reset form with current employee data when modal is opened
     if (isModalVisible && currentEmployee) {
       form.setFieldsValue({
         contactNo: currentEmployee.contactNo,
@@ -112,9 +38,7 @@ const Profile = () => {
     }
   }, [isModalVisible, currentEmployee]);
 
-  // Add useEffect for success handling
   useEffect(() => {
-    // Close modal when update is successful
     if (isSuccess && isSubmitting) {
       setIsModalVisible(false);
       setIsSubmitting(false);
@@ -122,7 +46,6 @@ const Profile = () => {
     }
   }, [isSuccess, isSubmitting]);
 
-  // Add modal handlers
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -132,7 +55,6 @@ const Profile = () => {
     form.resetFields();
   };
 
-  // Add form submission handler
   const handleSubmit = async (values) => {
     if (!currentEmployee) return;
 
@@ -210,7 +132,6 @@ const Profile = () => {
         </Button>
       </div>
 
-      {/* Add Modal and Form */}
       <Modal
         title="Update Profile"
         open={isModalVisible}
