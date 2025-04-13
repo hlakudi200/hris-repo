@@ -15,12 +15,13 @@ import { LeaveRequestProvider } from "@/providers/leaveRequest";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "@/providers/auth";
+import styels from "./styles/global.module.css"
 
 const { Header, Sider, Content } = Layout;
 
 const siderItems: ItemType<MenuItemType>[] = [
   {
-    key: "/employee/profile",
+    key: "/employee",
     icon: <HomeOutlined />,
     label: "Home",
   },
@@ -61,7 +62,7 @@ const Employee = ({ children }: { children: React.ReactNode }) => {
   return (
     <EmployeeProvider>
       <LeaveRequestProvider>
-        <Layout style={{ height: "100vh" }}>
+        <Layout className={styels.layout}>
           <Sider trigger={null} collapsible collapsed={collapsed}>
             <div className="demo-logo-vertical" />
             <Menu
@@ -86,11 +87,7 @@ const Employee = ({ children }: { children: React.ReactNode }) => {
               />
             </Header>
             <Content
-              style={{
-                margin: "24px 16px",
-                padding: 24,
-                minHeight: 280,
-              }}
+              className={styels.content}
             >
               {children}
             </Content>

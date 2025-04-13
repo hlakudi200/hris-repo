@@ -3,7 +3,7 @@ import { Calendar, Card } from "antd";
 import AttendanceOverview from "@/_componets/attandaceComponent/attandanceOverview";
 // import LeaveOverview from "@/_componets/leaveOverviewComponent/leaveOverview";
 import Profile from "@/_componets/profileComponent/profile";
-import styles from "./styles/global.module.css"// Adjust the path if needed
+import styles from "./styles/global.module.css"
 
 const Employee = () => {
   return (
