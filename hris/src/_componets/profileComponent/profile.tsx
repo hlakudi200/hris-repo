@@ -4,18 +4,21 @@ import Image from "next/image";
 import styles from "./styles/styles.module.css";
 import { Button } from "antd";
 import { useEmployeeActions, useEmployeeState } from "@/providers/employee";
-import { useAuthState } from "@/providers/auth";
+import globals from "../globals.module.css";
+
+//import { useAuthState } from "@/providers/auth";
 
 const Profile = () => {
   const { currentEmployee, isPending } = useEmployeeState();
-  const { currentUser } = useAuthState();
+  //const { currentUser } = useAuthState();
   const { getEmployee } = useEmployeeActions();
 
   useEffect(() => {
-    if (currentUser.id) {
-      debugger;
-      getEmployee(currentUser.id!);
-    }
+    // if (currentUser.id) {
+
+    //   getEmployee(3);
+    // }
+    getEmployee(3);
   }, []);
 
   if (isPending) {
@@ -29,35 +32,35 @@ const Profile = () => {
   }
 
   return (
-    <div className={styles.OuterContainer}>
+    <div className={globals.OuterContainer}>
       <div className={styles.ImgContainer}>
         <Image
           width={150}
           height={150}
           src={"/images/profile-user.png"}
           alt=""
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 20,}}
+          className={styles.profileImage}
         ></Image>
         <div
           style={{
-            fontWeight: 700,
-            fontSize: 31,
-            color: "#726D6D",
             textAlign: "center",
-          }}
+          }
+        }
+        className={globals.heading}
         >
-          {currentUser.name} {currentUser.surname}
+          {"Rapudi"} {"Hlakudi"}
         </div>
       </div>
 
-      <div className={styles.InfoContainer}>
-        <div className={styles.subheading}>Position</div>
+      <div className={globals.InfoContainer}>
+        <div className={globals.subheading}>Position</div>
         <div> {currentEmployee.position} </div>
-        <div className={styles.subheading}>Department</div>
+        <div className={globals.subheading}>Department</div>
         <div>{currentEmployee.department} </div>
-        <div className={styles.subheading}>Employee no</div>
+        <div className={globals.subheading}>Employee no</div>
         <div>{currentEmployee.employeeNumber}</div>
-        <div className={styles.subheading}>National Id no</div>
+        <div className={globals.subheading}>National Id no</div>
         <div> {currentEmployee.nationalIdNumber}</div>
       </div>
       <div style={{ marginBottom: 20 }}>

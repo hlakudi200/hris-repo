@@ -12,7 +12,7 @@
 
   .OuterContainer {
     background-color: #ded7d742;
-    width: 30%;
+    width: 100%;
     border-radius: 7px;
     display: flex;
     flex-direction: column;
@@ -32,4 +32,19 @@
     padding-bottom: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+@media (max-width: 768px){
+  .subheading {
+    font-weight: 700;
+    font-size: 15px;
+    color: #726D6D;
+  }
+  
+  .heading {
+    font-weight: 700;
+    font-size: 18px;
+    color: #726D6D;
+  }
+ 
 }

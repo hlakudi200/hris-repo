@@ -9,7 +9,8 @@ const LeaveOverview = () => {
   const { getLeaves } = useEmployeeActions();
 
   useEffect(() => {
-    getLeaves(currentEmployee.Id);
+     getLeaves(currentEmployee.Id);
+    //getLeaves("c0ad5650-57b0-476e-7d84-08dd7a9faf63");
   }, []);
 
   if (isPending) {
