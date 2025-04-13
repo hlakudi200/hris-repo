@@ -116,19 +116,24 @@ namespace hrisApi.Services.Employee_Management
             // Update employee using manager
             Employee updatedEmployee = await _employeeManager.UpdateEmployeeAsync(
                 input.Id,
-                input.Name,
-                input.Surname,
-                input.Email,
-                input.Username,
+                //input.Name,
+                //input.Surname,
+                //input.Email,
+                //input.Username,
                 //input.Password,
-                input.EmployeeNumber,
-                input.ContactNo,
-                input.DateOfBirth,
-                input.NationalIdNumber,
-                input.HireDate,
+                
+                
+                //input.DateOfBirth,
+               
+                //input.HireDate,
                 input.Position,
                 input.Department,
-                input.ManagerId
+                input.EmployeeNumber,
+                 input.NationalIdNumber,
+                 input.ContactNo
+                //input.ManagerId
+
+
             );
 
             var employeeDtoReturn = ObjectMapper.Map<EmployeeDto>(updatedEmployee);
