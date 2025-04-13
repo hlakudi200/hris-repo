@@ -5,8 +5,9 @@ import AttandaceOverview from "@/_componets/attandaceComponent/attandanceOvervie
 //import AttendanceForm from "@/_componets/attandanceFormComponent/attandanceForm";
 // import LeaveForm from "@/_componets/leaveFormComponet/leaveForm";
 import CreateEmployeeForm from "@/_componets/createEmployee/page";
-
+//import JobPost from "@/_componets/JobPostComponent/jobPostComponent";
 const Employee = () => {
+
   return <CreateEmployeeForm />;
 
 };
