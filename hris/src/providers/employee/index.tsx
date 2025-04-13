@@ -6,6 +6,7 @@ import {
   EmployeeActionContext,
   EmployeeStateContext,
   ICreateEmployeeRequest,
+  IEmployee,
   INITIAL_STATE,
 } from "./context";
 import {
@@ -18,6 +19,9 @@ import {
   getLeavesError,
   getLeavesPending,
   getLeavesSuccess,
+  updateEmployeeError,
+  updateEmployeePending,
+  updateEmployeeSuccess,
 } from "./actions";
 import { getAxiosInstace } from "@/utils/axios-instance";
 
@@ -84,10 +88,31 @@ export const EmployeeProvider = ({
       });
   };
 
+  // In EmployeeProvider, add this new function
+  const updateEmployee = async (employee: IEmployee) => {
+    dispatch(updateEmployeePending());
+
+    const endpoint = "/api/services/app/Employee/Update";
+
+    try {
+      const response = await instance.put(endpoint, employee);
+      if (response.status === 200) {
+        dispatch(updateEmployeeSuccess(response.data.result));
+        return response.data.result;
+      }
+    } catch (error) {
+      console.error("Error updating employee:", error);
+      dispatch(
+        updateEmployeeError(error.message || "Failed to update employee")
+      );
+      throw error;
+    }
+  };
+
   return (
     <EmployeeStateContext.Provider value={state}>
       <EmployeeActionContext.Provider
-        value={{ createEmployee, getEmployee, getLeaves }}
+        value={{ createEmployee, getEmployee, getLeaves, updateEmployee }}
       >
         {children}
       </EmployeeActionContext.Provider>
