@@ -34,12 +34,14 @@ export interface IAuthActionContext {
   loginUser: (loginData: ILoginData) => Promise<void>;
   getCurrentUser: (jwtToken: string) => Promise<void>;
   signUp: (user: IUser) => Promise<void>;
+  resetStateFlags: () => void;
 }
 
 export const INITIAL_STATE: IAuthStateContext = {
   isPending: false,
   isSuccess: false,
   isError: false,
+  currentUser: null,
 };
 
 export const AuthStateContext = createContext<IAuthStateContext>(INITIAL_STATE);

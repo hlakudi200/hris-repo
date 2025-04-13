@@ -1,13 +1,27 @@
 import React from "react";
+import { Calendar, Card } from "antd";
+import AttendanceOverview from "@/_componets/attandaceComponent/attandanceOverview";
+// import LeaveOverview from "@/_componets/leaveOverviewComponent/leaveOverview";
 import Profile from "@/_componets/profileComponent/profile";
-//import LeaveOverview from "@/_componets/leaveOverviewComponent/leaveOverview";
-//import AttandaceOverview from "@/_componets/attandaceComponent/attandanceOverview";
-//import AttendanceForm from "@/_componets/attandanceFormComponent/attandanceForm";
-// import LeaveForm from "@/_componets/leaveFormComponet/leaveForm";
-//import CreateEmployeeForm from "@/_componets/createEmployee/page";
-//import JobPost from "@/_componets/JobPostComponent/jobPostComponent";
+import styles from "./styles/global.module.css"// Adjust the path if needed
+
 const Employee = () => {
-  return <Profile />;
+  return (
+    <div className={styles.employeeContainer}>
+      <div className={styles.profileSection}>
+        <Profile />
+      </div>
+      <div className={styles.calendarSection}>
+        <Card title="Calendar" style={{ width: "100%" }}>
+          <Calendar fullscreen={false} />
+        </Card>
+      </div>
+      <div className={styles.attendanceSection}>
+        <AttendanceOverview />
+        {/* <LeaveOverview /> */}
+      </div>
+    </div>
+  );
 };
 
 export default Employee;

@@ -21,6 +21,7 @@ import {
   signUpSuccess,
 } from "./actions";
 import { getAxiosInstace } from "@/utils/axios-instance";
+import { resetStateFlagsAction } from "../jobApplication/actions";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
@@ -83,9 +84,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
   };
 
+  const resetStateFlags = async () => {
+    dispatch(resetStateFlagsAction());
+  };
+
   return (
     <AuthStateContext.Provider value={state}>
-      <AuthActionContext.Provider value={{ loginUser, getCurrentUser, signUp }}>
+      <AuthActionContext.Provider
+        value={{ loginUser, getCurrentUser, signUp, resetStateFlags }}
+      >
         {children}
       </AuthActionContext.Provider>
     </AuthStateContext.Provider>

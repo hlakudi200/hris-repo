@@ -37,7 +37,7 @@ export const JobPostingProvider = ({
   const getJobPostings = async () => {
     dispatch(getJobPostingsPending());
     try {
-      const response = await instance.get("/JobPosting/GetAll", {
+      const response = await instance.get("/api/services/app/JobPosting/GetAll", {
         params: {
           Sorting: "", 
           SkipCount: 0, 
@@ -55,7 +55,7 @@ export const JobPostingProvider = ({
 
   const getJobPosting = async (id: string) => {
     dispatch(getJobPostingPending());
-    const endpoint = `/JobPosting/Get/${id}`;
+    const endpoint = `/api/services/app/JobPosting/Get/${id}`;
     await instance
       .get(endpoint)
       .then((response) => {
@@ -70,7 +70,7 @@ export const JobPostingProvider = ({
 
   const createJobPosting = async (JobPosting: IJobPosting) => {
     dispatch(createJobPostingPending());
-    const endpoint = `/JobPosting/Create`;
+    const endpoint = `/api/services/app/JobPosting/Create`;
     await instance
       .post(endpoint, JobPosting)
       .then((response) => {
@@ -84,7 +84,7 @@ export const JobPostingProvider = ({
 
   const updateJobPosting = async (JobPosting: IJobPosting) => {
     dispatch(updateJobPostingPending());
-    const endpoint = `/JobPosting/Update/${JobPosting.id}`;
+    const endpoint = `/api/services/app/JobPosting/Update/${JobPosting.id}`;
     await instance
       .put(endpoint, JobPosting)
       .then((response) => {
@@ -99,7 +99,7 @@ export const JobPostingProvider = ({
   const deleteJobPosting = async(id: string) => {
     dispatch(deleteJobPostingPending());
     try {
-     await instance.delete(`/JobPosting/Delete/${id}`);
+     await instance.delete(`/api/services/app/JobPosting/Delete/${id}`);
       dispatch(deleteJobPostingSuccess(id));  
     } catch (error) {
       console.error('Delete Error:', error);

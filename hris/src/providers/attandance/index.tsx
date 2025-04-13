@@ -56,7 +56,7 @@ export const AttandanceProvider = ({
     try {
       dispatch(getWeeklyHoursPending());
       const response = await instance.get<IWeeklyHoursResponse>(
-        `AttendanceRecord/GetWeeklyHours`,
+        `/api/services/app/AttendanceRecord/GetWeeklyHours`,
         { params: { employeeId } }
       );
       dispatch(getWeeklyHoursSuccess(response.data.result));
@@ -68,7 +68,7 @@ export const AttandanceProvider = ({
 
   const getAttandance = async (id: string) => {
     dispatch(getAttandancePending());
-    const endpoint = `/AttendanceRecord/${id}`;
+    const endpoint = `/api/services/app/AttendanceRecord/${id}`;
     await instance
       .get(endpoint)
       .then((response) => {
@@ -82,7 +82,7 @@ export const AttandanceProvider = ({
 
   const createAttandance = async (Attandance: IAttandance) => {
     dispatch(createAttandancePending());
-    const endpoint = `/AttendanceRecord/Create`;
+    const endpoint = `/api/services/app/AttendanceRecord/Create`;
     await instance
       .post(endpoint, Attandance)
       .then((response) => {
@@ -96,7 +96,7 @@ export const AttandanceProvider = ({
 
   const updateAttandance = async (Attandance: IAttandance) => {
     dispatch(updateAttandancePending());
-    const endpoint = `/AttendanceRecord/${Attandance.id}`;
+    const endpoint = `/api/services/app/AttendanceRecord/${Attandance.id}`;
     await instance
       .put(endpoint, Attandance)
       .then((response) => {
