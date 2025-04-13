@@ -55,7 +55,7 @@ export const EmployeeProvider = ({
 
     //TODO: Add endpoint
     const endpoint: string = `/api/services/app/Employee/GetEmployeeById?userId=${userId}`;
-
+    
     await instance
       .get(endpoint)
 
@@ -71,7 +71,7 @@ export const EmployeeProvider = ({
   const getLeaves = async (employeeId: string) => {
     dispatch(getLeavesPending());
 
-    const endpoint: string = `/api/services/app/Leave/Get?Id=${employeeId}`;
+    const endpoint: string = `/api/services/app/Leave/GetByEmpId?employeeId=${employeeId}`;
 
     await instance
       .get(endpoint)
