@@ -1,5 +1,10 @@
 import { createAction } from "redux-actions";
-import { IEmployee, IEmployeeStateContext, ILeaves } from "./context";
+import {
+  IEmployee,
+  IEmployeeStateContext,
+  ILeaves,
+  IPayrollProfile,
+} from "./context";
 
 export enum EmployeeActionEnums {
   createEmployeePending = "CREATE_EMPLOYEE_PENDING",
@@ -17,6 +22,10 @@ export enum EmployeeActionEnums {
   updateEmployeePending = "UPDATE_EMPLOYEE_PENDING",
   updateEmployeeSuccess = "UPDATE_EMPLOYEE_SUCCESS",
   updateEmployeeError = "UPDATE_EMPLOYEE_ERROR",
+
+  getPayrollProfilePending = "GET_PAYROLL_PROFILE_PENDING",
+  getPayrollProfileSuccess = "GET_PAYROLL_PROFILE_SUCCESS",
+  getPayrollProfileError = "GET_PAYROLL_PROFILE_ERROR",
 }
 
 export const createEmployeePending = createAction<IEmployeeStateContext>(
@@ -82,8 +91,7 @@ export const getLeavesError = createAction<IEmployeeStateContext>(
   () => ({ isPending: false, isSuccess: false, isError: true })
 );
 
-// Add these new action creators
-
+// Creating actions for updateEmployee statuses
 export const updateEmployeePending = createAction<IEmployeeStateContext>(
   EmployeeActionEnums.updateEmployeePending,
   () => ({ isPending: true, isSuccess: false, isError: false })
@@ -105,4 +113,25 @@ export const updateEmployeeError = createAction<IEmployeeStateContext, string>(
     isError: true,
     errorMessage,
   })
+);
+
+export const getPayrollProfilePending = createAction<IEmployeeStateContext>(
+  EmployeeActionEnums.getPayrollProfilePending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+export const getPayrollProfileSuccess = createAction<
+  IEmployeeStateContext,
+  IPayrollProfile
+>(
+  EmployeeActionEnums.getPayrollProfileSuccess,
+  (payrollProfile: IPayrollProfile) => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+    payrollProfile,
+  })
+);
+export const getPayrollProfileError = createAction<IEmployeeStateContext>(
+  EmployeeActionEnums.getPayrollProfileError,
+  () => ({ isPending: false, isSuccess: false, isError: true })
 );

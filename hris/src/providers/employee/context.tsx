@@ -48,12 +48,20 @@ export interface ILeaves {
   familyResponsibility: number;
 }
 
+export interface IPayrollProfile {
+  employeeId: string;
+  basicSalary: number;
+  taxRate: number;
+  id: string;
+}
+
 export interface IEmployeeStateContext {
   isPending: boolean;
   isSuccess: boolean;
   isError: boolean;
   currentEmployee?: IEmployee;
   leaves?: ILeaves;
+  payrollProfile?: IPayrollProfile;
   errorMessage?: string;
 }
 
@@ -62,6 +70,7 @@ export interface IEmployeeActionContext {
   getEmployee: (userId: number) => Promise<void>;
   getLeaves: (employeeId: string) => Promise<void>;
   updateEmployee: (employee: IEmployee) => Promise<void>;
+  getPayrollProfile: (employeeId: string) => Promise<void>;
 }
 
 export const INITIAL_STATE: IEmployeeStateContext = {
