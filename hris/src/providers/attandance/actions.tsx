@@ -7,8 +7,8 @@ export enum AttandanceActionEnums {
   getAttandancesError = "GET_ATTANDANCES_ERROR",
 
   getProjectsPending = "GET_PROJECTS_PENDING",
-  getProjectsSuccess = "GET_GET_PROJECTS_SUCCESS",
-  getProjectsError = "GET_GET_PROJECTS_ERROR",
+  getProjectsSuccess = "GET_PROJECTS_SUCCESS",
+  getProjectsError = "GET_PROJECTS_ERROR",
 
   getWeeklyHoursPending = "GET_WEEKLYHOURS_PENDING",
   getWeeklyHoursSuccess = "GET_WEEKLYHOURS_SUCCESS",
@@ -102,8 +102,8 @@ export const getAttandanceError = createAction<IAttandanceStateContext>(
 
 export const getProjectsSuccess = createAction<
   IAttandanceStateContext,
-  IAttandance
->(AttandanceActionEnums.getAttandanceSuccess, (projects: IProject[]) => ({
+  IProject[]
+>(AttandanceActionEnums.getProjectsSuccess, (projects: IProject[]) => ({
   isPending: false,
   isSuccess: true,
   isError: false,
