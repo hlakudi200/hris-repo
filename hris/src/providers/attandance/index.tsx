@@ -28,6 +28,7 @@ import {
   getWeeklyHoursSuccess,
   getWeeklyHoursPending,
   getWeeklyHoursError,
+  getProjectsPending,
 } from "./actions";
 import axios from "axios";
 
@@ -41,7 +42,7 @@ export const AttandanceProvider = ({
 
   const getAttandances = async () => {
     dispatch(getAttandancesPending());
-    const endpoint = `/AttendanceRecord`;
+    const endpoint = `/api/services/app/AttendanceRecord`;
     await axios(endpoint)
       .then((response) => {
         dispatch(getAttandancesSuccess(response.data));
@@ -51,6 +52,19 @@ export const AttandanceProvider = ({
         dispatch(getAttandancesError());
       });
   };
+  
+  const getPorjects=async()=>{
+    dispatch(getProjectsPending());
+    const endpoint= `/api/services/app/Project`
+    await axios(endpoint)
+      .then((response) => {
+        dispatch(getAttandancesSuccess(response.data));
+      })
+      .catch((error) => {
+        console.error(error);
+        dispatch(getAttandancesError());
+      });
+  }
 
   const getWeeklyHours = async (employeeId: string) => {
     try {
@@ -132,6 +146,7 @@ export const AttandanceProvider = ({
           createAttandance,
           updateAttandance,
           deleteAttandance,
+          getPorjects,
         }}
       >
         {children}
