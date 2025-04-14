@@ -1,23 +1,31 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import globals from "../globals.module.css";
 import { Button, Flex, Spin } from "antd";
 import { useEmployeeActions, useEmployeeState } from "@/providers/employee";
 
 const LeaveOverview = () => {
-  const { leaves, isPending, isSuccess, currentEmployee } = useEmployeeState();
+  const { leaves, isPending, isError, currentEmployee } = useEmployeeState();
   const { getLeaves } = useEmployeeActions();
 
   //TODO: add use effect?
-   if (leaves === undefined && currentEmployee){
-     getLeaves(currentEmployee.id);
-   }
+  useEffect(() => {
+    if (leaves === undefined && currentEmployee){
+      getLeaves(currentEmployee.id);
+    }
+
+  }, [leaves])
 
   if (isPending) {
     return (
       <Flex justify="center" style={{ marginBottom: 20 }}>
         <Spin size="large" />
       </Flex>
+    );
+  }
+  if (isError) {
+    return (
+     <div>Failed</div>
     );
   }
 
@@ -28,13 +36,13 @@ const LeaveOverview = () => {
       </div>
       <div className={globals.InfoContainer}>
         <div className={globals.subheading}>Annual Leave</div>
-        <div>{isSuccess ? leaves.annual.toString() : "Please wait"}</div>
+        <div>{leaves ? leaves.annual.toString() : "Please wait"}</div>
         <div className={globals.subheading}>Sick Leave</div>
-        <div>{isSuccess ? leaves.sick.toString() : "Please wait"}</div>
+        <div>{leaves ? leaves.sick.toString() : "Please wait"}</div>
         <div className={globals.subheading}>Study Leave</div>
-        <div>{isSuccess ? leaves.study.toString() : "Please wait"}</div>
+        <div>{leaves  ? leaves.study.toString() : "Please wait"}</div>
         <div className={globals.subheading}>Family Responsibility Leave</div>
-        <div>{isSuccess ? leaves.annual.toString() : "Please wait"}</div>
+        <div>{leaves  ? leaves.annual.toString() : "Please wait"}</div>
         <div style={{ marginTop: 20 }}>
           <Button type="primary">View more</Button>
         </div>
