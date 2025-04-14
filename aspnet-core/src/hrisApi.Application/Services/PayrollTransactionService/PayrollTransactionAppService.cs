@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+using Abp.UI;
 
 public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransaction, PayrollTransactionDto, Guid>, IPayrollTransactionAppService
 {
@@ -17,7 +18,7 @@ public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransacti
     public override async Task<PayrollTransactionDto> CreateAsync(PayrollTransactionDto input)
     {
         // Calculate tax before creating the transaction
-        if (input.TaxAmount <= 0)
+        if (input.GrossAmount > 0)
         {
             // Calculate tax based on gross amount
             input.TaxAmount = CalculateTax(input.GrossAmount);
@@ -25,6 +26,12 @@ public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransacti
             // Calculate net amount
             input.NetAmount = input.GrossAmount - input.TaxAmount;
         }
+        else
+        {
+
+           throw new UserFriendlyException("Error: Check Gross Amount ");
+        }
+
 
         // Call the base method to save the entity
         return await base.CreateAsync(input);
