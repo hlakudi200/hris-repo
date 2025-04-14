@@ -3,6 +3,8 @@ import { INITIAL_STATE, IAttandanceStateContext } from "./context";
 import { AttandanceActionEnums } from "./actions";
 
 export const AttandanceReducer = handleActions<IAttandanceStateContext, IAttandanceStateContext>({
+   
+   //get all 
     [AttandanceActionEnums.getAttandancesPending]: (state, action) => ({
         ...state,
         ...action.payload,
@@ -15,6 +17,22 @@ export const AttandanceReducer = handleActions<IAttandanceStateContext, IAttanda
         ...state,
         ...action.payload,
     }),
+
+    //get all projects
+    [AttandanceActionEnums.getProjectsPending]: (state, action) => ({
+        ...state,
+        ...action.payload,
+    }),
+    [AttandanceActionEnums.getProjectsSuccess]: (state, action) => ({
+        ...state,
+        ...action.payload,
+    }),
+    [AttandanceActionEnums.getProjectsError]: (state, action) => ({
+        ...state,
+        ...action.payload,
+    }),
+
+   //get weekly hrs
     [AttandanceActionEnums.getWeeklyHoursPending]: (state, action) => ({
         ...state,
         ...action.payload,
@@ -30,6 +48,8 @@ export const AttandanceReducer = handleActions<IAttandanceStateContext, IAttanda
         ...state,
         ...action.payload,
     }),
+
+   //get
     [AttandanceActionEnums.getAttandancePending]: (state, action) => ({
         ...state,
         ...action.payload,
@@ -42,6 +62,8 @@ export const AttandanceReducer = handleActions<IAttandanceStateContext, IAttanda
         ...state,
         ...action.payload,
     }),
+
+  //create
     [AttandanceActionEnums.createAttandancePending]: (state, action) => ({
         ...state,
         ...action.payload,
@@ -54,6 +76,8 @@ export const AttandanceReducer = handleActions<IAttandanceStateContext, IAttanda
         ...state,
         ...action.payload,
     }),
+
+   //update
     [AttandanceActionEnums.updateAttandancePending]: (state, action) => ({
         ...state,
         ...action.payload,
@@ -66,6 +90,8 @@ export const AttandanceReducer = handleActions<IAttandanceStateContext, IAttanda
         ...state,
         ...action.payload,
     }),
+
+    //delete
     [AttandanceActionEnums.deleteAttandancePending]: (state, action) => ({
         ...state,
         ...action.payload,

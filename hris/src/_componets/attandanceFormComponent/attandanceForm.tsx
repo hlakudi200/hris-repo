@@ -4,51 +4,56 @@ import { Form, TimePicker, Select, Button } from "antd";
 import globals from "../globals.module.css";
 import moment, { Moment } from "moment";
 import TextArea from "antd/es/input/TextArea";
-import { useAttandanceActions } from "@/providers/attandance";
+import {
+  useAttandanceActions,
+  useAttandanceState,
+} from "@/providers/attandance";
 import { IAttandance } from "@/providers/attandance/context";
 import { toast } from "@/providers/toast/toast";
+import { useEffect } from "react";
 
 const { Option } = Select;
 
 type AttendanceFormValues = {
   clockIn: Moment;
   clockOut: Moment;
-  project: string;
+  projectId: string;
   notes: string;
 };
 
 const AttendanceForm = () => {
   const [form] = Form.useForm<AttendanceFormValues>();
-  const { createAttandance } = useAttandanceActions();
+  const { createAttandance, getPorjects } = useAttandanceActions();
+  const { projects } = useAttandanceState();
+  const projectList = projects || [];
 
-  const PROJECT_IDS = {
-    projectAlpha: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    projectBeta: "another-guid-here",
-    internal: "internal-guid-here",
-  };
+  useEffect(() => {
+    getPorjects();
+  }, []);
 
   const onFinish = async (values: AttendanceFormValues) => {
     try {
       const baseDate = moment().startOf("day");
 
       const clockInTime = baseDate.clone().set({
-        hour: values.clockIn.hour(), 
-        minute: values.clockIn.minute(), 
+        hour: values.clockIn.hour(),
+        minute: values.clockIn.minute(),
       });
 
       let clockOutTime = baseDate.clone().set({
-        hour: values.clockOut.hour(), 
-        minute: values.clockOut.minute(), 
+        hour: values.clockOut.hour(),
+        minute: values.clockOut.minute(),
       });
+
       if (clockOutTime.isBefore(clockInTime)) {
         clockOutTime = clockOutTime.add(1, "day");
       }
 
       const formatted: IAttandance = {
-        employeeId: "4e01ed41-cf32-4699-d4d0-08dd790588f3",
+        employeeId: "c0ad5650-57b0-476e-7d84-08dd7a9faf63",
+        projectId: values.projectId,
         clockInTime: clockInTime.utc().toISOString(),
         clockOutTime: clockOutTime.utc().toISOString(),
-        projectId: PROJECT_IDS[values.project as keyof typeof PROJECT_IDS],
         yearMonthWeek: `${moment().isoWeekYear()}-W${moment()
           .isoWeek()
           .toString()
@@ -57,11 +62,11 @@ const AttendanceForm = () => {
       };
 
       await createAttandance(formatted);
-
-      toast("Attandace recorded successfuly", "success");
+      toast("Attendance recorded successfully", "success");
+      form.resetFields();
     } catch (error) {
-      toast("Attandace recorded unsuccessfuly, please try again", "error");
-      console.log(error);
+      toast("Attendance submission failed. Please try again.", "error");
+      console.error(error);
     }
   };
 
@@ -115,13 +120,15 @@ const AttendanceForm = () => {
 
           <Form.Item
             label="Select Project"
-            name="project"
+            name="projectId"
             rules={[{ required: true, message: "Please select a project" }]}
           >
             <Select placeholder="Select project">
-              <Option value="projectAlpha">Project Alpha</Option>
-              <Option value="projectBeta">Project Beta</Option>
-              <Option value="internal">Internal Tasks</Option>
+              {projectList.map((proj) => (
+                <Option key={proj.id} value={proj.id}>
+                  {proj.title}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
 
@@ -131,7 +138,7 @@ const AttendanceForm = () => {
 
           <Form.Item>
             <Button type="primary" htmlType="submit" block>
-              Send
+              Record Attandance
             </Button>
           </Form.Item>
         </Form>
