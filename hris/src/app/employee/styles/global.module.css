@@ -13,6 +13,7 @@
 .calendarSection {
   width: 30%;
   padding: 0 10px;
+  display: flex;
 }
 
 .attendanceSection {
@@ -23,8 +24,7 @@
 .content{
  margin: 24px 16px;
  padding: 24;
- min-height: 280,
-             
+ min-height: 280,        
 }
 
 .layout{

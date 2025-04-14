@@ -1,0 +1,36 @@
+.mainContainer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .subSection {
+    height: 100%;
+    width: 33%;
+  }
+  .attendanceSection {
+    width: 33%;
+  }
+
+  .calendarSection {
+    width: 33%;
+    padding: 0 10px;
+    display: flex;
+  }
+  
+
+  @media (max-width: 768px) {
+    .mainContainer {
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+    }
+    .subSection{
+        width: 100%;
+    }
+  }
+  
+  
+  

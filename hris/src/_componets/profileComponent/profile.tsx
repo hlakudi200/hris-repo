@@ -112,7 +112,7 @@ const Profile = () => {
         }
         className={globals.heading}
         >
-          {"Rapudi"} {"Hlakudi"}
+          {currentUser.name} {currentUser.surname}
         </div>
       </div>
 
