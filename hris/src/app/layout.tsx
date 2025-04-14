@@ -9,6 +9,7 @@ import { AttandanceProvider } from "@/providers/attandance";
 import { JobPostingProvider } from "@/providers/jobPost";
 
 import { JobApplicationProvider } from "@/providers/jobApplication";
+import { InterviewProvider } from "@/providers/Interview";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -71,18 +72,20 @@ export default function RootLayout({
           },
         }}
       >
-        <AuthProvider>
-          <ToastProvider />
-          <JobPostingProvider>
-            <EmployeeProvider>
-              <AttandanceProvider>
-                <JobApplicationProvider>
-                  <body>{children}</body>
-                </JobApplicationProvider>
-              </AttandanceProvider>
-            </EmployeeProvider>
-          </JobPostingProvider>
-        </AuthProvider>
+        <InterviewProvider>
+          <AuthProvider>
+            <ToastProvider />
+            <JobPostingProvider>
+              <EmployeeProvider>
+                <AttandanceProvider>
+                  <JobApplicationProvider>
+                    <body>{children}</body>
+                  </JobApplicationProvider>
+                </AttandanceProvider>
+              </EmployeeProvider>
+            </JobPostingProvider>
+          </AuthProvider>
+        </InterviewProvider>
       </ConfigProvider>
     </html>
   );
