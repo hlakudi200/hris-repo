@@ -62,7 +62,6 @@ export const EmployeeProvider = ({
     
     await instance
       .get(endpoint)
-
       .then((response) => {
         dispatch(getEmployeeSuccess(response.data.result));
       })
