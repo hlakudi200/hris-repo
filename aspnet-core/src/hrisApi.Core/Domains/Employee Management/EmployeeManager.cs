@@ -80,6 +80,16 @@ namespace hrisApi.Domains.Employee_Management
 
         }
 
+        //New
+        public async Task<Employee> GetByEmployeeNoAsync(long userId)
+        {
+            var employee = await _employeeRepository.FirstOrDefaultAsync(e => e.UserId == userId);
+            if (employee == null)
+            {
+                throw new UserFriendlyException("Employee not found");
+            }
+            return employee;
+        }
 
 
         public async Task<Employee> GetAsync(Guid id)
@@ -117,20 +127,12 @@ namespace hrisApi.Domains.Employee_Management
 
         public async Task<Employee> UpdateEmployeeAsync(
             Guid id,
-            string firstName,
-            string surname,
-            string emailAddress,
-            string username,
-            //string password,
-            string EmployeeNumber,
-            string ContactNo,
-            DateTime DateOfBirth,
-            string NationalIdNumber,
-            DateTime HireDate,
-            string Position,
-            string Department,
-            Guid? ManagerId
-            )
+            string? position = null,
+            string? department = null,
+            string? employeeNumber = null,
+            string? nationalIdNumber = null,
+            string? contactNo = null 
+        )
         {
             // Get the employee
             var employee = await _employeeRepository.GetAsync(id);
@@ -140,38 +142,12 @@ namespace hrisApi.Domains.Employee_Management
             }
 
             // Update employee properties
-            employee.ContactNo = ContactNo;
-            employee.DateOfBirth = DateOfBirth;
-            employee.NationalIdNumber = NationalIdNumber;
-            employee.HireDate = HireDate;
-            employee.Position = Position;
-            employee.Department = Department;
-            employee.EmployeeNumber = EmployeeNumber;
+            if (!string.IsNullOrEmpty(contactNo)) employee.ContactNo = contactNo;
+            if (!string.IsNullOrEmpty(nationalIdNumber)) employee.NationalIdNumber = nationalIdNumber;
+            if (!string.IsNullOrEmpty(position)) employee.Position = position;
+            if (!string.IsNullOrEmpty(department)) employee.Department = department;
+            if (!string.IsNullOrEmpty(employeeNumber)) employee.EmployeeNumber = employeeNumber;
 
-            // Update associated user
-            var user = await _userManager.GetUserByIdAsync(employee.UserId);
-            if (user == null)
-            {
-                throw new UserFriendlyException("Associated user not found");
-            }
-
-            user.Name = firstName;
-            user.Surname = surname;
-            user.EmailAddress = emailAddress;
-            user.UserName = username;
-
-            // Update user with password if provided
-            //if (!string.IsNullOrEmpty(password))
-            //{
-            //    var passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-            //    var passwordChangeResult = await _userManager.ResetPasswordAsync(user, passwordResetToken, password);
-            //    if (!passwordChangeResult.Succeeded)
-            //    {
-            //        throw new UserFriendlyException("Password update failed");
-            //    }
-            //}
-
-            await _userManager.UpdateAsync(user);
             await _employeeRepository.UpdateAsync(employee);
 
             return employee;
