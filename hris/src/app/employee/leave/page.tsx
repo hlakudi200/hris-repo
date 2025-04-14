@@ -1,7 +1,8 @@
-import LeaveForm from "@/_componets/leaveFormComponet/leaveForm";
+"use client";
+import LeaveOverview from "@/_componets/leaveOverviewComponent/leaveOverview";
 
 const LeavePage: React.FC = () => {
-  return <LeaveForm />;
+  return <LeaveOverview />
 };
 
 export default LeavePage;

@@ -27,7 +27,7 @@ const LeaveForm = () => {
 
   const onFinish = (values: LeaveFormValues) => {
     const request: ILeaveRequest = {
-      employeeId: currentEmployee.Id,
+      employeeId: currentEmployee.id,
       leaveType: values.leaveType,
       startDate: values.dateRange[0].format("YYYY-MM-DD"),
       endDate: values.dateRange[1].format("YYYY-MM-DD"),

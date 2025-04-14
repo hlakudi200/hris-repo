@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import globals from "../globals.module.css";
 import { Button, Flex, Spin } from "antd";
 import { useEmployeeActions, useEmployeeState } from "@/providers/employee";
@@ -8,10 +8,10 @@ const LeaveOverview = () => {
   const { leaves, isPending, isSuccess, currentEmployee } = useEmployeeState();
   const { getLeaves } = useEmployeeActions();
 
-  useEffect(() => {
-     getLeaves(currentEmployee.Id);
-    //getLeaves("c0ad5650-57b0-476e-7d84-08dd7a9faf63");
-  }, []);
+  //TODO: add use effect?
+   if (leaves === undefined && currentEmployee){
+     getLeaves(currentEmployee.id);
+   }
 
   if (isPending) {
     return (
