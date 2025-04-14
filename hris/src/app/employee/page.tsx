@@ -1,7 +1,6 @@
 import React from "react";
 import { Calendar, Card } from "antd";
 import AttendanceOverview from "@/_componets/attandaceComponent/attandanceOverview";
-// import LeaveOverview from "@/_componets/leaveOverviewComponent/leaveOverview";
 import Profile from "@/_componets/profileComponent/profile";
 import styles from "./styles/global.module.css"
 
@@ -12,13 +11,12 @@ const Employee = () => {
         <Profile />
       </div>
       <div className={styles.calendarSection}>
-        <Card title="Calendar" style={{ width: "100%" }}>
+        <Card title="Calendar" style={{ width: "100%", height: "100%" }}>
           <Calendar fullscreen={false} />
         </Card>
       </div>
       <div className={styles.attendanceSection}>
         <AttendanceOverview />
-        {/* <LeaveOverview /> */}
       </div>
     </div>
   );
