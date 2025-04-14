@@ -11,7 +11,7 @@ using hrisApi.Domains.Employee_Management;
 namespace hrisApi.Services.ProjectService.DTO
 {
     [AutoMap(typeof(Project))]
-    public class ProjectDto : FullAuditedEntityDto<Guid>
+    public class ProjectDto : EntityDto<Guid>
     {
         public string ProjectCode { get; set; }
         public string Title { get; set; }
