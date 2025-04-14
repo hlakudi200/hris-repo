@@ -56,15 +56,19 @@ export const AttandanceProvider = ({
       });
   };
 
-  const getPorjects = async () => {
+  const getProjects = async () => {
     dispatch(getProjectsPending());
     const endpoint = `/api/services/app/Project/GetAll`;
-    await instance(endpoint)
+    debugger;
+    await instance.get(endpoint)
+    
       .then((response) => {
+        debugger;
         dispatch(getProjectsSuccess(response.data.result.items));
         console.log("Projects", response.data.result);
       })
       .catch((error) => {
+        debugger;
         console.error(error);
         dispatch(getProjectsError());
       });
@@ -151,7 +155,7 @@ export const AttandanceProvider = ({
           createAttandance,
           updateAttandance,
           deleteAttandance,
-          getPorjects,
+          getProjects,
         }}
       >
         {children}

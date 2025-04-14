@@ -8,10 +8,12 @@ import {
   useAttandanceActions,
   useAttandanceState,
 } from "@/providers/attandance";
+import { useEmployeeState } from "@/providers/employee";
 
 const AttendanceOverview = () => {
   const { weeklyHours, isPending, isError } = useAttandanceState();
   const { getWeeklyHours } = useAttandanceActions();
+  const { currentEmployee } = useEmployeeState();
 
   useEffect(() => {
     let isActive = true;
@@ -19,7 +21,7 @@ const AttendanceOverview = () => {
     
     const fetchData = async () => {
       try {
-        await getWeeklyHours("4E01ED41-CF32-4699-D4D0-08DD790588F3");
+        getWeeklyHours(currentEmployee.id);
       } catch (error) {
         if (isActive && !controller.signal.aborted) {
           console.error("Error:", error);

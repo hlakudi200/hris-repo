@@ -16,6 +16,5 @@ namespace hrisApi.Services.ProjectService.DTO
         public string ProjectCode { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public ICollection<Employee>? Employees { get; set; }
     }
 }
