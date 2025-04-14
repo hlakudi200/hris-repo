@@ -1,10 +1,14 @@
 import { createAction } from "redux-actions";
-import { IAttandance, IAttandanceStateContext } from "./context";
+import { IAttandance, IAttandanceStateContext, IProject } from "./context";
 
 export enum AttandanceActionEnums {
   getAttandancesPending = "GET_ATTANDANCES_PENDING",
   getAttandancesSuccess = "GET_ATTANDANCES_SUCCESS",
   getAttandancesError = "GET_ATTANDANCES_ERROR",
+
+  getProjectsPending = "GET_PROJECTS_PENDING",
+  getProjectsSuccess = "GET_PROJECTS_SUCCESS",
+  getProjectsError = "GET_PROJECTS_ERROR",
 
   getWeeklyHoursPending = "GET_WEEKLYHOURS_PENDING",
   getWeeklyHoursSuccess = "GET_WEEKLYHOURS_SUCCESS",
@@ -91,6 +95,27 @@ export const getAttandanceSuccess = createAction<
 }));
 
 export const getAttandanceError = createAction<IAttandanceStateContext>(
+  AttandanceActionEnums.getAttandanceError,
+  () => ({ isPending: false, isSuccess: false, isError: true })
+);
+
+
+export const getProjectsSuccess = createAction<
+  IAttandanceStateContext,
+  IProject[]
+>(AttandanceActionEnums.getProjectsSuccess, (projects: IProject[]) => ({
+  isPending: false,
+  isSuccess: true,
+  isError: false,
+  projects,
+}));
+
+export const getProjectsPending = createAction<IAttandanceStateContext>(
+  AttandanceActionEnums.getAttandanceError,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
+export const getProjectsError = createAction<IAttandanceStateContext>(
   AttandanceActionEnums.getAttandanceError,
   () => ({ isPending: false, isSuccess: false, isError: true })
 );

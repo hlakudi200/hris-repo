@@ -1,5 +1,6 @@
 'use client'
 import { createContext } from "react";
+import { IEmployee } from "../employee/context";
 
 export interface IAttandance {
   id?: string;
@@ -11,6 +12,13 @@ export interface IAttandance {
   note: string;
 }
 
+export interface IProject {
+  id: string;
+  projectCode: string;
+  title: string;
+  description: string;
+  employees?:IEmployee[]
+}
 
 export interface IWeeklyHoursResponse {
   result: number;
@@ -24,11 +32,13 @@ export interface IAttandanceStateContext {
   weeklyHours?:IWeeklyHoursResponse
   Attandance?: IAttandance;
   Attandances?: IAttandance[];
+  projects?:IProject[]
 }
 
 export interface IAttandanceActionContext {
   getAttandances: () => void;
   getAttandance: (id: string) => void;
+  getPorjects:()=>void;
   getWeeklyHours:(employeeId:string)=>void;
   createAttandance: (Attandance: IAttandance) => void;
   updateAttandance: (Attandance: IAttandance) => void;
