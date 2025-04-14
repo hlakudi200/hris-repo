@@ -28,6 +28,7 @@ public class hrisApiDbContext : AbpZeroDbContext<Tenant, Role, User, hrisApiDbCo
     public DbSet<Reimbursement> Reimbursements { get; set; }
 
     public DbSet<Interview> Interviews { get; set; }
+    public DbSet<Leave> Leaves { get; set; }
     public hrisApiDbContext(DbContextOptions<hrisApiDbContext> options)
         : base(options)
     {

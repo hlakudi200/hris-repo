@@ -16,6 +16,10 @@ export const LeaveRequestReducer = handleActions<ILeaveRequestStateContext>(
       ...state,
       ...action.payload,
     }),
+    [LeaveRequestActionEnums.resetStateFlagsAction]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
   },
   INITIAL_STATE
 );

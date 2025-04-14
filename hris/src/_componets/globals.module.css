@@ -13,6 +13,7 @@
   .OuterContainer {
     background-color: #ded7d742;
     width: 100%;
+    height: 100%;
     border-radius: 7px;
     display: flex;
     flex-direction: column;
@@ -25,6 +26,7 @@
 
 .InfoContainer {
     width: 90%;
+    height: 90%;
     background-color: white;
     border-radius: 8px;
     padding-top: 20px;

@@ -5,6 +5,8 @@ export enum LeaveRequestActionEnums {
   submitLeaveRequestPending = "SUBMIT_LEAVE_REQUEST_USER_PENDING",
   submitLeaveRequestSuccess = "SUBMIT_LEAVE_REQUEST_SUCCESS",
   submitLeaveRequestError = "SUBMIT_LEAVE_REQUEST_ERROR",
+
+  resetStateFlagsAction = "RESET_STATE_FLAGS",
 }
 
 export const submitLeaveRequestPending =
@@ -27,4 +29,9 @@ export const submitLeaveRequestSuccess = createAction<
 export const submitLeaveRequestError = createAction<ILeaveRequestStateContext>(
   LeaveRequestActionEnums.submitLeaveRequestError,
   () => ({ isPending: false, isSuccess: false, isError: true })
+);
+
+export const resetStateFlagsAction = createAction<ILeaveRequestStateContext>(
+  LeaveRequestActionEnums.resetStateFlagsAction,
+  () => ({ isPending: false, isSuccess: false, isError: false })
 );

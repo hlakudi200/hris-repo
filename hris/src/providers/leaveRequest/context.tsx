@@ -17,6 +17,7 @@ export interface ILeaveRequestStateContext {
 
 export interface ILeaveRequestActionContext {
   submitLeaveRequest: (request: ILeaveRequest) => Promise<void>;
+  resetStateFlags: () => void;
 }
 
 export const INITIAL_STATE: ILeaveRequestStateContext = {
