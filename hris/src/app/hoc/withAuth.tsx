@@ -14,19 +14,21 @@ const roleMap: Record<number, string> = {
   3: "hrManager"
 };
 
-const withAuth = (
-  WrappedComponent: React.ComponentType<any>,
+const withAuth = <P extends object>(
+  WrappedComponent: React.ComponentType<P>,
   { allowedRoles = [] }: IWithAuthProps = {}
 ) => {
-  const Wrapper: React.FC = (props) => {
+  const Wrapper: React.FC<P> = (props) => {
     const { isSuccess, isPending, currentUser, isError } = useAuthState();
     const router = useRouter();
 
+    const userRoles = currentUser?.roles?.map((r) => roleMap[r.roleId]) || [];
+
     useEffect(() => {
       if (!isPending && currentUser) {
-        const userRoles = currentUser.roles?.map((r) => roleMap[r.roleId]) || [];
-
-        const hasValidRole = allowedRoles.length === 0 || userRoles.some((role) => allowedRoles.includes(role));
+        const hasValidRole =
+          allowedRoles.length === 0 ||
+          userRoles.some((role) => allowedRoles.includes(role));
 
         if (isError || !hasValidRole) {
           if (userRoles.includes("admin")) {
@@ -38,7 +40,7 @@ const withAuth = (
           }
         }
       }
-    }, [isPending, isError, currentUser, allowedRoles, router]);
+    }, [isPending, isError, currentUser, allowedRoles, router, userRoles]);
 
     if (isPending || !isSuccess) {
       return (
@@ -48,9 +50,9 @@ const withAuth = (
       );
     }
 
-    const userRoles = currentUser.roles?.map((r) => roleMap[r.roleId]) || [];
     const isAuthorized =
-      allowedRoles.length === 0 || userRoles.some((role) => allowedRoles.includes(role));
+      allowedRoles.length === 0 ||
+      userRoles.some((role) => allowedRoles.includes(role));
 
     return isAuthorized ? <WrappedComponent {...props} /> : null;
   };
