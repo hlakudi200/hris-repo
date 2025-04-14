@@ -23,7 +23,7 @@ const LeaveForm = () => {
   const [form] = Form.useForm<LeaveFormValues>();
   const { currentEmployee } = useEmployeeState();
   const { isPending, isSuccess } = useLeaveRequestState();
-  const { submitLeaveRequest } = useLeaveRequestActions();
+  const { submitLeaveRequest, resetStateFlags } = useLeaveRequestActions();
 
   const onFinish = (values: LeaveFormValues) => {
     const request: ILeaveRequest = {
@@ -36,6 +36,8 @@ const LeaveForm = () => {
 
     submitLeaveRequest(request);
   };
+
+  
   if (isPending) {
     return (
       <Flex justify="center" style={{ marginBottom: 20 }}>
@@ -45,10 +47,14 @@ const LeaveForm = () => {
   }
   if (isSuccess) {
     toast("Request successfully submitted", "success");
+    resetStateFlags();
   }
 
   return (
-    <div className={globals.OuterContainer} style={{ width: "40%" }}>
+    <div className={globals.OuterContainer} style={{ width: "100%" }}>
+      <div className={globals.heading} style={{ paddingTop: 20 }}>
+        Apply for Leave
+      </div>
       <div className={globals.InfoContainer}>
         <Form
           form={form}
@@ -80,7 +86,7 @@ const LeaveForm = () => {
 
           <Form.Item>
             <Button type="primary" htmlType="submit" block>
-              Request
+              Apply
             </Button>
           </Form.Item>
         </Form>

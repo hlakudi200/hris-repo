@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import globals from "../globals.module.css";
-import { Button, Flex, Spin } from "antd";
+import { Flex, Spin } from "antd";
 import { useEmployeeActions, useEmployeeState } from "@/providers/employee";
 
 const LeaveOverview = () => {
@@ -43,9 +43,6 @@ const LeaveOverview = () => {
         <div>{leaves  ? leaves.study.toString() : "Please wait"}</div>
         <div className={globals.subheading}>Family Responsibility Leave</div>
         <div>{leaves  ? leaves.annual.toString() : "Please wait"}</div>
-        <div style={{ marginTop: 20 }}>
-          <Button type="primary">View more</Button>
-        </div>
       </div>
     </div>
   );
