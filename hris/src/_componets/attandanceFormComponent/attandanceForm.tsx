@@ -11,6 +11,7 @@ import {
 import { IAttandance } from "@/providers/attandance/context";
 import { toast } from "@/providers/toast/toast";
 import { useEffect } from "react";
+import { useEmployeeState } from "@/providers/employee";
 
 const { Option } = Select;
 
@@ -23,12 +24,13 @@ type AttendanceFormValues = {
 
 const AttendanceForm = () => {
   const [form] = Form.useForm<AttendanceFormValues>();
-  const { createAttandance, getPorjects } = useAttandanceActions();
+  const { createAttandance, getProjects } = useAttandanceActions();
   const { projects } = useAttandanceState();
+  const { currentEmployee } = useEmployeeState();
   const projectList = projects || [];
 
   useEffect(() => {
-    getPorjects();
+    getProjects();
   }, []);
 
   const onFinish = async (values: AttendanceFormValues) => {
@@ -50,7 +52,7 @@ const AttendanceForm = () => {
       }
 
       const formatted: IAttandance = {
-        employeeId: "c0ad5650-57b0-476e-7d84-08dd7a9faf63",
+        employeeId: currentEmployee.id,
         projectId: values.projectId,
         clockInTime: clockInTime.utc().toISOString(),
         clockOutTime: clockOutTime.utc().toISOString(),
@@ -70,6 +72,7 @@ const AttendanceForm = () => {
     }
   };
 
+  
   return (
     <div
       className={globals.OuterContainer}

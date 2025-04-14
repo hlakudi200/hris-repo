@@ -38,7 +38,7 @@ export interface IAttandanceStateContext {
 export interface IAttandanceActionContext {
   getAttandances: () => void;
   getAttandance: (id: string) => void;
-  getPorjects:()=>void;
+  getProjects:()=>void;
   getWeeklyHours:(employeeId:string)=>void;
   createAttandance: (Attandance: IAttandance) => void;
   updateAttandance: (Attandance: IAttandance) => void;
