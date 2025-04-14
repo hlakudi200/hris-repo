@@ -10,6 +10,8 @@ namespace hrisApi.Services.PayrollProfileService.DTO
     {
         public Guid EmployeeId { get; set; }
         public decimal BasicSalary { get; set; }
-        public decimal TaxRate { get; set; }
+
+        //set TaxRate to 15.5%
+        public decimal TaxRate { get;  } = 15.5m;
     }
 }
