@@ -1,7 +1,7 @@
-import Profile from "@/_componets/profileComponent/profile";
+import EmployeePayroll from "@/_componets/payrollComponent/employeePayroll";
 
 const PayrollPage: React.FC = () => {
-  return <Profile />;
+  return <EmployeePayroll />;
 };
 
 export default PayrollPage;

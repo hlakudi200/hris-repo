@@ -43,6 +43,19 @@ export const EmployeeReducer = handleActions<IEmployeeStateContext>(
       ...state,
       ...action.payload,
     }),
+
+    [EmployeeActionEnums.getPayrollProfilePending]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [EmployeeActionEnums.getPayrollProfileSuccess]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [EmployeeActionEnums.getPayrollProfileError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
   },
   INITIAL_STATE
 );

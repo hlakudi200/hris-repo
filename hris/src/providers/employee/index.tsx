@@ -8,6 +8,7 @@ import {
   ICreateEmployeeRequest,
   IEmployee,
   INITIAL_STATE,
+  IPayrollProfile,
 } from "./context";
 import {
   createEmployeeError,
@@ -19,6 +20,9 @@ import {
   getLeavesError,
   getLeavesPending,
   getLeavesSuccess,
+  getPayrollProfileError,
+  getPayrollProfilePending,
+  getPayrollProfileSuccess,
   updateEmployeeError,
   updateEmployeePending,
   updateEmployeeSuccess,
@@ -59,7 +63,7 @@ export const EmployeeProvider = ({
 
     //TODO: Add endpoint
     const endpoint: string = `/api/services/app/Employee/GetEmployeeById?userId=${userId}`;
-    
+
     await instance
       .get(endpoint)
       .then((response) => {
@@ -108,10 +112,35 @@ export const EmployeeProvider = ({
     }
   };
 
+  const getPayrollProfile = async (employeeId: string) => {
+    dispatch(getPayrollProfilePending());
+
+    const endpoint = `/api/services/app/PayrollProfile/GetByEmpId?empId=${employeeId}`;
+
+    await instance
+      .get(endpoint)
+      .then((response) => {
+        if (response.status === 200) {
+          const payrollProfile: IPayrollProfile = response.data.result;
+          dispatch(getPayrollProfileSuccess(payrollProfile));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        dispatch(getPayrollProfileError());
+      });
+  };
+
   return (
     <EmployeeStateContext.Provider value={state}>
       <EmployeeActionContext.Provider
-        value={{ createEmployee, getEmployee, getLeaves, updateEmployee }}
+        value={{
+          createEmployee,
+          getEmployee,
+          getLeaves,
+          updateEmployee,
+          getPayrollProfile,
+        }}
       >
         {children}
       </EmployeeActionContext.Provider>
