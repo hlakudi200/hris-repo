@@ -2246,8 +2246,14 @@ namespace hrisApi.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("OpenDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -2703,11 +2709,13 @@ namespace hrisApi.Migrations
 
             modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.JobApplication", b =>
                 {
-                    b.HasOne("hrisApi.Domains.Recruitment_Module.JobPosting", null)
+                    b.HasOne("hrisApi.Domains.Recruitment_Module.JobPosting", "JobPosting")
                         .WithMany("Applications")
                         .HasForeignKey("JobPostingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("JobPosting");
                 });
 
             modelBuilder.Entity("hrisApi.MultiTenancy.Tenant", b =>

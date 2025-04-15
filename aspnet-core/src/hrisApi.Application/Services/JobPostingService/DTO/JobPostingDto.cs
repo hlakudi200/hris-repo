@@ -20,6 +20,6 @@ namespace hrisApi.Services.JobPostingService.DTO
         public DateTime OpenDate { get; set; }
         public DateTime? CloseDate { get; set; }
         public string Status { get; set; }
-        public ICollection<JobApplicationDto> JobApplications { get; set; } = new List<JobApplicationDto>();
+        public ICollection<JobApplication> Applications { get; set; }
     }
 }

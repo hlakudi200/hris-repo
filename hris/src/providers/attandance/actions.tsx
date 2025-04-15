@@ -90,6 +90,12 @@ export const getAttandanceError = createAction<IAttandanceStateContext>(
   () => ({ isPending: false, isSuccess: false, isError: true })
 );
 
+//get Projects
+export const getProjectsPending = createAction<IAttandanceStateContext>(
+  AttandanceActionEnums.getProjectsPending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
 export const getProjectsSuccess = createAction<
   IAttandanceStateContext,
   IProject[]
@@ -100,16 +106,12 @@ export const getProjectsSuccess = createAction<
   projects,
 }));
 
-export const getProjectsPending = createAction<IAttandanceStateContext>(
-  AttandanceActionEnums.getAttandanceError,
-  () => ({ isPending: true, isSuccess: false, isError: false })
-);
-
 export const getProjectsError = createAction<IAttandanceStateContext>(
-  AttandanceActionEnums.getAttandanceError,
+  AttandanceActionEnums.getProjectsPending,
   () => ({ isPending: false, isSuccess: false, isError: true })
 );
 
+//create Attandace 
 export const createAttandancePending = createAction<IAttandanceStateContext>(
   AttandanceActionEnums.createAttandancePending,
   () => ({ isPending: true, isSuccess: false, isError: false })

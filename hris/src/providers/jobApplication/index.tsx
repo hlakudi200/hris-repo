@@ -9,11 +9,15 @@ import {
   JobApplicationStateContext,
 } from "./context";
 import {
+  getJobApplicationsError,
+  getJobApplicationsPending,
   resetStateFlagsAction,
   submitJobApplicationError,
   submitJobApplicationPending,
   submitJobApplicationSuccess,
 } from "./actions";
+import {getJobApplicationsSuccess} from "../jobApplication/actions"
+import { getInterviewsByJobApplicationPending, getInterviewsByJobApplicationSuccess } from "../Interview/actions";
 
 export const JobApplicationProvider = ({
   children,
@@ -40,6 +44,21 @@ export const JobApplicationProvider = ({
         dispatch(submitJobApplicationError());
       });
   };
+    const getJobApplications = async () => {
+      dispatch(getJobApplicationsPending());
+      const endpoint = `/api/services/app/JobApplication/GetAll`;
+      await instance
+        .get(endpoint)
+  
+        .then((response) => {
+          dispatch(getJobApplicationsSuccess(response.data.result.items));
+          console.log("JobApplications", response.data.result.items);
+        })
+        .catch((error) => {
+          console.error(error);
+          dispatch(getJobApplicationsError());
+        });
+    };
 
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
@@ -48,7 +67,7 @@ export const JobApplicationProvider = ({
   return (
     <JobApplicationStateContext.Provider value={state}>
       <JobApplicationActionContext.Provider
-        value={{ submitJobApplication, resetStateFlags }}
+        value={{ submitJobApplication, resetStateFlags,getJobApplications}}
       >
         {children}
       </JobApplicationActionContext.Provider>
