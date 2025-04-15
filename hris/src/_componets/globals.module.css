@@ -1,0 +1,52 @@
+.subheading {
+    font-weight: 700;
+    font-size: 21px;
+    color: #726D6D;
+  }
+  
+  .heading {
+    font-weight: 700;
+    font-size: 31px;
+    color: #726D6D;
+    text-align: center;
+  }
+
+  .OuterContainer {
+    background-color: #ded7d742;
+    width: 100%;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    border-width: 4px;
+    border-color: white;
+    border-style: solid;
+    justify-content: center;
+    align-items: center;
+}
+
+.InfoContainer {
+    width: 90%;
+    height: 90%;
+    background-color: white;
+    border-radius: 8px;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px){
+  .subheading {
+    font-weight: 700;
+    font-size: 15px;
+    color: #726D6D;
+  }
+  
+  .heading {
+    font-weight: 700;
+    font-size: 18px;
+    color: #726D6D;
+  }
+ 
+}
