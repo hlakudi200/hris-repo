@@ -5,6 +5,14 @@ import {
 } from "@/providers/jobApplication";
 import { Alert, Spin, Table, Button, Tag, Space } from "antd";
 
+interface JobApplication {
+  id?: string;
+  applicantName: string;
+  email: string;
+  resumePath: string;
+  status: string;
+}
+
 const ViewJobApplications = () => {
   const { getJobApplications } = useJobApplicationActions();
   const { isPending, isSuccess, isError, jobApplications } =
@@ -41,7 +49,7 @@ const ViewJobApplications = () => {
       dataIndex: "status",
       key: "status",
       render: (status: string) => {
-        let color =
+        const color =
           status === "Pending"
             ? "orange"
             : status === "Approved"
@@ -55,7 +63,7 @@ const ViewJobApplications = () => {
     {
       title: "Actions",
       key: "actions",
-      render: (_: any, record: any) => (
+      render: () => (
         <Space>
           <Button type="primary">Approve</Button>
           <Button danger>Decline</Button>
@@ -64,7 +72,7 @@ const ViewJobApplications = () => {
     },
   ];
 
-  const dataSource = jobAppsList.map((item: any, index: number) => ({
+  const dataSource = jobAppsList.map((item: JobApplication, index: number) => ({
     ...item,
     key: item.id || index,
   }));
