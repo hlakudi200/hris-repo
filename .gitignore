@@ -1,5 +1,53 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
+﻿# Root level
+.vs/
+*.user
+*.suo
+*.swp
+*.bak
+*.tmp
 
-/aspnet-core/src/hrisApi.Web.Host/App_Data/Logs/Logs.txt
+# Ignore node_modules for frontend
+hris/node_modules/
+hris/.next/
+hris/.turbo/
+hris/out/
+hris/.env*
+hris/npm-debug.log*
+hris/yarn-debug.log*
+hris/yarn-error.log*
+hris/package-lock.json
+hris/pnpm-lock.yaml
+hris/.eslintcache
+hris/.DS_Store
+hris/.idea/
+
+# Ignore build outputs from aspnet-core
+aspnet-core/bin/
+aspnet-core/obj/
+aspnet-core/Migrations/
+
+# Ignore logs and temp files
+*.log
+*.nlog
+*.log.*
+*.tlog
+
+# Ignore publish output
+aspnet-core/wwwroot/
+aspnet-core/**/*.Publish.xml
+aspnet-core/**/publish/
+
+# Secrets
+aspnet-core/appsettings.*.json
+aspnet-core/secrets.json
+hris/.env.local
+hris/.env.development.local
+hris/.env.production.local
+
+# GitHub workflows (optional if not custom)
+.github/
+
+# macOS & system files
+.DS_Store
+Thumbs.db
+ehthumbs.db
