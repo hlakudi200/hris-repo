@@ -13,6 +13,9 @@ import {
   createPayrollTransactionError,
   createPayrollTransactionPending,
   createPayrollTransactionSuccess,
+  getPayrollTransactionError,
+  getPayrollTransactionSuccess,
+  getPayrollTransactionPending,
 } from "./actions";
 
 export const PayrollTransactionProvider = ({
@@ -54,6 +57,20 @@ export const PayrollTransactionProvider = ({
       });
   };
 
+  const getAllTrasactions = async () => {
+    dispatch(getPayrollTransactionPending());
+    const endpoint = `/api/services/app/PayrollTransaction/GetAll`;
+    await instance
+      .get(endpoint)
+      .then((response) => {
+        dispatch(getPayrollTransactionSuccess(response.data.result.items));
+      })
+      .catch((err) => {
+        getPayrollTransactionError()
+        console.log("getPayrollTrasactions:", err);
+      });
+  };
+
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
   };
@@ -61,7 +78,11 @@ export const PayrollTransactionProvider = ({
   return (
     <PayrollTransactionStateContext.Provider value={state}>
       <PayrollTransactionActionContext.Provider
-        value={{ createPayrollTransaction, resetStateFlags }}
+        value={{
+          createPayrollTransaction,
+          resetStateFlags,
+          getAllTrasactions,
+        }}
       >
         {children}
       </PayrollTransactionActionContext.Provider>

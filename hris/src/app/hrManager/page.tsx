@@ -1,8 +1,9 @@
 import React from 'react'
+import HrCharts from '@/_componets/hrCharts/hrChart'
 
 const HrManager=()=> {
   return (
-    <div>HrManagers</div>
+    <div><HrCharts/></div>
   )
 }
 
