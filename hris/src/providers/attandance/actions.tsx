@@ -35,6 +35,7 @@ export const getAttandancesPending = createAction<IAttandanceStateContext>(
   AttandanceActionEnums.getAttandancesPending,
   () => ({ isPending: true, isSuccess: false, isError: false })
 );
+
 export const getAttandancesSuccess = createAction<
   IAttandanceStateContext,
   IAttandance[]
