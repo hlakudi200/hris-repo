@@ -1,69 +1,61 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
+  FileFilled,
+  FileSearchOutlined,
+  HomeOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  ProjectOutlined,
   UploadOutlined,
-  FileFilled,
-  HomeOutlined,
-  FileSearchOutlined,
-  ClockCircleFilled,
+  UsergroupAddOutlined
 } from "@ant-design/icons";
 import { Button, Layout, Menu } from "antd";
-import { EmployeeProvider, useEmployeeActions } from "@/providers/employee";
 import { LeaveRequestProvider } from "@/providers/leaveRequest";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
-import { useRouter } from "next/navigation";
-import { useAuthState } from "@/providers/auth";
-import styels from "./styles/global.module.css";
 import { PayrollTransactionProvider } from "@/providers/payrolltransaction";
+import { EmployeeProvider } from "@/providers/employee";
+import styels from "./styles/global.module.css";
 
 const { Header, Sider, Content } = Layout;
 
-const siderItems: ItemType<MenuItemType>[] = [
-  {
-    key: "/employee",
-    icon: <HomeOutlined />,
-    label: "Home",
-  },
-  {
-    key: "/employee/logHours",
-    icon: <ClockCircleFilled />,
-    label: "Log hours",
-  },
-  {
-    key: "/employee/leave",
-    icon: <UploadOutlined />,
-    label: "Leave",
-  },
-  {
-    key: "/employee/payroll",
-    icon: <FileFilled />,
-    label: "Payroll",
-  },
-  {
-    key: "/employee/jobPost",
-    icon: <FileSearchOutlined />,
-    label: "Job post",
-  },
-  {
-    key: "/employee/payrolltransaction",
-    icon: <FileSearchOutlined />,
-    label: "PayRoll",
-  },
-];
-
 const HrManager = ({ children }: { children: React.ReactNode }) => {
-  const { currentUser } = useAuthState();
-  const { getEmployee } = useEmployeeActions();
-
-  useEffect(() => {
-    if (currentUser !== null) {
-      getEmployee(currentUser.id);
-    }
-  }, []);
   const [collapsed, setCollapsed] = useState(false);
-  const router = useRouter();
+    const router = useRouter();
+
+  const siderItems: ItemType<MenuItemType>[] = [
+    {
+      key: "/hrManager",
+      icon: <HomeOutlined />,
+      label: "Home",
+    },
+    {
+      key: "/hrManager/employees",
+      icon: <UsergroupAddOutlined />,
+      label: "Employees",
+    },
+    {
+      key: "/hrManager/jobPost",
+      icon: <UploadOutlined />,
+      label: "Job Post",
+    },
+    {
+      key: "/hrManager/payroll",
+      icon: <FileFilled />,
+      label: "Payroll",
+    },
+    {
+      key: "/hrManager/interviews",
+      icon: <FileSearchOutlined />,
+      label: "Interviews",
+    },
+    {
+      key: "/hrManager/projects",
+      icon: <ProjectOutlined />,
+      label: "Projects",
+    },
+  ];
 
   return (
     <PayrollTransactionProvider>

@@ -76,7 +76,7 @@ const Employee = ({ children }: { children: React.ReactNode }) => {
                 onClick={({ key }) => router.push(key)}
                 theme="dark"
                 mode="inline"
-                defaultSelectedKeys={["profile"]}
+                defaultSelectedKeys={["/employee"]}
                 items={siderItems}
               />
             </Sider>
