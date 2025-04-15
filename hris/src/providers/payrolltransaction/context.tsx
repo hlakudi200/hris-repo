@@ -15,10 +15,12 @@ export interface IPayrollTransactionStateContext {
   isSuccess: boolean;
   isError: boolean;
   payrollTransaction?: IPayrollTransaction;
+  payrollTransactions?:IPayrollTransaction[]
 }
 
 export interface IPayrollTransactionActionContext {
   createPayrollTransaction: (transaction: IPayrollTransaction) => Promise<void>;
+  getAllTrasactions:()=>void;
   resetStateFlags: () => void;
 }
 
