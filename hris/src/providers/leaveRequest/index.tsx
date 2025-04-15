@@ -41,14 +41,16 @@ export const LeaveRequestProvider = ({
         dispatch(submitLeaveRequestError());
       });
   };
-  
-    const resetStateFlags = async () => {
-      dispatch(resetStateFlagsAction());
-    };
+
+  const resetStateFlags = async () => {
+    dispatch(resetStateFlagsAction());
+  };
 
   return (
     <LeaveRequestStateContext.Provider value={state}>
-      <LeaveRequestActionContext.Provider value={{ submitLeaveRequest, resetStateFlags }}>
+      <LeaveRequestActionContext.Provider
+        value={{ submitLeaveRequest, resetStateFlags }}
+      >
         {children}
       </LeaveRequestActionContext.Provider>
     </LeaveRequestStateContext.Provider>

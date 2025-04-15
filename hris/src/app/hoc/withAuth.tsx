@@ -11,7 +11,7 @@ interface IWithAuthProps {
 const roleMap: Record<number, string> = {
   1: "admin",
   2: "employee",
-  3: "hrManager"
+  3: "hrManager",
 };
 
 const withAuth = <P extends object>(

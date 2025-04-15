@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { createContext } from "react";
 import { IEmployee } from "../employee/context";
 
@@ -8,7 +8,7 @@ export interface IAttandance {
   projectId: string;
   clockInTime: string;
   clockOutTime: string;
-  yearMonthWeek :string
+  yearMonthWeek: string;
   note: string;
 }
 
@@ -17,29 +17,29 @@ export interface IProject {
   projectCode: string;
   title: string;
   description: string;
-  employees?:IEmployee[]
+  employees?: IEmployee[];
 }
 
 export interface IWeeklyHoursResponse {
   result: number;
   success: boolean;
   error: string | null;
-  }
+}
 export interface IAttandanceStateContext {
   isPending: boolean;
   isSuccess: boolean;
   isError: boolean;
-  weeklyHours?:IWeeklyHoursResponse
+  weeklyHours?: IWeeklyHoursResponse;
   Attandance?: IAttandance;
   Attandances?: IAttandance[];
-  projects?:IProject[]
+  projects?: IProject[];
 }
 
 export interface IAttandanceActionContext {
   getAttandances: () => void;
   getAttandance: (id: string) => void;
-  getProjects:()=>void;
-  getWeeklyHours:(employeeId:string)=>void;
+  getProjects: () => void;
+  getWeeklyHours: (employeeId: string) => void;
   createAttandance: (Attandance: IAttandance) => void;
   updateAttandance: (Attandance: IAttandance) => void;
   deleteAttandance: (id: string) => void;
@@ -56,5 +56,3 @@ export const AttandanceStateContext =
 
 export const AttandanceActionContext =
   createContext<IAttandanceActionContext>(undefined);
-
-  

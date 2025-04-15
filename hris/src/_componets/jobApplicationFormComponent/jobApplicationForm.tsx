@@ -54,38 +54,36 @@ const JobApplicationForm: React.FC = () => {
   }
 
   return (
-    <div className={globals.OuterContainer} style={{ width: "40%" }}>
-      <div className={globals.InfoContainer}>
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={onFinish}
-          style={{ maxWidth: 400, margin: "0 auto", padding: 24 }}
-        >
-          <Form.Item name="name" rules={[{ required: true }]}>
-            <Input
-              placeholder="Name"
-              suffix={<UserOutlined />}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Form.Item>
-          <Form.Item name="email" rules={[{ required: true }]}>
-            <Input
-              placeholder="Email"
-              suffix={<MailFilled />}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Item>
+    <div className={globals.InfoContainer}>
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={onFinish}
+        style={{ maxWidth: 400, margin: "0 auto", padding: 24 }}
+      >
+        <Form.Item name="name" rules={[{ required: true }]}>
+          <Input
+            placeholder="Name"
+            suffix={<UserOutlined />}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </Form.Item>
+        <Form.Item name="email" rules={[{ required: true }]}>
+          <Input
+            placeholder="Email"
+            suffix={<MailFilled />}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              Request
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            Request
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

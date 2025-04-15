@@ -1,7 +1,6 @@
-'use client'
+"use client";
 import { createContext } from "react";
 import { IJobPosting } from "./interfaces";
-
 
 export interface IJobPostingStateContext {
   isPending: boolean;
@@ -30,5 +29,3 @@ export const JobPostingStateContext =
 
 export const JobPostingActionContext =
   createContext<IJobPostingActionContext>(undefined);
-
-  

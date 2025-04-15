@@ -4,7 +4,6 @@ import { MailFilled } from "@ant-design/icons";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
-
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuthState, useAuthActions } from "@/providers/auth";

@@ -37,7 +37,6 @@ const LeaveForm = () => {
     submitLeaveRequest(request);
   };
 
-  
   if (isPending) {
     return (
       <Flex justify="center" style={{ marginBottom: 20 }}>

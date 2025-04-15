@@ -26,7 +26,7 @@ export const PayrollTransactionProvider = ({
   );
   const instance = getAxiosInstace();
 
-  const endpoint = `https://localhost:44311/api/services/app/PayrollTransaction/Create`;
+  const endpoint = `/api/services/app/PayrollTransaction/Create`;
 
   const createPayrollTransaction = async (transaction: IPayrollTransaction) => {
     dispatch(createPayrollTransactionPending());

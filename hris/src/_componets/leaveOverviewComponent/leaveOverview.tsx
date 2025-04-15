@@ -10,11 +10,10 @@ const LeaveOverview = () => {
 
   //TODO: add use effect?
   useEffect(() => {
-    if (leaves === undefined && currentEmployee){
+    if (leaves === undefined && currentEmployee) {
       getLeaves(currentEmployee.id);
     }
-
-  }, [leaves])
+  }, [leaves]);
 
   if (isPending) {
     return (
@@ -24,9 +23,7 @@ const LeaveOverview = () => {
     );
   }
   if (isError) {
-    return (
-     <div>Failed</div>
-    );
+    return <div>Failed</div>;
   }
 
   return (
@@ -40,9 +37,9 @@ const LeaveOverview = () => {
         <div className={globals.subheading}>Sick Leave</div>
         <div>{leaves ? leaves.sick.toString() : "Please wait"}</div>
         <div className={globals.subheading}>Study Leave</div>
-        <div>{leaves  ? leaves.study.toString() : "Please wait"}</div>
+        <div>{leaves ? leaves.study.toString() : "Please wait"}</div>
         <div className={globals.subheading}>Family Responsibility Leave</div>
-        <div>{leaves  ? leaves.annual.toString() : "Please wait"}</div>
+        <div>{leaves ? leaves.annual.toString() : "Please wait"}</div>
       </div>
     </div>
   );

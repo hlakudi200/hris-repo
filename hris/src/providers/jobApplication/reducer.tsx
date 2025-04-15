@@ -4,11 +4,17 @@ import { JobApplicationActionEnums } from "./actions";
 
 export const JobApplicationReducer = handleActions<IJobApplicationStateContext>(
   {
-    [JobApplicationActionEnums.submitJobApplicationPending]: (state, action) => ({
+    [JobApplicationActionEnums.submitJobApplicationPending]: (
+      state,
+      action
+    ) => ({
       ...state,
       ...action.payload,
     }),
-    [JobApplicationActionEnums.submitJobApplicationSuccess]: (state, action) => ({
+    [JobApplicationActionEnums.submitJobApplicationSuccess]: (
+      state,
+      action
+    ) => ({
       ...state,
       ...action.payload,
     }),
@@ -23,4 +29,3 @@ export const JobApplicationReducer = handleActions<IJobApplicationStateContext>(
   },
   INITIAL_STATE
 );
-

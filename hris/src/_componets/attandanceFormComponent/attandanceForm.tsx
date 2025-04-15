@@ -63,7 +63,7 @@ const AttendanceForm = () => {
         note: values.notes,
       };
 
-      await createAttandance(formatted);
+      createAttandance(formatted);
       toast("Attendance recorded successfully", "success");
       form.resetFields();
     } catch (error) {
@@ -72,12 +72,8 @@ const AttendanceForm = () => {
     }
   };
 
-  
   return (
-    <div
-      className={globals.OuterContainer}
-      style={{ width: "100%" }}
-    >
+    <div className={globals.OuterContainer} style={{ width: "100%" }}>
       <div className={globals.InfoContainer}>
         <Form
           form={form}
