@@ -2,7 +2,7 @@ import React from "react";
 import { Calendar, Card } from "antd";
 import AttendanceOverview from "@/_componets/attandaceComponent/attandanceOverview";
 import Profile from "@/_componets/profileComponent/profile";
-import styles from "./styles/global.module.css"
+import styles from "./styles/global.module.css";
 
 const Employee = () => {
   return (

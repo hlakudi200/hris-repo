@@ -1,5 +1,5 @@
 "use client";
-import LeaveForm from "@/_componets/leaveFormComponet/leaveForm";
+import LeaveForm from "@/_componets/leaveFormComponent/leaveForm";
 import LeaveOverview from "@/_componets/leaveOverviewComponent/leaveOverview";
 import styles from "./styles/global.module.css";
 

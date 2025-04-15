@@ -44,8 +44,6 @@ export const JobPostingProvider = ({
           MaxResultCount: 10,
         },
       });
-
-     console.log(response.data.result.items)
       dispatch(getJobPostingsSuccess(response.data.result.items));
     } catch (error) {
       console.error("API Error:", error);

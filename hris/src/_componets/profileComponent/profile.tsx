@@ -102,15 +102,14 @@ const Profile = () => {
           height={150}
           src={"/images/profile-user.png"}
           alt=""
-          style={{ marginTop: 20,}}
+          style={{ marginTop: 20 }}
           className={styles.profileImage}
         ></Image>
         <div
           style={{
             textAlign: "center",
-          }
-        }
-        className={globals.heading}
+          }}
+          className={globals.heading}
         >
           {currentUser.name} {currentUser.surname}
         </div>
