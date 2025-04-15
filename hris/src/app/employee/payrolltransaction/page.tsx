@@ -137,7 +137,7 @@ const PayrollTransactionForm: React.FC = () => {
                 ]}
               >
                 <Input
-                  prefix="$"
+                  prefix="R"
                   placeholder="0.00"
                   type="number"
                   step="0.01"
@@ -187,13 +187,13 @@ const PayrollTransactionForm: React.FC = () => {
                 </div>
 
                 <div className={globals.subheading}>Gross Amount</div>
-                <div>${payrollTransaction.grossAmount.toFixed(2)}</div>
+                <div>R{payrollTransaction.grossAmount.toFixed(2)}</div>
 
                 <div className={globals.subheading}>Tax Amount</div>
-                <div>${payrollTransaction.taxAmount?.toFixed(2)}</div>
+                <div>R{payrollTransaction.taxAmount?.toFixed(2)}</div>
 
                 <div className={globals.subheading}>Net Amount</div>
-                <div>${payrollTransaction.netAmount?.toFixed(2)}</div>
+                <div>R{payrollTransaction.netAmount?.toFixed(2)}</div>
 
                 <div className={globals.subheading}>Status</div>
                 <div>{payrollTransaction.isPaid ? "Paid" : "Unpaid"}</div>
