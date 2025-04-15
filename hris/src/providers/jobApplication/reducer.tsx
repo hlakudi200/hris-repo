@@ -39,6 +39,20 @@ export const JobApplicationReducer = handleActions<IJobApplicationStateContext>(
       ...state,
       ...action.payload,
     }),
+    
+    //update job application 
+    [JobApplicationActionEnums.UpdateJobApplicationPending]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [JobApplicationActionEnums.UpdateJobApplicationSuccess]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [JobApplicationActionEnums.UpdateJobApplicationError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
   },
   INITIAL_STATE
 );
