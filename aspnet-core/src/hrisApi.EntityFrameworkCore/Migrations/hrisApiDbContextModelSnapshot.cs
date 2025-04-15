@@ -1678,6 +1678,55 @@ namespace hrisApi.Migrations
                     b.ToTable("AttendanceRecords");
                 });
 
+            modelBuilder.Entity("hrisApi.Domains.Attendance_Management.Leave", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Annual")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("FamilyResponsibility")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Sick")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Study")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Leaves");
+                });
+
             modelBuilder.Entity("hrisApi.Domains.Attendance_Management.LeaveRequest", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1692,6 +1741,12 @@ namespace hrisApi.Migrations
 
                     b.Property<string>("LeaveType")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
@@ -2103,7 +2158,7 @@ namespace hrisApi.Migrations
 
                     b.HasIndex("JobApplicationId");
 
-                    b.ToTable("Interview");
+                    b.ToTable("Interviews");
                 });
 
             modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.JobApplication", b =>
@@ -2543,6 +2598,17 @@ namespace hrisApi.Migrations
                 });
 
             modelBuilder.Entity("hrisApi.Domains.Attendance_Management.AttendanceRecord", b =>
+                {
+                    b.HasOne("hrisApi.Domains.Employee_Management.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("hrisApi.Domains.Attendance_Management.Leave", b =>
                 {
                     b.HasOne("hrisApi.Domains.Employee_Management.Employee", "Employee")
                         .WithMany()
