@@ -1,0 +1,29 @@
+.container {
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+  }
+  
+  .form {
+    width: 100%;
+  }
+  
+  .flexGroup {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .flexItem {
+    flex: 1;
+  }
+  
+ 
+  @media (max-width: 768px) {
+    .flexGroup {
+      flex-direction: column;
+    }
+  
+  
+  }
+  

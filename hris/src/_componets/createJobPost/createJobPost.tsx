@@ -1,9 +1,12 @@
-'use client'
+"use client";
+
 import React from "react";
 import { Form, Input, DatePicker, Button } from "antd";
 import dayjs from "dayjs";
 import { IJobPosting } from "@/providers/jobPost/interfaces";
-import globals from "../globals.module.css";
+import globals from "../globals.module.css"; 
+import styles from "./styles/styles.module.css"   
+
 const { TextArea } = Input;
 
 interface FormValues {
@@ -34,10 +37,7 @@ const CreateJobPost: React.FC = () => {
   };
 
   return (
-    <div
-      className={globals.OuterContainer}
-      style={{ width: "100%", height: "100%" }}
-    >
+    <div className={globals.OuterContainer}>
       <div className={globals.InfoContainer}>
         <Form
           form={form}
@@ -47,64 +47,79 @@ const CreateJobPost: React.FC = () => {
             openDate: dayjs(),
             closeDate: dayjs(),
           }}
+          className={styles.form}
         >
-          <Form.Item
-            label="Title"
-            name="title"
-            rules={[{ required: true, message: "Please enter the title" }]}
-          >
-            <Input />
-          </Form.Item>
+          <div className={styles.flexGroup}>
+            <Form.Item
+              label="Title"
+              name="title"
+              rules={[{ required: true, message: "Please enter the title" }]}
+              className={styles.flexItem}
+            >
+              <Input />
+            </Form.Item>
 
-          <Form.Item
-            label="Department"
-            name="department"
-            rules={[{ required: true, message: "Please enter the department" }]}
-          >
-            <Input />c
-          </Form.Item>
+            <Form.Item
+              label="Department"
+              name="department"
+              rules={[{ required: true, message: "Please enter the department" }]}
+              className={styles.flexItem}
+            >
+              <Input />
+            </Form.Item>
+          </div>
 
           <Form.Item
             label="Description"
             name="description"
-            rules={[
-              { required: true, message: "Please enter the description" },
-            ]}
+            rules={[{ required: true, message: "Please enter the description" }]}
           >
             <TextArea rows={4} />
           </Form.Item>
 
           <Form.Item
-            label="Open Date"
-            name="openDate"
-            rules={[{ required: true, message: "Please select the open date" }]}
+            label="Location"
+            name="location"
+            rules={[{ required: true, message: "Please enter the location" }]}
           >
-            <DatePicker showTime />
+            <Input />
           </Form.Item>
 
-          <Form.Item
-            label="Close Date"
-            name="closeDate"
-            rules={[
-              { required: true, message: "Please select the close date" },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  const openDate = getFieldValue("openDate");
-                  if (!value || !openDate || value.isAfter(openDate)) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(
-                    new Error("Close date must be after the open date")
-                  );
-                },
-              }),
-            ]}
-          >
-            <DatePicker showTime />
-          </Form.Item>
+          <div className={styles.flexGroup}>
+            <Form.Item
+              label="Open Date"
+              name="openDate"
+              rules={[{ required: true, message: "Please select the open date" }]}
+              className={styles.flexItem}
+            >
+              <DatePicker style={{ width: "100%" }} />
+            </Form.Item>
+
+            <Form.Item
+              label="Close Date"
+              name="closeDate"
+              rules={[
+                { required: true, message: "Please select the close date" },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    const openDate = getFieldValue("openDate");
+                    if (!value || !openDate || value.isAfter(openDate)) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error("Close date must be after the open date")
+                    );
+                  },
+                }),
+              ]}
+              className={styles.flexItem}
+            >
+              <DatePicker style={{ width: "100%" }} />
+            </Form.Item>
+          </div>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" block>
               Submit
             </Button>
           </Form.Item>
