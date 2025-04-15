@@ -29,6 +29,30 @@ export const PayrollTransactionReducer =
         ...state,
         ...action.payload,
       }),
+
+      //get payrolltrasaction
+
+      [PayrollTransactionActionEnums.getPayrollTransactionPending]: (
+        state,
+        action
+      ) => ({
+        ...state,
+        ...action.payload,
+      }),
+      [PayrollTransactionActionEnums.getPayrollTransactionSuccess]: (
+        state,
+        action
+      ) => ({
+        ...state,
+        ...action.payload,
+      }),
+      [PayrollTransactionActionEnums.getPayrollTransactionError]: (
+        state,
+        action
+      ) => ({
+        ...state,
+        ...action.payload,
+      }),
       [PayrollTransactionActionEnums.resetStateFlagsAction]: (
         state,
         action
