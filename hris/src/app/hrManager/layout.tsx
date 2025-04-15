@@ -1,44 +1,68 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
+  FileFilled,
+  FileSearchOutlined,
+  HomeOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  ProjectOutlined,
   UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
+  UsergroupAddOutlined
 } from "@ant-design/icons";
 import { Button, Layout, Menu } from "antd";
+import { ItemType, MenuItemType } from "antd/es/menu/interface";
 
 const { Header, Sider, Content } = Layout;
 
-const HrManager = () => {
+const HrManager = ({ children }: { children: React.ReactNode }) => {
   const [collapsed, setCollapsed] = useState(false);
+    const router = useRouter();
+
+  const siderItems: ItemType<MenuItemType>[] = [
+    {
+      key: "/hrManager",
+      icon: <HomeOutlined />,
+      label: "Home",
+    },
+    {
+      key: "/hrManager/employees",
+      icon: <UsergroupAddOutlined />,
+      label: "Employees",
+    },
+    {
+      key: "/hrManager/jobPost",
+      icon: <UploadOutlined />,
+      label: "Job Post",
+    },
+    {
+      key: "/hrManager/payroll",
+      icon: <FileFilled />,
+      label: "Payroll",
+    },
+    {
+      key: "/hrManager/interviews",
+      icon: <FileSearchOutlined />,
+      label: "Interviews",
+    },
+    {
+      key: "/hrManager/projects",
+      icon: <ProjectOutlined />,
+      label: "Projects",
+    },
+  ];
 
   return (
     <Layout style={{ height: "100vh" }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
         <Menu
+          onClick={({ key }) => router.push(key)}
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["1"]}
-          items={[
-            {
-              key: "1",
-              icon: <UserOutlined />,
-              label: "nav 1",
-            },
-            {
-              key: "2",
-              icon: <VideoCameraOutlined />,
-              label: "nav 2",
-            },
-            {
-              key: "3",
-              icon: <UploadOutlined />,
-              label: "nav 3",
-            },
-          ]}
+          defaultSelectedKeys={["/hrManager"]}
+          items={siderItems}
         />
       </Sider>
       <Layout>
@@ -61,7 +85,7 @@ const HrManager = () => {
             minHeight: 280,
           }}
         >
-          Content
+          {children}
         </Content>
       </Layout>
     </Layout>
