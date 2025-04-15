@@ -19,6 +19,9 @@ namespace hrisApi.Services.PayrollTransactionService.DTO
         public decimal NetAmount { get; set; } = 0.0m; // Default value for net amount
         public bool IsPaid { get; set; }
         //public ICollection<BonusOrCommission>? BonusesAndCommissions { get; set; }
-        
+
+        public string TransactionDate { get; set; }
+        public string EmployeeName { get; set; }
+
     }
 }
