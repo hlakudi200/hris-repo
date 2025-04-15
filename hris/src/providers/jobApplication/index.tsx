@@ -15,8 +15,12 @@ import {
   submitJobApplicationError,
   submitJobApplicationPending,
   submitJobApplicationSuccess,
+  UpdateJobApplicationError,
+  UpdateJobApplicationPending,
+  UpdateJobApplicationSuccess,
 } from "./actions";
 import { getJobApplicationsSuccess } from "../jobApplication/actions";
+
 
 export const JobApplicationProvider = ({
   children,
@@ -59,6 +63,20 @@ export const JobApplicationProvider = ({
       });
   };
 
+  const updateJobApplication = async (request: IJobApplication) => {
+    dispatch(UpdateJobApplicationPending());
+    const endPoint = `/api/services/app/JobApplication/Update`;
+    await instance
+      .put(endPoint,request)
+      .then((response) => {
+        dispatch(UpdateJobApplicationSuccess(response.data.resutls));
+      })
+      .catch((err) => {
+        dispatch(UpdateJobApplicationError());
+        console.log(err);
+      });
+  };
+
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
   };
@@ -66,7 +84,12 @@ export const JobApplicationProvider = ({
   return (
     <JobApplicationStateContext.Provider value={state}>
       <JobApplicationActionContext.Provider
-        value={{ submitJobApplication, resetStateFlags, getJobApplications }}
+        value={{
+          submitJobApplication,
+          resetStateFlags,
+          getJobApplications,
+          updateJobApplication,
+        }}
       >
         {children}
       </JobApplicationActionContext.Provider>
