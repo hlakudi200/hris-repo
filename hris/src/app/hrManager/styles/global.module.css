@@ -1,4 +1,4 @@
-.employeeContainer {
+.container {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -6,17 +6,17 @@
   flex-wrap: wrap;
 }
 
-.profileSection {
+.leftSection {
   width: 35%;
 }
 
-.calendarSection {
+.middleSection {
   width: 30%;
   padding: 0 10px;
   display: flex;
 }
 
-.attendanceSection {
+.rightSection {
   width: 35%;
   display: flex;
   flex-direction: column;

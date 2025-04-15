@@ -38,8 +38,9 @@ export interface IJobApplication {
 }
 
 export interface IJobPosting {
-  id: string;
+  id?: string;
   title: string;
+  department:string;
   description: string;
   location: string;
   openDate: string;
