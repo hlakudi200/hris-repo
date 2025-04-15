@@ -98,8 +98,8 @@ const Profile = () => {
     <div className={globals.OuterContainer}>
       <div className={styles.ImgContainer}>
         <Image
-          width={150}
-          height={150}
+          width={100}
+          height={100}
           src={"/images/profile-user.png"}
           alt=""
           style={{ marginTop: 20 }}

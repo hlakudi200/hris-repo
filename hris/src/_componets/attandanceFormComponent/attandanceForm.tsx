@@ -73,18 +73,19 @@ const AttendanceForm = () => {
   };
 
   return (
-    <div className={globals.OuterContainer} style={{ width: "100%" }}>
+    <div className={globals.OuterContainer} style={{ width: "100%",height: "100%" }}>
       <div className={globals.InfoContainer}>
         <Form
           form={form}
           layout="vertical"
           onFinish={onFinish}
-          style={{ maxWidth: 400, margin: "0 auto", padding: 24 }}
+          style={{ maxWidth: 400, margin: "0 auto", paddingRight: 15 }}
         >
           <Form.Item
             label="Clock In Time"
             name="clockIn"
             rules={[{ required: true, message: "Please select clock-in time" }]}
+            style={{marginBottom: "10px"}}
           >
             <TimePicker
               use12Hours
@@ -109,6 +110,7 @@ const AttendanceForm = () => {
                 },
               }),
             ]}
+            style={{marginBottom: "15px"}}
           >
             <TimePicker
               use12Hours
@@ -121,6 +123,7 @@ const AttendanceForm = () => {
             label="Select Project"
             name="projectId"
             rules={[{ required: true, message: "Please select a project" }]}
+            style={{marginBottom: "15px"}}
           >
             <Select placeholder="Select project">
               {projectList.map((proj) => (
@@ -131,11 +134,13 @@ const AttendanceForm = () => {
             </Select>
           </Form.Item>
 
-          <Form.Item label="Notes" name="notes">
+          <Form.Item label="Notes" name="notes" 
+            style={{marginBottom: "10px"}}>
             <TextArea rows={2} />
           </Form.Item>
 
-          <Form.Item>
+          <Form.Item 
+            style={{marginTop: "20px"}}>
             <Button type="primary" htmlType="submit" block>
               Record Attandance
             </Button>

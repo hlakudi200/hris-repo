@@ -33,7 +33,6 @@ import {
   getProjectsError,
 } from "./actions";
 
-
 export const AttandanceProvider = ({
   children,
 }: {
@@ -59,16 +58,14 @@ export const AttandanceProvider = ({
   const getProjects = async () => {
     dispatch(getProjectsPending());
     const endpoint = `/api/services/app/Project/GetAll`;
-    debugger;
-    await instance.get(endpoint)
-    
+    await instance
+      .get(endpoint)
+
       .then((response) => {
-        debugger;
         dispatch(getProjectsSuccess(response.data.result.items));
         console.log("Projects", response.data.result);
       })
       .catch((error) => {
-        debugger;
         console.error(error);
         dispatch(getProjectsError());
       });
@@ -103,7 +100,6 @@ export const AttandanceProvider = ({
   };
 
   const createAttandance = async (Attandance: IAttandance) => {
-    debugger;
     dispatch(createAttandancePending());
     const endpoint = `/api/services/app/AttendanceRecord/Create`;
     await instance
