@@ -12,7 +12,11 @@ import {
   UsergroupAddOutlined
 } from "@ant-design/icons";
 import { Button, Layout, Menu } from "antd";
+import { EmployeeProvider } from "@/providers/employee";
+import { LeaveRequestProvider } from "@/providers/leaveRequest";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
+import styels from "./styles/global.module.css";
+import { PayrollTransactionProvider } from "@/providers/payrolltransaction";
 
 const { Header, Sider, Content } = Layout;
 
@@ -54,41 +58,41 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
   ];
 
   return (
-    <Layout style={{ height: "100vh" }}>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="demo-logo-vertical" />
-        <Menu
-          onClick={({ key }) => router.push(key)}
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={["/hrManager"]}
-          items={siderItems}
-        />
-      </Sider>
-      <Layout>
-        <Header style={{ padding: 0, backgroundColor: "white" }}>
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: "16px",
-              width: 64,
-              height: 64,
-            }}
-          />
-        </Header>
-        <Content
-          style={{
-            margin: "24px 16px",
-            padding: 24,
-            minHeight: 280,
-          }}
-        >
-          {children}
-        </Content>
-      </Layout>
-    </Layout>
+    <PayrollTransactionProvider>
+      <EmployeeProvider>
+        <LeaveRequestProvider>
+          <Layout className={styels.layout}>
+            <Sider trigger={null} collapsible collapsed={collapsed}>
+              <div className="demo-logo-vertical" />
+              <Menu
+                onClick={({ key }) => router.push(key)}
+                theme="dark"
+                mode="inline"
+                defaultSelectedKeys={["profile"]}
+                items={siderItems}
+              />
+            </Sider>
+            <Layout>
+              <Header style={{ padding: 0, backgroundColor: "white" }}>
+                <Button
+                  type="text"
+                  icon={
+                    collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
+                  }
+                  onClick={() => setCollapsed(!collapsed)}
+                  style={{
+                    fontSize: "16px",
+                    width: 64,
+                    height: 64,
+                  }}
+                />
+              </Header>
+              <Content className={styels.content}>{children}</Content>
+            </Layout>
+          </Layout>
+        </LeaveRequestProvider>
+      </EmployeeProvider>
+    </PayrollTransactionProvider>
   );
 };
 
