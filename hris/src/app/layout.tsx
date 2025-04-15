@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/providers/auth";
+import { ConfigProvider } from "antd";
+import ToastProvider from "@/providers/toast/toast";
+import { EmployeeProvider } from "@/providers/employee";
+import { AttandanceProvider } from "@/providers/attandance";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import { JobPostingProvider } from "@/providers/jobPost";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { JobApplicationProvider } from "@/providers/jobApplication";
+import { InterviewProvider } from "@/providers/Interview";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,9 +23,70 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
-      </body>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#fb9b01",
+            colorInfo: "#fb9b01",
+            sizeStep: 6,
+            borderRadius: 5,
+            wireframe: false,
+            fontSize: 17,
+          },
+          components: {
+            Button: {
+              contentFontSize: 18,
+              contentFontSizeLG: 17,
+              contentFontSizeSM: 0,
+              contentLineHeightLG: 7.5,
+              paddingBlock: 4,
+              controlHeight: 49,
+            },
+            Input: {
+              controlHeight: 48,
+              lineWidth: 2,
+              borderRadius: 15,
+              activeBg: "rgba(226, 226, 226, 0.29)",
+            },
+            Layout: {
+              headerHeight: 55,
+              headerBg: "rgb(34,36,38)",
+            },
+            Spin: {
+              dotSize: 57,
+              fontSize: 25,
+              motionDurationMid: "0.1s",
+            },
+            Carousel: {
+              dotHeight: 12,
+            },
+            Select: {
+              controlHeight: 49,
+              borderRadius: 15,
+            },
+            InputNumber: {
+              controlHeight: 48,
+              borderRadius: 15,
+              lineWidth: 2,
+            },
+          },
+        }}
+      >
+        <InterviewProvider>
+          <AuthProvider>
+            <ToastProvider />
+            <JobPostingProvider>
+              <EmployeeProvider>
+                <AttandanceProvider>
+                  <JobApplicationProvider>
+                    <body>{children}</body>
+                  </JobApplicationProvider>
+                </AttandanceProvider>
+              </EmployeeProvider>
+            </JobPostingProvider>
+          </AuthProvider>
+        </InterviewProvider>
+      </ConfigProvider>
     </html>
   );
 }

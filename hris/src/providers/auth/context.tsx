@@ -1,17 +1,19 @@
+"use client";
+
 import { createContext } from "react";
 
 export interface IUser {
-  id: string;
-  username: string;
+  id?: number;
+  userName: string;
   name: string;
   surname: string;
   emailAddress: string;
   password: string;
-  roles: IUserRole[];
+  roles?: IUserRole[];
 }
 
 export interface ILoginData {
-  email: string;
+  userNameOrEmailAddress: string;
   password: string;
 }
 
@@ -29,14 +31,17 @@ export interface IAuthStateContext {
 }
 
 export interface IAuthActionContext {
-  loginUser: (loginData: ILoginData) => void;
-  getCurrentUser: (jwtToken: string) => void;
+  loginUser: (loginData: ILoginData) => Promise<void>;
+  getCurrentUser: (jwtToken: string) => Promise<void>;
+  signUp: (user: IUser) => Promise<void>;
+  resetStateFlags: () => void;
 }
 
 export const INITIAL_STATE: IAuthStateContext = {
   isPending: false,
   isSuccess: false,
   isError: false,
+  currentUser: null,
 };
 
 export const AuthStateContext = createContext<IAuthStateContext>(INITIAL_STATE);

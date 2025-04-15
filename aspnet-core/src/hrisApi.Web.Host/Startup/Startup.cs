@@ -17,6 +17,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.FileProviders;
+using hrisApi.Configurations;
 
 namespace hrisApi.Web.Host.Startup
 {
@@ -47,7 +49,7 @@ namespace hrisApi.Web.Host.Startup
             AuthConfigurer.Configure(services, _appConfiguration);
 
             services.AddSignalR();
-
+            services.Configure<SmtpSettings>(_appConfiguration.GetSection("SmtpSettings"));
             // Configure CORS for angular2 UI
             services.AddCors(
                 options => options.AddPolicy(
@@ -87,12 +89,20 @@ namespace hrisApi.Web.Host.Startup
 
             app.UseCors(_defaultCorsPolicyName); // Enable CORS!
 
-            app.UseStaticFiles();
+
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "C:\\Users\\Motseki Tshabalala\\Source\\Repos\\hris-repo\\aspnet-core\\src\\hrisApi.Web.Host\\App_Data\\Documents\\")),
+            //    RequestPath = "/App_Data/Documents"
+            //});
+
+
 
             app.UseAbpRequestLocalization();
 
