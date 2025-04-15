@@ -4,8 +4,10 @@ import React from "react";
 import { Form, Input, DatePicker, Button } from "antd";
 import dayjs from "dayjs";
 import { IJobPosting } from "@/providers/jobPost/interfaces";
-import globals from "../globals.module.css"; 
-import styles from "./styles/styles.module.css"   
+import globals from "../globals.module.css";
+import styles from "./styles/styles.module.css";
+import { useJobPostingActions } from "@/providers/jobPost";
+import { toast } from "@/providers/toast/toast";
 
 const { TextArea } = Input;
 
@@ -21,19 +23,26 @@ interface FormValues {
 
 const CreateJobPost: React.FC = () => {
   const [form] = Form.useForm();
+  const { createJobPosting } = useJobPostingActions();
 
   const onFinish = (values: FormValues) => {
-    const payload: IJobPosting = {
-      title: values.title,
-      department: values.department,
-      description: values.description,
-      location: values.location,
-      openDate: values.openDate.toString(),
-      closeDate: values.closeDate.toString(),
-      status: "Open",
-    };
+    try {
+      const payload: IJobPosting = {
+        title: values.title,
+        department: values.department,
+        description: values.description,
+        location: values.location,
+        openDate: values.openDate.toString(),
+        closeDate: values.closeDate.toString(),
+        status: "Open",
+      };
 
-    console.log("Payload:", payload);
+      createJobPosting(payload);
+      toast("A new job post recorded successfully", "success");
+    } catch (err) {
+      toast("Job Post submission failed. Please try again.", "error");
+      console.log(err);
+    }
   };
 
   return (
@@ -62,7 +71,9 @@ const CreateJobPost: React.FC = () => {
             <Form.Item
               label="Department"
               name="department"
-              rules={[{ required: true, message: "Please enter the department" }]}
+              rules={[
+                { required: true, message: "Please enter the department" },
+              ]}
               className={styles.flexItem}
             >
               <Input />
@@ -72,7 +83,9 @@ const CreateJobPost: React.FC = () => {
           <Form.Item
             label="Description"
             name="description"
-            rules={[{ required: true, message: "Please enter the description" }]}
+            rules={[
+              { required: true, message: "Please enter the description" },
+            ]}
           >
             <TextArea rows={4} />
           </Form.Item>
@@ -89,7 +102,9 @@ const CreateJobPost: React.FC = () => {
             <Form.Item
               label="Open Date"
               name="openDate"
-              rules={[{ required: true, message: "Please select the open date" }]}
+              rules={[
+                { required: true, message: "Please select the open date" },
+              ]}
               className={styles.flexItem}
             >
               <DatePicker style={{ width: "100%" }} />
