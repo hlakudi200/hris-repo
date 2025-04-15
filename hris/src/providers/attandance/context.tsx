@@ -17,7 +17,6 @@ export interface IProject {
   projectCode: string;
   title: string;
   description: string;
-  employees?: IEmployee[];
 }
 
 export interface IWeeklyHoursResponse {
@@ -41,6 +40,7 @@ export interface IAttandanceActionContext {
   getProjects: () => void;
   getWeeklyHours: (employeeId: string) => void;
   createAttandance: (Attandance: IAttandance) => void;
+  createProject: (project: IProject) => void;
   updateAttandance: (Attandance: IAttandance) => void;
   deleteAttandance: (id: string) => void;
 }
