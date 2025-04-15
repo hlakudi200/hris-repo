@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   FileFilled,
@@ -15,6 +15,13 @@ import { Button, Layout, Menu } from "antd";
 import { EmployeeProvider } from "@/providers/employee";
 import { LeaveRequestProvider } from "@/providers/leaveRequest";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
+import styels from "./styles/global.module.css";
+import { PayrollTransactionProvider } from "@/providers/payrolltransaction";
+import { EmployeeProvider, useEmployeeActions } from "@/providers/employee";
+import { LeaveRequestProvider } from "@/providers/leaveRequest";
+import { ItemType, MenuItemType } from "antd/es/menu/interface";
+import { useRouter } from "next/navigation";
+import { useAuthState } from "@/providers/auth";
 import styels from "./styles/global.module.css";
 import { PayrollTransactionProvider } from "@/providers/payrolltransaction";
 
