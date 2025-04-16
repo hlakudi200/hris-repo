@@ -22,6 +22,10 @@ export enum AttandanceActionEnums {
   createAttandanceSuccess = "CREATE_ATTANDANCE_SUCCESS",
   createAttandanceError = "CREATE_ATTANDANCE_ERROR",
 
+  createProjectPending = "CREATE_PROJECT_PENDING",
+  createProjectSuccess = "CREATE_PROJECT_SUCCESS",
+  createProjectError = "CREATE_PROJECT_ERROR",
+
   updateAttandancePending = "UPDATE_ATTANDANCE_PENDING",
   updateAttandanceSuccess = "UPDATE_ATTANDANCE_SUCCESS",
   updateAttandanceError = "UPDATE_ATTANDANCE_ERROR",
@@ -90,6 +94,12 @@ export const getAttandanceError = createAction<IAttandanceStateContext>(
   () => ({ isPending: false, isSuccess: false, isError: true })
 );
 
+//get Projects
+export const getProjectsPending = createAction<IAttandanceStateContext>(
+  AttandanceActionEnums.getProjectsPending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
 export const getProjectsSuccess = createAction<
   IAttandanceStateContext,
   IProject[]
@@ -100,16 +110,12 @@ export const getProjectsSuccess = createAction<
   projects,
 }));
 
-export const getProjectsPending = createAction<IAttandanceStateContext>(
-  AttandanceActionEnums.getAttandanceError,
-  () => ({ isPending: true, isSuccess: false, isError: false })
-);
-
 export const getProjectsError = createAction<IAttandanceStateContext>(
-  AttandanceActionEnums.getAttandanceError,
+  AttandanceActionEnums.getProjectsPending,
   () => ({ isPending: false, isSuccess: false, isError: true })
 );
 
+//create Attandance 
 export const createAttandancePending = createAction<IAttandanceStateContext>(
   AttandanceActionEnums.createAttandancePending,
   () => ({ isPending: true, isSuccess: false, isError: false })
@@ -130,6 +136,28 @@ export const createAttandanceError = createAction<IAttandanceStateContext>(
   () => ({ isPending: false, isSuccess: false, isError: true })
 );
 
+//create Project
+export const createProjectPending = createAction<IAttandanceStateContext>(
+  AttandanceActionEnums.createProjectPending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
+export const createProjectSuccess = createAction<
+  IAttandanceStateContext,
+  IProject
+>(AttandanceActionEnums.createProjectSuccess, (project: IProject) => ({
+  isPending: false,
+  isSuccess: true,
+  isError: false,
+  project,
+}));
+
+export const createProjecError = createAction<IAttandanceStateContext>(
+  AttandanceActionEnums.createProjectError,
+  () => ({ isPending: false, isSuccess: false, isError: true })
+);
+
+//update Attandance
 export const updateAttandancePending = createAction<IAttandanceStateContext>(
   AttandanceActionEnums.updateAttandancePending,
   () => ({ isPending: true, isSuccess: false, isError: false })

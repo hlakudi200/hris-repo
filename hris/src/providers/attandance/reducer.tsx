@@ -80,6 +80,20 @@ export const AttandanceReducer = handleActions<
       ...action.payload,
     }),
 
+    //create Projects 
+    [AttandanceActionEnums.createProjectPending]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [AttandanceActionEnums.createProjectSuccess]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [AttandanceActionEnums.createProjectError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+
     //update attendance record
     [AttandanceActionEnums.updateAttandancePending]: (state, action) => ({
       ...state,

@@ -13,7 +13,6 @@ namespace hrisApi.Services.JobApplicationService.DTO
     [AutoMap(typeof(JobApplication))]
     public class JobApplicationDto : EntityDto<Guid>
     {
-
         public Guid JobPostingId { get; set; }
         public string ApplicantName { get; set; }
         public string Email { get; set; }

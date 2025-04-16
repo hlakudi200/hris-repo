@@ -1,6 +1,7 @@
 import { createContext } from "react";
 
 export interface IJobApplication {
+  id?:string
   jobPostingId: string;
   applicantName: string;
   email: string;
@@ -8,6 +9,7 @@ export interface IJobApplication {
   status: string;
   interviews?: IInterview;
 }
+
 
 export interface IInterview {
   jobApplicationId: string;
@@ -26,6 +28,8 @@ export interface IJobApplicationStateContext {
 
 export interface IJobApplicationActionContext {
   submitJobApplication: (application: IJobApplication) => Promise<void>;
+  getJobApplications:()=>void;
+  updateJobApplication:(jobApplication:IJobApplication)=>Promise<void>;
   resetStateFlags: () => void;
 }
 

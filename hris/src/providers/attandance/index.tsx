@@ -6,6 +6,7 @@ import {
   AttandanceActionContext,
   AttandanceStateContext,
   IWeeklyHoursResponse,
+  IProject,
 } from "./context";
 import { AttandanceReducer } from "./reducer";
 import { useContext, useReducer } from "react";
@@ -31,6 +32,9 @@ import {
   getProjectsPending,
   getProjectsSuccess,
   getProjectsError,
+  createProjectSuccess,
+  createProjectPending,
+  createProjecError
 } from "./actions";
 
 export const AttandanceProvider = ({
@@ -112,6 +116,20 @@ export const AttandanceProvider = ({
         dispatch(createAttandanceError());
       });
   };
+  
+  const createProject = async (request: IProject) => {
+    dispatch(createProjectPending());
+    const endpoint = `/api/services/app/Project/Create`;
+    await instance
+      .post(endpoint, request)
+      .then((response) => {
+        dispatch(createProjectSuccess(response.data.results));
+      })
+      .catch((error) => {
+        console.error(error);
+        dispatch(createProjecError());
+      });
+  };
 
   const updateAttandance = async (Attandance: IAttandance) => {
     dispatch(updateAttandancePending());
@@ -152,6 +170,7 @@ export const AttandanceProvider = ({
           updateAttandance,
           deleteAttandance,
           getProjects,
+          createProject,
         }}
       >
         {children}
