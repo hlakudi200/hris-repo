@@ -15,7 +15,15 @@ namespace hrisApi.Services.InterviewService
         public InterviewAppService(IRepository<Interview, Guid> repository) : base(repository)
         {
         }
-       
+
+        public async Task<IList<InterviewDto>> GetInterviewsByJobApplication(Guid id)
+        {
+            var interviews = await Repository.GetAllListAsync(x => x.JobApplicationId == id);
+
+            return ObjectMapper.Map<IList<InterviewDto>>(interviews);
+        }
+
+
     }
    
 }
