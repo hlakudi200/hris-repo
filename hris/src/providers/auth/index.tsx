@@ -16,12 +16,14 @@ import {
   loginUserError,
   loginUserPending,
   loginUserSuccess,
+  resetStateFlagsAction,
   signUpError,
   signUpPending,
   signUpSuccess,
+  updateRoleAction,
 } from "./actions";
 import { getAxiosInstace } from "@/utils/axios-instance";
-import { resetStateFlagsAction } from "../jobApplication/actions";
+import { getRole } from "@/utils/jwtDecoder";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
@@ -35,6 +37,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await instance
       .post(endpoint, loginData)
       .then((response) => {
+        const role = getRole(response.data.result.accessToken);
+        updateRole(role);
         getCurrentUser(response.data.result.accessToken);
         dispatch(loginUserSuccess(response.data.result.accessToken));
       })
@@ -86,10 +90,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch(resetStateFlagsAction());
   };
 
+  const updateRole = (role: string) => {
+    dispatch(updateRoleAction(role));
+  };
+
   return (
     <AuthStateContext.Provider value={state}>
       <AuthActionContext.Provider
-        value={{ loginUser, getCurrentUser, signUp, resetStateFlags }}
+        value={{
+          loginUser,
+          getCurrentUser,
+          signUp,
+          resetStateFlags,
+          updateRole,
+        }}
       >
         {children}
       </AuthActionContext.Provider>
