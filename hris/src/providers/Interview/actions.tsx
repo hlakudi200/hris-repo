@@ -10,6 +10,10 @@ export enum InterviewActionEnums {
   getInterviewSuccess = "GET_INTERVIEW_SUCCESS",
   getInterviewError = "GET_INTERVIEW_ERROR",
 
+  getAllInterviewsPending = "GET_ALL_INTERVIEWS_PENDING",
+  getAllInterviewsSuccess = "GET_ALL_INTERVIEWS_SUCCESS",
+  getAllInterviewsError = "GET_ALL_INTERVIEWS_ERROR",
+
   getInterviewsByJobApplicationPending = "GET_INTERVIEWS_BY_JOB_APPLICATION_PENDING",
   getInterviewsByJobApplicationSuccess = "GET_INTERVIEWS_BY_JOB_APPLICATION_SUCCESS",
   getInterviewsByJobApplicationError = "GET_INTERVIEWS_BY_JOB_APPLICATION_ERROR",
@@ -77,6 +81,32 @@ export const getInterviewError = createAction<IInterviewStateContext, string>(
     errorMessage,
   })
 );
+
+// Get all interviews actions
+export const getAllInterviewsPending = createAction<IInterviewStateContext>(
+  InterviewActionEnums.getAllInterviewsPending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
+export const getAllInterviewsSuccess = createAction<
+  IInterviewStateContext,
+  IInterview[]
+>(InterviewActionEnums.getAllInterviewsSuccess, (interviews: IInterview[]) => ({
+  isPending: false,
+  isSuccess: true,
+  isError: false,
+  interviews,
+}));
+
+export const getAllInterviewsError = createAction<
+  IInterviewStateContext,
+  string
+>(InterviewActionEnums.getAllInterviewsError, (errorMessage: string) => ({
+  isPending: false,
+  isSuccess: false,
+  isError: true,
+  errorMessage,
+}));
 
 // Get interviews by job application actions
 export const getInterviewsByJobApplicationPending =

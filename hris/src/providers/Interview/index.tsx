@@ -16,6 +16,9 @@ import {
   getInterviewError,
   getInterviewPending,
   getInterviewSuccess,
+  getAllInterviewsPending,
+  getAllInterviewsSuccess,
+  getAllInterviewsError,
   getInterviewsByJobApplicationError,
   getInterviewsByJobApplicationPending,
   getInterviewsByJobApplicationSuccess,
@@ -71,7 +74,33 @@ export const InterviewProvider = ({
       }
     } catch (error) {
       console.error("Error getting interview:", error);
+      debugger;
       dispatch(getInterviewError(error.message || "Failed to get interview"));
+
+      throw error;
+    }
+  };
+
+  const getAllInterviews = async () => {
+    dispatch(getAllInterviewsPending());
+
+    const endpoint = `/api/services/app/Interview/GetAll`;
+
+    try {
+      const response = await instance.get(endpoint);
+      debugger;
+      if (response.status === 200) {
+        debugger;
+        dispatch(getAllInterviewsSuccess(response.data.result.items));
+        return response.data.result.items;
+      }
+    } catch (error) {
+      console.error("Error getting all interviews:", error);
+
+      dispatch(
+        getAllInterviewsError(error.message || "Failed to get all interviews")
+      );
+
       throw error;
     }
   };
@@ -79,9 +108,10 @@ export const InterviewProvider = ({
   const getInterviewsByJobApplication = async (jobApplicationId: string) => {
     dispatch(getInterviewsByJobApplicationPending());
 
-    const endpoint = `/api/services/app/Interview/GetAllByJobApplication?jobApplicationId=${jobApplicationId}`;
+    const endpoint = `/api/services/app/Interview/GetInterviewsByJobApplication?id=${jobApplicationId}`;
 
     try {
+      debugger;
       const response = await instance.get(endpoint);
 
       if (response.status === 200) {
@@ -147,6 +177,7 @@ export const InterviewProvider = ({
         value={{
           createInterview,
           getInterview,
+          getAllInterviews,
           getInterviewsByJobApplication,
           updateInterview,
           deleteInterview,

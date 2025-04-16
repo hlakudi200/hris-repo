@@ -32,6 +32,20 @@ export const InterviewReducer = handleActions<IInterviewStateContext>(
       ...action.payload,
     }),
 
+    // Get all interviews reducers
+    [InterviewActionEnums.getAllInterviewsPending]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [InterviewActionEnums.getAllInterviewsSuccess]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [InterviewActionEnums.getAllInterviewsError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+
     // Get interviews by job application reducers
     [InterviewActionEnums.getInterviewsByJobApplicationPending]: (
       state,
