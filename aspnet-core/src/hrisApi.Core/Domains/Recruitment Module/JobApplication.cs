@@ -11,10 +11,10 @@ namespace hrisApi.Domains.Recruitment_Module
 
         [ForeignKey(nameof(JobPostingId))]
         public JobPosting JobPosting { get; set; }
-        public string ApplicantName { get; set; }
-        public string Email { get; set; }
-        public string ResumePath { get; set; }
-        public string Status { get; set; }
+        public string ApplicantName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string ResumePath { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
         public ICollection<Interview> Interviews { get; set; }
     }
 

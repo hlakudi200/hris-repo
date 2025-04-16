@@ -6,8 +6,8 @@ namespace hrisApi.Domains.Payroll_Processing
     public class BonusOrCommission : FullAuditedEntity<Guid>
     {
         public Guid PayrollTransactionId { get; set; }
-        public string Type { get; set; } // Bonus or Commission
+        public string Type { get; set; } = string.Empty;
         public decimal Amount { get; set; }
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
     }
 }

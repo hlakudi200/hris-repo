@@ -10,9 +10,9 @@ namespace hrisApi.Domains.Attendance_Management
 {
     public class Project : FullAuditedEntity<Guid>
     {
-        public string ProjectCode { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public string ProjectCode { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public ICollection<Employee> Employees { get; set; }
     }
 }
