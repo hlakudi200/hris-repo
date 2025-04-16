@@ -18,6 +18,7 @@ import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import { PayrollTransactionProvider } from "@/providers/payrolltransaction";
 import { EmployeeProvider } from "@/providers/employee";
 import styels from "./styles/global.module.css";
+import { EmailProvider } from "@/providers/email";
 
 const { Header, Sider, Content } = Layout;
 
@@ -64,7 +65,8 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
   ];
 
   return (
-    <PayrollTransactionProvider>
+    <EmailProvider>
+        <PayrollTransactionProvider>
       <EmployeeProvider>
         <LeaveRequestProvider>
           <Layout className={styels.layout}>
@@ -99,6 +101,8 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
         </LeaveRequestProvider>
       </EmployeeProvider>
     </PayrollTransactionProvider>
+    </EmailProvider>
+  
   );
 };
 

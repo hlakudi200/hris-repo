@@ -24,6 +24,6 @@ export const INITIAL_STATE: IEmailStateContext = {
   isError: false,
 };
 
-export const AuthStateContext = createContext<IEmailStateContext>(INITIAL_STATE);
+export const EmailStateContext = createContext<IEmailStateContext>(INITIAL_STATE);
 
-export const AuthActionContext = createContext<IEmailActionContext>(undefined);
+export const EmailActionContext = createContext<IEmailActionContext>(undefined);
