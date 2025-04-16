@@ -1,88 +1,272 @@
 "use client";
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-  useEmployeeActions,
-  useEmployeeState,
-} from "@/providers/employee/index";
-import { ICreateEmployeeRequest } from "@/providers/employee/context";
-import {
+  App,
+  Button,
+  Table,
+  Modal,
   Form,
   Input,
   DatePicker,
   Select,
-  Button,
-  Card,
-  message,
+  Space,
+  Popconfirm,
   Spin,
+  Alert,
 } from "antd";
-
-import { Moment } from "moment";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  PlusOutlined,
+  ReloadOutlined,
+} from "@ant-design/icons";
+import {
+  useEmployeeActions,
+  useEmployeeState,
+} from "@/providers/employee/index";
+import moment from "moment";
 
 const { Option } = Select;
 const { Password } = Input;
 
-interface CreateEmployeeFormValues {
-  name: string;
-  surname: string;
-  email: string;
-  username: string;
-  password: string;
-  employeeNumber: string;
-  contactNo: string;
-  dateOfBirth: Moment;
-  nationalIdNumber: string;
-  hireDate: Moment;
-  position: string;
-  department: string;
-  managerId: string;
-  roleNames: string[];
-}
+const EmployeeManagement = () => {
+  const { message } = App.useApp();
+  const [form] = Form.useForm();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentEmployeeId, setCurrentEmployeeId] = useState(null);
+  const [localSubmitting, setLocalSubmitting] = useState(false);
 
-const CreateEmployeeForm = () => {
-  const { createEmployee } = useEmployeeActions();
-  const { isPending, isSuccess, isError, errorMessage } = useEmployeeState();
-  const [form] = Form.useForm<CreateEmployeeFormValues>();
+  const { isPending, isSuccess, isError, errorMessage, employees } =
+    useEmployeeState();
+  const { createEmployee, getAllEmployees, updateEmployee, deleteEmployee } =
+    useEmployeeActions();
 
-  const availableRoles = ["Employee", "Manager", "HR"];
-
-  const onFinish = async (values: CreateEmployeeFormValues) => {
-    const employeeData: ICreateEmployeeRequest = {
-      ...values,
-      dateOfBirth: values.dateOfBirth
-        ? values.dateOfBirth.format("YYYY-MM-DD")
-        : null,
-      hireDate: values.hireDate ? values.hireDate.format("YYYY-MM-DD") : null,
-    };
-
+  const fetchEmployees = async () => {
     try {
-      await createEmployee(employeeData);
-    } catch {}
+      await getAllEmployees();
+    } catch (error) {
+      message.error("Failed to fetch employees");
+      console.error(error);
+    }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
+  useEffect(() => {
+    if (isSuccess && !isPending && localSubmitting) {
+      setLocalSubmitting(false);
+      setIsModalVisible(false);
+      form.resetFields();
+      setIsEditing(false);
+      setCurrentEmployeeId(null);
+      message.success(
+        isEditing
+          ? "Employee updated successfully"
+          : "Employee created successfully"
+      );
+    }
+  }, [isSuccess, isPending]);
+
+  useEffect(() => {
     if (isError && errorMessage) {
       message.error(errorMessage);
+      setLocalSubmitting(false);
     }
   }, [isError, errorMessage]);
 
-  React.useEffect(() => {
-    if (isSuccess) {
-      message.success("Employee created successfully!");
+  const showCreateModal = () => {
+    form.resetFields();
+    setIsEditing(false);
+    setCurrentEmployeeId(null);
+    setIsModalVisible(true);
+  };
+
+  const showEditModal = (employee) => {
+    setIsEditing(true);
+    setCurrentEmployeeId(employee.id);
+    form.setFieldsValue({
+      ...employee,
+      dateOfBirth: employee.dateOfBirth ? moment(employee.dateOfBirth) : null,
+      hireDate: employee.hireDate ? moment(employee.hireDate) : null,
+    });
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    form.resetFields();
+    setIsEditing(false);
+    setCurrentEmployeeId(null);
+  };
+
+  const handleSubmit = async (values) => {
+    setLocalSubmitting(true);
+    try {
+      const employeeData = {
+        ...values,
+        dateOfBirth: values.dateOfBirth?.format("YYYY-MM-DD"),
+        hireDate: values.hireDate?.format("YYYY-MM-DD"),
+      };
+
+      if (isEditing && currentEmployeeId) {
+        await updateEmployee({
+          id: currentEmployeeId,
+          ...employeeData,
+        });
+      } else {
+        await createEmployee(employeeData);
+      }
+    } catch (error) {
+      setLocalSubmitting(false);
+      message.error(
+        isEditing ? "Failed to update employee" : "Failed to create employee"
+      );
+      console.error(error);
     }
-  }, [isSuccess]);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteEmployee(id);
+      message.success("Employee deleted successfully");
+    } catch (error) {
+      message.error("Failed to delete employee");
+      console.error(error);
+    }
+  };
+
+  const columns = [
+    {
+      title: "Employee ID",
+      dataIndex: "employeeNumber",
+      key: "employeeNumber",
+      sorter: (a, b) => a.employeeNumber.localeCompare(b.employeeNumber),
+    },
+    {
+      title: "Name",
+      key: "fullName",
+      render: (_, record) => `${record.fullName} ${record.surname}`,
+      sorter: (a, b) =>
+        `${a.fullName} ${a.surname}`.localeCompare(
+          `${b.fullName} ${b.surname}`
+        ),
+    },
+    {
+      title: "Position",
+      dataIndex: "position",
+      key: "position",
+      sorter: (a, b) => a.position.localeCompare(b.position),
+    },
+    {
+      title: "Department",
+      dataIndex: "department",
+      key: "department",
+      sorter: (a, b) => a.department.localeCompare(b.department),
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      ellipsis: true,
+    },
+    {
+      title: "Hire Date",
+      dataIndex: "hireDate",
+      key: "hireDate",
+      render: (text) => (text ? moment(text).format("MMM DD, YYYY") : "-"),
+      sorter: (a, b) => moment(a.hireDate).unix() - moment(b.hireDate).unix(),
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (_, record) => (
+        <Space size="small">
+          <Button
+            icon={<EditOutlined />}
+            onClick={() => showEditModal(record)}
+            type="text"
+          />
+          <Popconfirm
+            title="Delete Employee"
+            description="Are you sure you want to delete this employee?"
+            onConfirm={() => handleDelete(record.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button danger icon={<DeleteOutlined />} type="text" />
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
+
+  const availableRoles = ["Employee", "Manager", "HR"];
 
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
-      <Card title="Create New Employee" bordered={false}>
-        <Spin spinning={isPending} tip="Creating employee...">
-          <Form
-            form={form}
-            name="createEmployee"
-            layout="vertical"
-            onFinish={onFinish}
-            autoComplete="off"
+    <div style={{ padding: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "16px",
+          alignItems: "center",
+        }}
+      >
+        <h2 style={{ margin: 0 }}>Employees</h2>
+        <Space>
+          <Button
+            icon={<ReloadOutlined />}
+            onClick={fetchEmployees}
+            loading={isPending}
           >
+            Refresh
+          </Button>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={showCreateModal}
+          >
+            Add Employee
+          </Button>
+        </Space>
+      </div>
+
+      {isError && errorMessage && (
+        <Alert
+          message="Error"
+          description={errorMessage}
+          type="error"
+          showIcon
+          style={{ marginBottom: "16px" }}
+        />
+      )}
+
+      <Table
+        columns={columns}
+        dataSource={Array.isArray(employees) ? employees : []}
+        rowKey="id"
+        loading={isPending}
+        pagination={{
+          pageSize: 10,
+          showSizeChanger: true,
+          showTotal: (total) => `Total ${total} employees`,
+        }}
+      />
+
+      <Modal
+        title={isEditing ? "Edit Employee" : "Add New Employee"}
+        open={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+        destroyOnClose
+        width={800}
+      >
+        <Spin spinning={isPending || localSubmitting} tip="Processing...">
+          <Form form={form} layout="vertical" onFinish={handleSubmit}>
+            {/* Form fields remain the same */}
             <div style={{ display: "flex", gap: "20px" }}>
               <Form.Item
                 name="name"
@@ -138,14 +322,18 @@ const CreateEmployeeForm = () => {
                 <Input placeholder="Enter username" />
               </Form.Item>
 
-              <Form.Item
-                name="password"
-                label="Password"
-                rules={[{ required: true, message: "Please enter password" }]}
-                style={{ flex: 1 }}
-              >
-                <Password placeholder="Enter password" />
-              </Form.Item>
+              {!isEditing && (
+                <Form.Item
+                  name="password"
+                  label="Password"
+                  rules={[
+                    { required: !isEditing, message: "Please enter password" },
+                  ]}
+                  style={{ flex: 1 }}
+                >
+                  <Password placeholder="Enter password" />
+                </Form.Item>
+              )}
             </div>
 
             <div style={{ display: "flex", gap: "20px" }}>
@@ -162,6 +350,20 @@ const CreateEmployeeForm = () => {
               >
                 <Input placeholder="Enter national ID number" />
               </Form.Item>
+
+              {/* <Form.Item
+                name="employeeNumber"
+                label="Employee Number"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter employee number",
+                  },
+                ]}
+                style={{ flex: 1 }}
+              >
+                <Input placeholder="Enter employee number" />
+              </Form.Item> */}
             </div>
 
             <div style={{ display: "flex", gap: "20px" }}>
@@ -227,19 +429,35 @@ const CreateEmployeeForm = () => {
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit" loading={isPending}>
-                Create Employee
-              </Button>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  gap: "8px",
+                }}
+              >
+                <Button onClick={handleCancel}>Cancel</Button>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  loading={isPending || localSubmitting}
+                >
+                  {isEditing ? "Update" : "Create"}
+                </Button>
+              </div>
             </Form.Item>
           </Form>
         </Spin>
-      </Card>
+      </Modal>
     </div>
   );
 };
 
-const CreateEmployeePage = () => {
-  return <CreateEmployeeForm />;
-};
+// Wrap with App component to provide message context
+const EmployeeManagementWithApp = () => (
+  <App>
+    <EmployeeManagement />
+  </App>
+);
 
-export default CreateEmployeePage;
+export default EmployeeManagementWithApp;
