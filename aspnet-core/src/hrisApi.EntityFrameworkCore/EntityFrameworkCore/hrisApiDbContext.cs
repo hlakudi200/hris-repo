@@ -1,4 +1,6 @@
-﻿using Abp.Zero.EntityFrameworkCore;
+﻿using System.Linq;
+using System;
+using Abp.Zero.EntityFrameworkCore;
 using hrisApi.Authorization.Roles;
 using hrisApi.Authorization.Users;
 using hrisApi.Domains.Attendance_Management;
@@ -33,4 +35,22 @@ public class hrisApiDbContext : AbpZeroDbContext<Tenant, Role, User, hrisApiDbCo
         : base(options)
     {
     }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        // Force all DateTime and DateTime? to be treated as UTC
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            foreach (var property in entityType.GetProperties()
+                .Where(p => p.ClrType == typeof(DateTime) || p.ClrType == typeof(DateTime?)))
+            {
+                property.SetValueConverter(new Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter<DateTime, DateTime>(
+                    v => v.Kind == DateTimeKind.Utc ? v : v.ToUniversalTime(),
+                    v => DateTime.SpecifyKind(v, DateTimeKind.Utc)
+                ));
+            }
+        }
+    }
+
 }
