@@ -9,7 +9,8 @@ import {
   MenuUnfoldOutlined,
   ProjectOutlined,
   UploadOutlined,
-  UsergroupAddOutlined
+  UsergroupAddOutlined,
+  FileTextOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu } from "antd";
 import { LeaveRequestProvider } from "@/providers/leaveRequest";
@@ -49,6 +50,11 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
       key: "/hrManager/interviews",
       icon: <FileSearchOutlined />,
       label: "Interviews",
+    },
+    {
+      key: "/hrManager/jobApplications",
+      icon: <FileTextOutlined />,
+      label: "Job Applications",
     },
     {
       key: "/hrManager/projects",
