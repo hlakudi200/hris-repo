@@ -74,7 +74,7 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
                 onClick={({ key }) => router.push(key)}
                 theme="dark"
                 mode="inline"
-                defaultSelectedKeys={["profile"]}
+                defaultSelectedKeys={["hrManager"]}
                 items={siderItems}
               />
             </Sider>
