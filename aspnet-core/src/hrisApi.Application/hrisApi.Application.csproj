@@ -14,6 +14,7 @@
   <ItemGroup>
     <PackageReference Include="iTextSharp" Version="5.5.13.4" />
     <PackageReference Include="MailKit" Version="4.11.0" />
+    <PackageReference Include="PdfPig" Version="0.1.10" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\hrisApi.Core\hrisApi.Core.csproj" />
