@@ -14,7 +14,7 @@ const SignIn: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { loginUser, resetStateFlags } = useAuthActions();
-  const { isPending, isSuccess, isError } = useAuthState();
+  const { isPending, isSuccess, isError, currentRole } = useAuthState();
   const router = useRouter();
 
   const handleSingIn = async () => {
@@ -32,7 +32,18 @@ const SignIn: React.FC = () => {
   useEffect(() => {
     if (isSuccess) {
       toast("Authorized", "success");
-      router.push("/employee");
+      resetStateFlags();
+      switch (currentRole) {
+        case "employee":
+          router.push("/employee");
+          break;
+        case "hrmanager":
+          router.push("/hrManager");
+          break;
+        default:
+          router.push("/auth/login");
+          break;
+      }
     }
 
     if (isError) {

@@ -15,6 +15,7 @@ export enum AuthActionEnums {
   signUpError = "SIGN_UP_ERROR",
 
   resetStateFlagsAction = "RESET_STATE_FLAGS",
+  updateRoleAction = "UPDATE_ROLE",
 }
 
 export const loginUserPending = createAction<IAuthStateContext>(
@@ -64,4 +65,17 @@ export const signUpSuccess = createAction<IAuthStateContext>(
 export const signUpError = createAction<IAuthStateContext>(
   AuthActionEnums.signUpSuccess,
   () => ({ isPending: false, isSuccess: false, isError: true })
+);
+export const resetStateFlagsAction = createAction<IAuthStateContext>(
+  AuthActionEnums.resetStateFlagsAction,
+  () => ({ isPending: false, isSuccess: false, isError: false })
+);
+export const updateRoleAction = createAction<IAuthStateContext, string>(
+  AuthActionEnums.updateRoleAction,
+  (currentRole: string) => ({
+    isPending: true,
+    isSuccess: false,
+    isError: false,
+    currentRole,
+  })
 );
