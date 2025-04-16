@@ -205,35 +205,57 @@ namespace hrisApi.Services.Employee_Management
 
         public override async Task<PagedResultDto<EmployeeDto>> GetAllAsync(PagedEmployeeResultRequestDto input)
         {
-            var query = Repository.GetAll();
+            // Start with an Include for the User entity
+            var query = Repository.GetAll().Include(e => e.User);
 
             // Apply filtering
-            if (!string.IsNullOrWhiteSpace(input.Keyword))
-            {
-                query = query.Where(e =>
-                    e.User.Name.Contains(input.Keyword) ||
-                    e.User.Surname.Contains(input.Keyword) ||
-                    e.EmployeeNumber.Contains(input.Keyword) ||
-                    e.NationalIdNumber.Contains(input.Keyword) ||
-                    e.Position.Contains(input.Keyword) ||
-                    e.Department.Contains(input.Keyword)
-                );
-            }
+            //if (!string.IsNullOrWhiteSpace(input.Keyword))
+            //{
+            //    query = query.Where(e =>
+            //        e.User.Name.Contains(input.Keyword) ||
+            //        e.User.Surname.Contains(input.Keyword) ||
+            //        e.EmployeeNumber.Contains(input.Keyword) ||
+            //        e.NationalIdNumber.Contains(input.Keyword) ||
+            //        e.Position.Contains(input.Keyword) ||
+            //        e.Department.Contains(input.Keyword)
+            //    );
+            //}
 
-            if (!string.IsNullOrWhiteSpace(input.Department))
-            {
-                query = query.Where(e => e.Department == input.Department);
-            }
+            // Additional filters for the new properties
+            //if (!string.IsNullOrWhiteSpace(input.FullName))
+            //{
+            //    query = query.Where(e => e.User.Name.Contains(input.FullName));
+            //}
 
-            // Apply sorting
-            if (!string.IsNullOrWhiteSpace(input.Sorting))
-            {
-                query = ApplySorting(query, input);
-            }
-            else
-            {
-                query = query.OrderBy(e => e.User.Name);
-            }
+            //if (!string.IsNullOrWhiteSpace(input.Surname))
+            //{
+            //    query = query.Where(e => e.User.Surname.Contains(input.Surname));
+            //}
+
+            //if (!string.IsNullOrWhiteSpace(input.Email))
+            //{
+            //    query = query.Where(e => e.User.EmailAddress.Contains(input.Email));
+            //}
+
+            //if (!string.IsNullOrWhiteSpace(input.Position))
+            //{
+            //    query = query.Where(e => e.Position.Contains(input.Position));
+            //}
+
+            //if (!string.IsNullOrWhiteSpace(input.Department))
+            //{
+            //    query = query.Where(e => e.Department == input.Department);
+            //}
+
+            //// Apply sorting
+            //if (!string.IsNullOrWhiteSpace(input.Sorting))
+            //{
+            //    query = ApplySorting(query, input);
+            //}
+            //else
+            //{
+            //    query = query.OrderBy(e => e.User.Name);
+            //}
 
             // Apply paging
             var totalCount = await query.CountAsync();
@@ -245,8 +267,20 @@ namespace hrisApi.Services.Employee_Management
             // Map to DTOs
             var employeeDtos = ObjectMapper.Map<List<EmployeeDto>>(employees);
 
+    
+            foreach (var dto in employeeDtos)
+            {
+                var employee = employees.First(e => e.Id == dto.Id);
+                dto.FullName = employee.User?.Name;
+                dto.Surname = employee.User?.Surname;
+                dto.Email = employee.User?.EmailAddress;
+            }
+
             return new PagedResultDto<EmployeeDto>(totalCount, employeeDtos);
         }
+
+
+
 
 
         //Document management methods

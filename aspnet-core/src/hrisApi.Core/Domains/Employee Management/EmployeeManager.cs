@@ -165,6 +165,7 @@ namespace hrisApi.Domains.Employee_Management
 
         public async Task<List<Employee>> GetAllAsync()
         {
+            
             return await _employeeRepository.GetAllListAsync();
         }
 
