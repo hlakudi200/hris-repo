@@ -18,12 +18,13 @@ import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import { PayrollTransactionProvider } from "@/providers/payrolltransaction";
 import { EmployeeProvider } from "@/providers/employee";
 import styels from "./styles/global.module.css";
+import { EmailProvider } from "@/providers/email";
 
 const { Header, Sider, Content } = Layout;
 
 const HrManager = ({ children }: { children: React.ReactNode }) => {
   const [collapsed, setCollapsed] = useState(false);
-    const router = useRouter();
+  const router = useRouter();
 
   const siderItems: ItemType<MenuItemType>[] = [
     {
@@ -32,7 +33,7 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
       label: "Home",
     },
     {
-      key: "/hrManager/employees",
+      key: "/hrManager/employee",
       icon: <UsergroupAddOutlined />,
       label: "Employees",
     },
@@ -47,7 +48,7 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
       label: "Payroll",
     },
     {
-      key: "/hrManager/interviews",
+      key: "/hrManager/interview",
       icon: <FileSearchOutlined />,
       label: "Interviews",
     },
@@ -64,7 +65,8 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
   ];
 
   return (
-    <PayrollTransactionProvider>
+    <EmailProvider>
+        <PayrollTransactionProvider>
       <EmployeeProvider>
         <LeaveRequestProvider>
           <Layout className={styels.layout}>
@@ -99,6 +101,8 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
         </LeaveRequestProvider>
       </EmployeeProvider>
     </PayrollTransactionProvider>
+    </EmailProvider>
+  
   );
 };
 

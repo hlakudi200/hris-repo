@@ -58,6 +58,16 @@ namespace hrisApi.Domains.Employee_Management
                 throw new UserFriendlyException("User creation failed");
             }
 
+            if (Position == "HR Manager")
+            {
+                await _userManager.AddToRoleAsync(user, "hrManager");
+            }
+            else
+            {
+                await _userManager.AddToRoleAsync(user, "EMPLOYEE");
+            }
+
+
 
             var employee = new Employee
             {
@@ -131,7 +141,7 @@ namespace hrisApi.Domains.Employee_Management
             string? department = null,
             string? employeeNumber = null,
             string? nationalIdNumber = null,
-            string? contactNo = null 
+            string? contactNo = null
         )
         {
             // Get the employee

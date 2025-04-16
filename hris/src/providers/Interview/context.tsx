@@ -31,6 +31,7 @@ export interface IInterviewStateContext {
 export interface IInterviewActionContext {
   createInterview: (interview: ICreateInterviewRequest) => Promise<void>;
   getInterview: (id: string) => Promise<void>;
+  getAllInterviews: () => Promise<void>;
   getInterviewsByJobApplication: (jobApplicationId: string) => Promise<void>;
   updateInterview: (interview: IInterview) => Promise<void>;
   deleteInterview: (id: string) => Promise<void>;
