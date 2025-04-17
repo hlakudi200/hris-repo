@@ -23,12 +23,13 @@ export interface IApplicantSignUp {
 const SignUp = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const { signUp } = useAuthActions();
+  const { signUp, resetStateFlags } = useAuthActions();
   const { isSuccess, isError } = useAuthState();
   const router = useRouter();
 
   if (isSuccess) {
     toast("Signup successful!", "success");
+    resetStateFlags();
     router.push("/auth/login");
   }
 
