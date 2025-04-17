@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./styles/styles.module.css";
-import { Button, Modal, Form, Input, message } from "antd";
+import { Button, Modal, Form, Input, message, Spin } from "antd";
 import { useEmployeeActions, useEmployeeState } from "@/providers/employee";
 import globals from "../globals.module.css";
 
@@ -86,7 +86,12 @@ const Profile = () => {
 
   if (isPending) {
     return (
-      <div className={styles.OuterContainer}>Loading employee data...</div>
+      <div
+        className={styles.OuterContainer}
+        style={{ textAlign: "center", padding: "50px 0" }}
+      >
+        <Spin size="large" tip="Loading employee data..." />
+      </div>
     );
   }
 
@@ -96,80 +101,106 @@ const Profile = () => {
 
   return (
     <div className={globals.OuterContainer}>
-      <div className={styles.ImgContainer}>
-        <Image
-          width={100}
-          height={100}
-          src={"/images/profile-user.png"}
-          alt=""
-          style={{ marginTop: 20 }}
-          className={styles.profileImage}
-        ></Image>
+      {isPending ? (
         <div
           style={{
-            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
           }}
-          className={globals.heading}
         >
-          {currentUser.name} {currentUser.surname}
+          <Spin size="large" />
         </div>
-      </div>
-
-      <div className={globals.InfoContainer}>
-        <div className={globals.subheading}>Position</div>
-        <div> {currentEmployee.position} </div>
-        <div className={globals.subheading}>Department</div>
-        <div>{currentEmployee.department} </div>
-        <div className={globals.subheading}>Employee no</div>
-        <div>{currentEmployee.employeeNumber}</div>
-        <div className={globals.subheading}>National Id no</div>
-        <div> {currentEmployee.nationalIdNumber}</div>
-        <div className={styles.subheading}>Contact No</div>
-        <div> {currentEmployee.contactNo}</div>
-      </div>
-      <div style={{ marginBottom: 20 }}>
-        <Button type="primary" onClick={showModal}>
-          Update profile
-        </Button>
-      </div>
-
-      <Modal
-        title="Update Profile"
-        open={isModalVisible}
-        onCancel={handleCancel}
-        footer={null}
-        destroyOnClose={true}
-      >
-        <Form form={form} layout="vertical" onFinish={handleSubmit}>
-          <Form.Item name="position" label="Position">
-            <Input />
-          </Form.Item>
-          <Form.Item name="department" label="Department">
-            <Input />
-          </Form.Item>
-          <Form.Item name="nationalIdNumber" label="National ID Number">
-            <Input />
-          </Form.Item>
-          <Form.Item name="contactNo" label="Contact Number">
-            <Input />
-          </Form.Item>
-
-          <Form.Item>
+      ) : (
+        <>
+          <div className={styles.ImgContainer}>
+            <Image
+              width={100}
+              height={100}
+              src={"/images/profile-user.png"}
+              alt=""
+              style={{ marginTop: 20 }}
+              className={styles.profileImage}
+            />
             <div
               style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                gap: "8px",
+                textAlign: "center",
               }}
+              className={globals.heading}
             >
-              <Button onClick={handleCancel}>Cancel</Button>
-              <Button type="primary" htmlType="submit" loading={isSubmitting}>
-                Save Changes
-              </Button>
+              {currentUser.name} {currentUser.surname}
             </div>
-          </Form.Item>
-        </Form>
-      </Modal>
+          </div>
+
+          <div className={globals.InfoContainer}>
+            <div className={globals.subheading}>Position</div>
+            <div> {currentEmployee.position} </div>
+            <div className={globals.subheading}>Department</div>
+            <div>{currentEmployee.department} </div>
+            <div className={globals.subheading}>Employee no</div>
+            <div>{currentEmployee.employeeNumber}</div>
+            <div className={globals.subheading}>National Id no</div>
+            <div> {currentEmployee.nationalIdNumber}</div>
+            <div className={styles.subheading}>Contact No</div>
+            <div> {currentEmployee.contactNo}</div>
+          </div>
+          <div style={{ marginBottom: 20 }}>
+            <Button type="primary" onClick={showModal}>
+              Update profile
+            </Button>
+          </div>
+
+          <Modal
+            title="Update Profile"
+            open={isModalVisible}
+            onCancel={handleCancel}
+            footer={null}
+            destroyOnClose={true}
+          >
+            <Form form={form} layout="vertical" onFinish={handleSubmit}>
+              <Form.Item name="position" label="Position">
+                <Input />
+              </Form.Item>
+              <Form.Item name="department" label="Department">
+                <Input />
+              </Form.Item>
+              <Form.Item name="nationalIdNumber" label="National ID Number">
+                <Input />
+              </Form.Item>
+              <Form.Item name="contactNo" label="Contact Number">
+                <Input />
+              </Form.Item>
+
+              <Form.Item>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: "8px",
+                  }}
+                >
+                  <Button onClick={handleCancel} disabled={isSubmitting}>
+                    Cancel
+                  </Button>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    loading={isSubmitting}
+                  >
+                    {isSubmitting ? "Saving..." : "Save Changes"}
+                  </Button>
+                </div>
+              </Form.Item>
+            </Form>
+            {isSubmitting && (
+              <div style={{ textAlign: "center", marginTop: "10px" }}>
+                <Spin tip="Updating profile..." />
+              </div>
+            )}
+          </Modal>
+        </>
+      )}
     </div>
   );
 };

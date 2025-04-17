@@ -250,7 +250,7 @@ const EmployeeManagement = () => {
         rowKey="id"
         loading={isPending}
         pagination={{
-          pageSize: 10,
+          pageSize: 4,
           showSizeChanger: true,
           showTotal: (total) => `Total ${total} employees`,
         }}
