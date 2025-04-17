@@ -16,6 +16,9 @@ namespace hrisApi.Services.Employee_Management.DTO
 
         public string EmployeeNumber { get; set; }
         public string FullName { get; set; }
+
+        public string Surname { get; set; }
+        public string Email { get; set; }
         public string Position { get; set; }
        
     }
