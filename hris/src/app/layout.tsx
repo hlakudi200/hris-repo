@@ -10,6 +10,7 @@ import { JobPostingProvider } from "@/providers/jobPost";
 
 import { JobApplicationProvider } from "@/providers/jobApplication";
 import { InterviewProvider } from "@/providers/Interview";
+import { PayrollProvider } from "@/providers/payrollProfile";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -79,7 +80,9 @@ export default function RootLayout({
               <EmployeeProvider>
                 <AttandanceProvider>
                   <JobApplicationProvider>
-                    <body>{children}</body>
+                    <PayrollProvider>
+                      <body>{children}</body>
+                    </PayrollProvider>
                   </JobApplicationProvider>
                 </AttandanceProvider>
               </EmployeeProvider>
