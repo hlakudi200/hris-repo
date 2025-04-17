@@ -16,6 +16,7 @@ import {
   loginUserPending,
   loginUserSuccess,
   resetStateFlagsAction,
+  signOutUser,
   signUpError,
   signUpPending,
   signUpSuccess,
@@ -85,6 +86,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
   };
 
+  const signOut = () => {
+    dispatch(signOutUser());
+  };
+
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
   };
@@ -100,6 +105,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           loginUser,
           getCurrentUser,
           signUp,
+          signOut,
           resetStateFlags,
           updateRole,
         }}

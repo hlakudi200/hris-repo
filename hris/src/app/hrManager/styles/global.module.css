@@ -21,14 +21,19 @@
   display: flex;
   flex-direction: column;
 }
-.content{
- margin: 24px 16px;
- padding: 24;
- min-height: 280,        
+.content {
+  margin: 24px 16px;
+  padding: 24;
+  min-height: 280;
 }
 
-.layout{
+.layout {
   height: 100vh;
+}
+
+.profileMenu {
+  margin-left: auto;
+  padding-right: 20;
 }
 
 @media (max-width: 768px) {
@@ -37,7 +42,7 @@
     align-items: center;
   }
 
-  .calendarSection{
+  .calendarSection {
     display: none;
   }
   .profileSection,
@@ -45,16 +50,17 @@
     width: 100%;
     margin-bottom: 16px;
   }
-  .content{
+  .content {
     margin: 8px -9px;
     padding: 19px;
     min-height: 280px;
   }
-  .layout{
+  .layout {
     height: 100%;
   }
-  
+
+  .profileMenu {
+    margin-left: auto;
+    padding-right: 5;
+  }
 }
-
-
-

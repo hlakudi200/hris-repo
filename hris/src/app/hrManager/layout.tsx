@@ -11,20 +11,38 @@ import {
   UploadOutlined,
   UsergroupAddOutlined,
   FileTextOutlined,
+  LogoutOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu } from "antd";
+import { Button, Dropdown, Layout, Menu } from "antd";
 import { LeaveRequestProvider } from "@/providers/leaveRequest";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import { PayrollTransactionProvider } from "@/providers/payrolltransaction";
 import { EmployeeProvider } from "@/providers/employee";
 import styels from "./styles/global.module.css";
 import { EmailProvider } from "@/providers/email";
+import { useAuthActions, useAuthState } from "@/providers/auth";
 
 const { Header, Sider, Content } = Layout;
 
 const HrManager = ({ children }: { children: React.ReactNode }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const { currentUser } = useAuthState();
+  const { signOut } = useAuthActions();
   const router = useRouter();
+  const userMenu = {
+    items: [
+      {
+        key: "signOut",
+        label: "Sign Out",
+        icon: <LogoutOutlined />,
+        onClick: () => {
+          router.replace("/");
+          signOut();
+        },
+      },
+    ],
+  };
 
   const siderItems: ItemType<MenuItemType>[] = [
     {
@@ -81,7 +99,11 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
                 />
               </Sider>
               <Layout>
-                <Header style={{ padding: 0, backgroundColor: "white" }}>
+                <Header style={{ 
+                    padding: 0,
+                    backgroundColor: "white",
+                    display: "flex",
+                    alignItems: "center",}}>
                   <Button
                     type="text"
                     icon={
@@ -94,6 +116,13 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
                       height: 64,
                     }}
                   />
+                  <div className={styels.profileMenu}>
+                    <Dropdown menu={userMenu} trigger={["click"]}>
+                      <Button type="text" icon={<UserOutlined />}>
+                        {currentUser?.emailAddress ?? "User"}
+                      </Button>
+                    </Dropdown>
+                  </div>
                 </Header>
                 <Content className={styels.content}>{children}</Content>
               </Layout>
