@@ -12,6 +12,18 @@
 .authImage{
     object-fit: contain;
 }
+.subheading {
+    font-weight: 700;
+    font-size: 21px;
+    color: #726D6D;
+  }
+  
+  .heading {
+    font-weight: 700;
+    font-size: 31px;
+    color: #726D6D;
+    text-align: center;
+  }
 @media only screen and (min-width: 320px) and (max-width: 1024px){
     .leftContainer{
         display: none;

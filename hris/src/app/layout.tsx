@@ -43,10 +43,10 @@ export default function RootLayout({
               controlHeight: 49,
             },
             Input: {
-              controlHeight: 48,
-              lineWidth: 2,
+              controlHeight: 45,
+              lineWidth: 1.7,
               borderRadius: 15,
-              activeBg: "rgba(226, 226, 226, 0.29)",
+              activeBg: "rgb(255, 255, 255)",
             },
             Layout: {
               headerHeight: 55,

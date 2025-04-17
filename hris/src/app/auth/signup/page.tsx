@@ -82,27 +82,18 @@ const SignUp = () => {
         className={styles.leftContainer}
       >
         <Image
-          src="/images/auth-image.jpg"
+          src="/images/SingUp.jpg"
           alt="loginImage"
           sizes="100vw"
           width={100}
-          height={100}
+          height={70}
           style={{ objectFit: "cover", width: "100%", height: "100%" }}
         />
       </div>
 
       <div className={styles.rightContainer}>
-        <div>
-          <Image
-            src="/images/logoBG.png"
-            alt=""
-            width={677}
-            height={200}
-            style={{ objectFit: "contain" }}
-            className={styles.logo}
-          />
-        </div>
-        <h1 style={{ fontSize: 40, marginBottom: 20 }}>Sign Up.</h1>
+       
+        <h1 style={{ fontSize: 40, marginBottom: 20 } } className={styles.heading}>Sign Up.</h1>
 
         <Form form={form} className={styles.signUpForm} onFinish={handleSignUp}>
           <div>

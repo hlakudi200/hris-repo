@@ -25,8 +25,8 @@ export default function Home() {
       <div style={{ backgroundColor: "rgba(0, 0, 0, 0.6)", padding: "40px", borderRadius: "10px" }}>
        
         <Image
-          src="/images/logoBG.png"
-          alt="Gym Logo"
+          src="/images/hrlogo.png"
+          alt="ubuntuLogo"
           preview={false}
           style={{ marginBottom: "20px" }}
         />
