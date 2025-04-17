@@ -1,5 +1,4 @@
 "use client";
-
 import { useContext, useReducer } from "react";
 import { AuthReducer } from "./reducer";
 import {
@@ -71,12 +70,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signUp = async (user: IUser) => {
     dispatch(signUpPending());
-    const endpoint = `/api/services/app/User/Create`;
+    const endpoint = `/api/services/app/Applicant/CreateApplicant`;
 
     await instance
       .post(endpoint, user)
       .then((response) => {
-        if (response.status === 201) {
+        if (response.status === 200) {
           dispatch(signUpSuccess());
         }
       })
