@@ -30,6 +30,11 @@
   height: 100vh;
 }
 
+.profileMenu{
+  margin-left: auto;
+  padding-right: 20;
+}
+
 @media (max-width: 768px) {
   .employeeContainer {
     flex-direction: column;
@@ -51,6 +56,11 @@
   }
   .layout{
     height: 100%;
+  }
+
+  .profileMenu{
+    margin-left: auto;
+    padding-right: 5;
   }
   
 }
