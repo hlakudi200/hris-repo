@@ -9,16 +9,22 @@ import {
   useAttandanceState,
 } from "@/providers/attandance";
 import { useEmployeeState } from "@/providers/employee";
+import { useRouter } from "next/navigation";
 
-const AttendanceOverview = () => {
+type AttendanceOverviewProps = {
+  showRecordButton?: boolean; 
+};
+
+const AttendanceOverview = ({ showRecordButton = true }: AttendanceOverviewProps) => {
   const { weeklyHours, isPending, isError } = useAttandanceState();
   const { getWeeklyHours } = useAttandanceActions();
   const { currentEmployee } = useEmployeeState();
+  const router = useRouter();
 
   useEffect(() => {
     let isActive = true;
     const controller = new AbortController();
-    
+
     const fetchData = async () => {
       try {
         getWeeklyHours(currentEmployee.id);
@@ -34,8 +40,8 @@ const AttendanceOverview = () => {
       isActive = false;
       controller.abort();
     };
-  }, []); 
-  
+  }, []);
+
   const currentDate = moment().format("YYYY MMMM D");
 
   const getWeekOfMonth = (date: moment.Moment): number => {
@@ -43,12 +49,12 @@ const AttendanceOverview = () => {
     const weekOfMonth = date.week() - startOfMonth.week() + 1;
     return weekOfMonth < 1 ? 1 : weekOfMonth;
   };
-  
+
   const currentWeek = getWeekOfMonth(moment());
 
   return (
-    <div className={globals.OuterContainer} style={{paddingBottom:20}}>
-      <div className={globals.heading} style={{ paddingTop: 20}}>
+    <div className={globals.OuterContainer} style={{ paddingBottom: 20 }}>
+      <div className={globals.heading} style={{ paddingTop: 20 }}>
         Attendance Overview{" "}
         <span>
           <ClockCircleFilled style={{ color: "green" }} />
@@ -65,11 +71,18 @@ const AttendanceOverview = () => {
           {isError && <Alert message="Error loading hours" type="error" />}
           {!isPending && !isError && `${weeklyHours?.result ?? 0} hours`}
         </div>
-      
       </div>
-      <div style={{ marginTop: 20 }}>
-          <Button type="primary">Record Attendance</Button>
+
+      {showRecordButton && ( 
+        <div style={{ marginTop: 20 }}>
+          <Button
+            type="primary"
+            onClick={() => router.push("/employee/logHours")}
+          >
+            Record Attendance
+          </Button>
         </div>
+      )}
     </div>
   );
 };
