@@ -47,11 +47,7 @@ const siderItems: ItemType<MenuItemType>[] = [
     icon: <FileSearchOutlined />,
     label: "Job post",
   },
-  {
-    key: "/employee/payrolltransaction",
-    icon: <FileSearchOutlined />,
-    label: "PayRoll",
-  },
+
 ];
 
 const Employee = ({ children }: { children: React.ReactNode }) => {
