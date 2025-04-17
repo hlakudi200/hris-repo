@@ -6,6 +6,10 @@ export interface IEmployee {
   id: string;
   employeeNumber: string;
   userId: number;
+  fullName?: string;
+  surname?: string;
+  email?: string;
+  username?: string;
   contactNo: string;
   dateOfBirth: Date;
   nationalIdNumber: string;
@@ -14,10 +18,11 @@ export interface IEmployee {
   department: string;
   managerId: string;
   documents: IEmployeeDocument[];
+  roleNames?: string[];
 }
 
 export interface ICreateEmployeeRequest {
-  name: string;
+  fullName: string;
   surname: string;
   email: string;
   username: string;
@@ -60,6 +65,7 @@ export interface IEmployeeStateContext {
   isSuccess: boolean;
   isError: boolean;
   currentEmployee?: IEmployee;
+  employees?: IEmployee[];
   leaves?: ILeaves;
   payrollProfile?: IPayrollProfile;
   errorMessage?: string;
@@ -71,6 +77,8 @@ export interface IEmployeeActionContext {
   getLeaves: (employeeId: string) => Promise<void>;
   updateEmployee: (employee: IEmployee) => Promise<void>;
   getPayrollProfile: (employeeId: string) => Promise<void>;
+  getAllEmployees: () => Promise<void>;
+  deleteEmployee: (id: string) => Promise<void>;
 }
 
 export const INITIAL_STATE: IEmployeeStateContext = {

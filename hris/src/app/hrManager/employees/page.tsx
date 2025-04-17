@@ -1,5 +1,11 @@
+import CreateEmployeeForm from "@/_componets/createEmployee/page";
+
 const EmployeePage: React.FC = () => {
-    return <div>Employee Page</div>
-}
+  return (
+    <div>
+      <CreateEmployeeForm />
+    </div>
+  );
+};
 
 export default EmployeePage;

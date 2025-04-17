@@ -26,6 +26,14 @@ export enum EmployeeActionEnums {
   getPayrollProfilePending = "GET_PAYROLL_PROFILE_PENDING",
   getPayrollProfileSuccess = "GET_PAYROLL_PROFILE_SUCCESS",
   getPayrollProfileError = "GET_PAYROLL_PROFILE_ERROR",
+
+  getAllEmployeesPending = "GET_ALL_EMPLOYEES_PENDING",
+  getAllEmployeesSuccess = "GET_ALL_EMPLOYEES_SUCCESS",
+  getAllEmployeesError = "GET_ALL_EMPLOYEES_ERROR",
+
+  deleteEmployeePending = "DELETE_EMPLOYEE_PENDING",
+  deleteEmployeeSuccess = "DELETE_EMPLOYEE_SUCCESS",
+  deleteEmployeeError = "DELETE_EMPLOYEE_ERROR",
 }
 
 export const createEmployeePending = createAction<IEmployeeStateContext>(
@@ -134,4 +142,55 @@ export const getPayrollProfileSuccess = createAction<
 export const getPayrollProfileError = createAction<IEmployeeStateContext>(
   EmployeeActionEnums.getPayrollProfileError,
   () => ({ isPending: false, isSuccess: false, isError: true })
+);
+
+// New actions for getAllEmployees
+export const getAllEmployeesPending = createAction<IEmployeeStateContext>(
+  EmployeeActionEnums.getAllEmployeesPending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
+export const getAllEmployeesSuccess = createAction<
+  IEmployeeStateContext,
+  IEmployee[]
+>(EmployeeActionEnums.getAllEmployeesSuccess, (employees: IEmployee[]) => ({
+  isPending: false,
+  isSuccess: true,
+  isError: false,
+  employees,
+}));
+
+export const getAllEmployeesError = createAction<IEmployeeStateContext, string>(
+  EmployeeActionEnums.getAllEmployeesError,
+  (errorMessage: string) => ({
+    isPending: false,
+    isSuccess: false,
+    isError: true,
+    errorMessage,
+  })
+);
+
+// New actions for deleteEmployee
+export const deleteEmployeePending = createAction<IEmployeeStateContext>(
+  EmployeeActionEnums.deleteEmployeePending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
+export const deleteEmployeeSuccess = createAction<IEmployeeStateContext>(
+  EmployeeActionEnums.deleteEmployeeSuccess,
+  () => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+  })
+);
+
+export const deleteEmployeeError = createAction<IEmployeeStateContext, string>(
+  EmployeeActionEnums.deleteEmployeeError,
+  (errorMessage: string) => ({
+    isPending: false,
+    isSuccess: false,
+    isError: true,
+    errorMessage,
+  })
 );
