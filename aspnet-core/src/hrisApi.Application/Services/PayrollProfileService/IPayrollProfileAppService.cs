@@ -8,7 +8,8 @@ namespace hrisApi.Services.PayrollProfileService
 {
     public interface IPayrollProfileAppService : IAsyncCrudAppService<PayrollProfileDto, Guid>
     {
-        public Task<PayrollProfileDto> GetByEmpId(Guid empId);
-        public Task<List<NamedPayrollProfileDto>> GetAllNamed();
+        public Task<GetPayrollProfileDto> GetByEmpId(Guid empId);
+        public Task<List<GetPayrollProfileDto>> GetAllInclude();
+
     }
 }

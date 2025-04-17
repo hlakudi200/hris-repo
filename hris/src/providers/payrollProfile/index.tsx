@@ -12,8 +12,10 @@ import {
   getAllNamedError,
   getAllNamedPending,
   getAllNamedSuccess,
+  getPayrollProfileSuccess,
   resetStateFlagsAction,
 } from "./actions";
+import { getPayrollProfilePending } from "../employee/actions";
 
 export const PayrollProvider = ({
   children,
@@ -43,13 +45,33 @@ export const PayrollProvider = ({
       });
   };
 
+  const getPayrollProfileById = async (id: string) => {
+    dispatch(getPayrollProfilePending());
+
+    const endpoint: string = `/api/services/app/PayrollProfile/GetByEmpId?empId=${id}`;
+    await instance
+      .get(endpoint)
+      .then((response) => {
+ 
+        if (response.status === 200) {
+          dispatch(getPayrollProfileSuccess(response.data.result));
+          console.log("PayrollProfile:",response.data.result)
+        }
+      })
+      .catch((error) => {
+        console.error("Error:",error);
+        dispatch(getAllNamedError());
+      });
+  };
   const resetStateFlags = () => {
     dispatch(resetStateFlagsAction());
   };
 
   return (
     <PayrollStateContext.Provider value={state}>
-      <PayrollActionContext.Provider value={{ getAllNamed, resetStateFlags }}>
+      <PayrollActionContext.Provider
+        value={{getAllNamed, resetStateFlags, getPayrollProfileById }}
+      >
         {children}
       </PayrollActionContext.Provider>
     </PayrollStateContext.Provider>

@@ -15,10 +15,12 @@ export interface IPayrollStateContext {
   isSuccess: boolean;
   isError: boolean;
   namedPayrollProfiles?: INamedPayrollProfile[];
+  PayrollProfile?:INamedPayrollProfile;
 }
 
 export interface IPayrollActionContext {
   getAllNamed: () => void;
+  getPayrollProfileById:(id:string)=>Promise<void>
   resetStateFlags: () => void;
 }
 

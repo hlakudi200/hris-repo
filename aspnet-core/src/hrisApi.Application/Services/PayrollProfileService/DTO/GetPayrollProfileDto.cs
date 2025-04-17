@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Abp.AutoMapper;
 using hrisApi.Domains.Payroll_Processing;
 
 namespace hrisApi.Services.PayrollProfileService.DTO
 {
-
-    public class NamedPayrollProfileDto
+    [AutoMap(typeof(PayrollProfile))]
+    public class GetPayrollProfileDto
     {
         public Guid EmployeeId { get; set; }
         public string EmployeeName { get; set; }
