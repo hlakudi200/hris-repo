@@ -7,8 +7,13 @@
   }
   
   .subSection {
+    width: 25%;
+  }
+  
+  .requestsSection {
     width: 50%;
   }
+
 
   @media (max-width: 768px) {
     .leaveContainer {
@@ -19,6 +24,12 @@
     .subSection{
         width: 100%;
     }
+    
+  
+  .requestsSection {
+    width: 100%;
+  }
+
   }
   
   

@@ -34,6 +34,10 @@ export enum EmployeeActionEnums {
   deleteEmployeePending = "DELETE_EMPLOYEE_PENDING",
   deleteEmployeeSuccess = "DELETE_EMPLOYEE_SUCCESS",
   deleteEmployeeError = "DELETE_EMPLOYEE_ERROR",
+
+  updateLeavesPending = "UPDATE_LEAVES_PENDING",
+  updateLeavesSuccess = "UPDATE_LEAVES_SUCCESS",
+  updateLeavesError = "UPDATE_LEAVES_ERROR",
 }
 
 export const createEmployeePending = createAction<IEmployeeStateContext>(
@@ -194,3 +198,26 @@ export const deleteEmployeeError = createAction<IEmployeeStateContext, string>(
     errorMessage,
   })
 );
+
+export const updateLeavesPending=
+    createAction<IEmployeeStateContext>(
+      EmployeeActionEnums.updateLeavesPending,
+      () => ({ isPending: true, isSuccess: false, isError: false })
+    );
+  export const updateLeavesSuccess = createAction<
+    IEmployeeStateContext,
+    ILeaves
+  >(
+    EmployeeActionEnums.updateLeavesSuccess,
+    (leaves: ILeaves[]) => ({
+      isPending: false,
+      isSuccess: true,
+      isError: false,
+      leaves,
+    })
+  );
+  export const updateLeavesError =
+    createAction<IEmployeeStateContext>(
+      EmployeeActionEnums.updateLeavesError,
+      () => ({ isPending: false, isSuccess: false, isError: true })
+    );

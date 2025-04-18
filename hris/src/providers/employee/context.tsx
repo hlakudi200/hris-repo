@@ -1,5 +1,4 @@
 "use client";
-
 import { createContext } from "react";
 
 export interface IEmployee {
@@ -47,6 +46,7 @@ export interface IEmployeeDocument {
 }
 
 export interface ILeaves {
+  id?: string;
   annual: number;
   sick: number;
   study: number;
@@ -79,6 +79,7 @@ export interface IEmployeeActionContext {
   getPayrollProfile: (employeeId: string) => Promise<void>;
   getAllEmployees: () => Promise<void>;
   deleteEmployee: (id: string) => Promise<void>;
+  updateLeaves: (leave: ILeaves) => void;
 }
 
 export const INITIAL_STATE: IEmployeeStateContext = {
