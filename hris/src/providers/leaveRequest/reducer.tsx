@@ -16,6 +16,25 @@ export const LeaveRequestReducer = handleActions<ILeaveRequestStateContext>(
       ...state,
       ...action.payload,
     }),
+
+    [LeaveRequestActionEnums.getLeaveRequestByEmpIdPending]: (
+      state,
+      action
+    ) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [LeaveRequestActionEnums.getLeaveRequestByEmpIdSuccess]: (
+      state,
+      action
+    ) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [LeaveRequestActionEnums.getLeaveRequestByEmpIdError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
     [LeaveRequestActionEnums.resetStateFlagsAction]: (state, action) => ({
       ...state,
       ...action.payload,

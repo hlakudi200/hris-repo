@@ -10,6 +10,9 @@ import {
   LeaveRequestStateContext,
 } from "./context";
 import {
+  getLeaveRequestByEmpIdError,
+  getLeaveRequestByEmpIdPending,
+  getLeaveRequestByEmpIdSuccess,
   resetStateFlagsAction,
   submitLeaveRequestError,
   submitLeaveRequestPending,
@@ -24,10 +27,9 @@ export const LeaveRequestProvider = ({
   const [state, dispatch] = useReducer(LeaveRequestReducer, INITIAL_STATE);
   const instance = getAxiosInstace();
 
-  const endpoint = `/api/services/app/LeaveRequest/Create`;
-
   const submitLeaveRequest = async (request: ILeaveRequest) => {
     dispatch(submitLeaveRequestPending());
+    const endpoint = `/api/services/app/LeaveRequest/Create`;
 
     instance
       .post(endpoint, request)
@@ -42,6 +44,21 @@ export const LeaveRequestProvider = ({
       });
   };
 
+  const getByEmpId = (empId: string) => {
+    dispatch(getLeaveRequestByEmpIdPending());
+
+    const endpoint = `/api/services/app/LeaveRequest/GetByEmpId?id=${empId}`;
+    instance
+      .get(endpoint)
+      .then((response) => {
+        dispatch(getLeaveRequestByEmpIdSuccess(response.data.result));
+      })
+      .catch((error) => {
+        console.error(error);
+        dispatch(getLeaveRequestByEmpIdError());
+      });
+  };
+
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
   };
@@ -49,7 +66,7 @@ export const LeaveRequestProvider = ({
   return (
     <LeaveRequestStateContext.Provider value={state}>
       <LeaveRequestActionContext.Provider
-        value={{ submitLeaveRequest, resetStateFlags }}
+        value={{ submitLeaveRequest, resetStateFlags, getByEmpId }}
       >
         {children}
       </LeaveRequestActionContext.Provider>
