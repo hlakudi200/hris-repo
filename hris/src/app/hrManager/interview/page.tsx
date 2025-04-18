@@ -82,7 +82,6 @@ const InterviewManagement = ({
     try {
       await getInterviewsByJobApplication(jobApplicationId);
     } catch (error) {
-      debugger;
       message.error("Failed to fetch interviews");
       console.error(error);
     }
