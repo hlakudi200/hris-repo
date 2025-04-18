@@ -13,7 +13,7 @@ interface DataType {
   endDate: string;
   leaveType: string;
   status: string;
-  reason: string;
+  reason?: string;
 }
 
 const ViewLeaveRequests: React.FC = () => {

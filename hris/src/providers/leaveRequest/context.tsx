@@ -6,7 +6,7 @@ export interface ILeaveRequest {
   startDate: string;
   endDate: string;
   status: string;
-  reason: string;
+  reason?: string;
 }
 
 export interface ILeaveRequestStateContext {
