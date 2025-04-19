@@ -22,6 +22,8 @@ export interface IPayrollTransactionActionContext {
   createPayrollTransaction: (transaction: IPayrollTransaction) => Promise<void>;
   getAllTrasactions:()=>void;
   resetStateFlags: () => void;
+  sentPaySlip:(id:string)=>void
+  sentPaySlips:(date:Date)=>void
 }
 
 export const INITIAL_STATE: IPayrollTransactionStateContext = {

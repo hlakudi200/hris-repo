@@ -53,6 +53,53 @@ export const PayrollTransactionReducer =
         ...state,
         ...action.payload,
       }),
+
+      //send payslip
+      [PayrollTransactionActionEnums.sentPaySlipPending]: (
+        state,
+        action
+      ) => ({
+        ...state,
+        ...action.payload,
+      }),
+      [PayrollTransactionActionEnums.sentPaySlipSuccess]: (
+        state,
+        action
+      ) => ({
+        ...state,
+        ...action.payload,
+      }),
+      [PayrollTransactionActionEnums.sentPaySlipError]: (
+        state,
+        action
+      ) => ({
+        ...state,
+        ...action.payload,
+      }),
+      
+      //sent payslips
+      [PayrollTransactionActionEnums.sentPaySlipsPending]: (
+        state,
+        action
+      ) => ({
+        ...state,
+        ...action.payload,
+      }),
+      [PayrollTransactionActionEnums.sentPaySlipsSuccess]: (
+        state,
+        action
+      ) => ({
+        ...state,
+        ...action.payload,
+      }),
+      [PayrollTransactionActionEnums.sentPaySlipsError]: (
+        state,
+        action
+      ) => ({
+        ...state,
+        ...action.payload,
+      }),
+
       [PayrollTransactionActionEnums.resetStateFlagsAction]: (
         state,
         action

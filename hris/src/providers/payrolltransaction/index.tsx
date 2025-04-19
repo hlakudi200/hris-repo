@@ -16,6 +16,12 @@ import {
   getPayrollTransactionError,
   getPayrollTransactionSuccess,
   getPayrollTransactionPending,
+  sentPaySlipsPending,
+  sentPaySlipSuccess,
+  sentPaySlipsSuccess,
+  sentPaySlipsError,
+  sentPaySlipPending,
+  sentPaySlipError,
 } from "./actions";
 
 export const PayrollTransactionProvider = ({
@@ -29,9 +35,10 @@ export const PayrollTransactionProvider = ({
   );
   const instance = getAxiosInstace();
 
-  const endpoint = `/api/services/app/PayrollTransaction/Create`;
+ 
 
   const createPayrollTransaction = async (transaction: IPayrollTransaction) => {
+    const endpoint = `/api/services/app/PayrollTransaction/Create`;
     dispatch(createPayrollTransactionPending());
 
     // Only send the fields that the user will input, backend will calculate the rest
@@ -71,6 +78,40 @@ export const PayrollTransactionProvider = ({
       });
   };
 
+  const sentPaySlips = async (date:Date) => {
+    dispatch(sentPaySlipsPending());
+  const  endpoint =`/api/payroll/send-payslip-email/${date}`
+
+    instance
+      .post(endpoint)
+      .then((response) => {
+        if (response.status === 200) {
+          dispatch(sentPaySlipsSuccess());
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        dispatch(sentPaySlipsError());
+      });
+  };
+
+  const sentPaySlip = async (id:string) => {
+    dispatch(sentPaySlipPending());
+  const  endpoint =`/api/payroll/send-payslips-for-date?id=${id}`
+
+    instance
+      .post(endpoint)
+      .then((response) => {
+        if (response.status === 200) {
+          dispatch(sentPaySlipSuccess());
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        dispatch(sentPaySlipError());
+      });
+  };
+
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
   };
@@ -82,6 +123,8 @@ export const PayrollTransactionProvider = ({
           createPayrollTransaction,
           resetStateFlags,
           getAllTrasactions,
+          sentPaySlip,
+          sentPaySlips
         }}
       >
         {children}
