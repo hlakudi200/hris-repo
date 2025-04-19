@@ -29,17 +29,14 @@ export const PayrollProvider = ({
     dispatch(getAllNamedPending());
     const endpoint: string = "/api/services/app/PayrollProfile/GetAllNamed";
 
-    debugger;
     await instance
       .get(endpoint)
       .then((response) => {
-        debugger;
         if (response.status === 200) {
           dispatch(getAllNamedSuccess(response.data.result));
         }
       })
       .catch((error) => {
-        debugger;
         console.error(error);
         dispatch(getAllNamedError());
       });

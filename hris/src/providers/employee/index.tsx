@@ -149,18 +149,15 @@ export const EmployeeProvider = ({
 
       if (response.status === 200 && response.data && response.data.result) {
         // Ensure we're getting the items array from the response
-        debugger;
         const employees = Array.isArray(response.data.result.items)
           ? response.data.result.items
           : response.data.result;
-        debugger;
         dispatch(getAllEmployeesSuccess(employees));
         return employees;
       } else {
         throw new Error("Invalid response format");
       }
     } catch (error) {
-      debugger;
       console.error("Error fetching employees:", error);
       dispatch(
         getAllEmployeesError(error.message || "Failed to fetch employees")

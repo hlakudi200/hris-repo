@@ -11,5 +11,6 @@ namespace hrisApi.Services.LeaveService
 {
     public interface ILeaveRequestAppService : IAsyncCrudAppService<LeaveRequestDto, Guid>
     {
+        public Task<IList<LeaveRequestDto>> GetByEmpId(Guid id);
     }
 }
