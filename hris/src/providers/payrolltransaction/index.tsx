@@ -80,7 +80,7 @@ export const PayrollTransactionProvider = ({
 
   const sentPaySlips = async (date:Date) => {
     dispatch(sentPaySlipsPending());
-  const  endpoint =`/api/payroll/send-payslip-email/${date}`
+    const  endpoint =`/api/payroll/send-payslips-for-date?id=${date}`
 
     instance
       .post(endpoint)
@@ -97,7 +97,8 @@ export const PayrollTransactionProvider = ({
 
   const sentPaySlip = async (id:string) => {
     dispatch(sentPaySlipPending());
-  const  endpoint =`/api/payroll/send-payslips-for-date?id=${id}`
+
+  const  endpoint =`/api/payroll/send-payslip-email/${id}`
 
     instance
       .post(endpoint)

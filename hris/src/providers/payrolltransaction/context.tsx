@@ -1,6 +1,7 @@
 import { createContext } from "react";
 
 export interface IPayrollTransaction {
+  id?:string
   payrollProfileId: string;
   periodStart: string;
   periodEnd: string;

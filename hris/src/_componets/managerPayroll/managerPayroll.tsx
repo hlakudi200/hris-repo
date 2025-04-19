@@ -1,10 +1,25 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Modal,
+  Spin,
+  Table,
+  Tooltip,
+  Tag,
+  Badge,
+  Input,
+  Space,
+  DatePicker,
+  message,
+} from "antd";
 import type { TableColumnsType } from "antd";
-import { Button, Modal, Spin, Table, Tooltip, Tag, Badge, Input, Space } from "antd";
+import dayjs from "dayjs";
 import { usePayrollActions, usePayrollState } from "@/providers/payrollProfile";
 import ViewPayrollTransactions from "../viewPayrollTransactions/viewPayrollTransactions";
 import { IPayrollTransaction } from "@/providers/payrolltransaction/context";
+import { usePayrollTransactionActions,usePayrollTransactionState } from "@/providers/payrolltransaction";
+import { toast } from "@/providers/toast/toast";
 
 const currencyFormatter = new Intl.NumberFormat("en-ZA", {
   style: "currency",
@@ -22,12 +37,16 @@ interface DataType {
 }
 
 const ManagerPayroll: React.FC = () => {
-  const { namedPayrollProfiles, isPending } = usePayrollState();
-  const { getAllNamed } = usePayrollActions();
-
+  const { namedPayrollProfiles} = usePayrollState();
+  const { getAllNamed} = usePayrollActions();
+  const {sentPaySlips}=usePayrollTransactionActions();
+  const {isSuccess,isError,isPending}=usePayrollTransactionState()
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [sendModalVisible, setSendModalVisible] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
+
 
   useEffect(() => {
     getAllNamed();
@@ -36,6 +55,29 @@ const ManagerPayroll: React.FC = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
     setSelectedRecord(null);
+  };
+
+  const handleSendPayslips = async () => {
+    if (!selectedDate) {
+      message.warning("Please select a date");
+      return;
+    }
+
+    try {
+  
+      await sentPaySlips(selectedDate.toDate());
+      if(isSuccess){
+        toast("Payslips sent successfully","success");
+      }
+        
+      setSendModalVisible(false);
+    } catch (error) {
+      console.error(error);
+       if (isError)
+       {
+        toast("Failed to send payslips","error");
+       }
+    } 
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,6 +180,9 @@ const ManagerPayroll: React.FC = () => {
           onChange={handleSearch}
           style={{ maxWidth: 300 }}
         />
+        <Button type="primary" onClick={() => setSendModalVisible(true)}>
+          Send Payslips by Date
+        </Button>
       </Space>
       <Table<DataType>
         columns={columns}
@@ -149,8 +194,25 @@ const ManagerPayroll: React.FC = () => {
         open={isModalVisible}
         width={"50%"}
         onCancel={handleCancel}
+        footer={null}
       >
         <ViewPayrollTransactions transactions={selectedRecord} />
+      </Modal>
+
+      <Modal
+        title="Send Payslips"
+        open={sendModalVisible}
+        onCancel={() => setSendModalVisible(false)}
+        onOk={handleSendPayslips}
+        confirmLoading={isPending}
+        okText="Send"
+      >
+        <p>Select the date for which you want to send payslips:</p>
+        <DatePicker
+          onChange={(date) => setSelectedDate(date)}
+          style={{ width: "100%" }}
+          format="YYYY-MM-DD"
+        />
       </Modal>
     </div>
   );
