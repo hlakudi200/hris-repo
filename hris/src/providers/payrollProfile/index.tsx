@@ -27,7 +27,7 @@ export const PayrollProvider = ({
 
   const getAllNamed = async () => {
     dispatch(getAllNamedPending());
-    const endpoint: string = "/api/services/app/PayrollProfile/GetAllNamed";
+    const endpoint: string = "/api/services/app/PayrollProfile/GetAllInclude";
 
     await instance
       .get(endpoint)
