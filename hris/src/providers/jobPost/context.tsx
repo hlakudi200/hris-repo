@@ -13,6 +13,7 @@ export interface IJobPostingStateContext {
 export interface IJobPostingActionContext {
   getJobPostings: () => void;
   getJobPosting: (id: string) => void;
+  getJobPostingIncluded:()=>Promise<void>;
   createJobPosting: (JobPosting: IJobPosting) => void;
   updateJobPosting: (JobPosting: IJobPosting) => void;
   deleteJobPosting: (id: string) => void;

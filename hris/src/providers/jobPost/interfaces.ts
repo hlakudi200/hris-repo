@@ -46,5 +46,5 @@ export interface IJobPosting {
   openDate: string;
   closeDate: string;
   status: string;
-  jobApplications?: IJobApplication[];
+  applications?: IJobApplication[];
 }
