@@ -53,6 +53,53 @@ export const PayrollTransactionReducer =
         ...state,
         ...action.payload,
       }),
+
+      //generate pdf 
+      [PayrollTransactionActionEnums.generatePayrollTransactionPdfPending]: (
+        state,
+        action
+      ) => ({
+        ...state,
+        ...action.payload,
+      }),
+      [PayrollTransactionActionEnums.generatePayrollTransactionPdfSuccess]: (
+        state,
+        action
+      ) => ({
+        ...state,
+        ...action.payload,
+      }),
+      [PayrollTransactionActionEnums.generatePayrollTransactionPdfError]: (
+        state,
+        action
+      ) => ({
+        ...state,
+        ...action.payload,
+      }),
+      //download pdf 
+      [PayrollTransactionActionEnums.downloadPayrollTransactionPdfPending]: (
+        state,
+        action
+      ) => ({
+        ...state,
+        ...action.payload,
+      }),
+      [PayrollTransactionActionEnums.downloadPayrollTransactionPdfSuccess]: (
+        state,
+        action
+      ) => ({
+        ...state,
+        ...action.payload,
+      }),
+      [PayrollTransactionActionEnums.downloadPayrollTransactionPdfError]: (
+        state,
+        action
+      ) => ({
+        ...state,
+        ...action.payload,
+      }),
+      //
+      
       [PayrollTransactionActionEnums.resetStateFlagsAction]: (
         state,
         action

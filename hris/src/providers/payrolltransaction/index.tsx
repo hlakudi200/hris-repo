@@ -16,6 +16,12 @@ import {
   getPayrollTransactionError,
   getPayrollTransactionSuccess,
   getPayrollTransactionPending,
+  generatePayrollTransactionPdfPending,
+  generatePayrollTransactionPdfSuccess,
+  generatePayrollTransactionPdfError,
+  downloadPayrollTransactionPdfPending,
+  downloadPayrollTransactionPdfSuccess,
+  downloadPayrollTransactionPdffError,
 } from "./actions";
 
 export const PayrollTransactionProvider = ({
@@ -66,10 +72,66 @@ export const PayrollTransactionProvider = ({
         dispatch(getPayrollTransactionSuccess(response.data.result.items));
       })
       .catch((err) => {
-        getPayrollTransactionError()
+        getPayrollTransactionError();
         console.log("getPayrollTrasactions:", err);
       });
   };
+
+  //Generate Pdf
+  const generatePayrollTransactionPdf = async (
+    payrollTransactionId: string
+  ) => {
+    dispatch(generatePayrollTransactionPdfPending());
+    const endpoint = `/api/services/app/PayrollTransaction/GeneratePayrollPdf?id=${payrollTransactionId}`;
+    await instance
+      .post(endpoint)
+      .then(() => {
+        dispatch(generatePayrollTransactionPdfSuccess());
+        downloadPayrollTransactionPdf(payrollTransactionId)
+      })
+      .catch((error) => {
+        console.error(error);
+        dispatch(generatePayrollTransactionPdfError());
+      });
+  };
+
+  //Download Pdf
+  const downloadPayrollTransactionPdf = async (id: string) => {
+    dispatch(downloadPayrollTransactionPdfPending());
+    const endpoint: string = `/api/payroll/download-pdf/${id}`;
+  
+    try {
+      const response = await instance.get(endpoint);
+  
+      if (response.status === 200) {
+        const result = response.data.result;
+        const byteCharacters = atob(result.fileBytes); 
+        const byteNumbers = new Array(byteCharacters.length);
+  
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+  
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: result.contentType });
+  
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = result.fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+  
+        dispatch(downloadPayrollTransactionPdfSuccess());
+      }
+    } catch (error) {
+      console.error("Download error:", error);
+      dispatch(downloadPayrollTransactionPdffError());
+    }
+  };
+  
 
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
@@ -82,6 +144,8 @@ export const PayrollTransactionProvider = ({
           createPayrollTransaction,
           resetStateFlags,
           getAllTrasactions,
+          downloadPayrollTransactionPdf,
+          generatePayrollTransactionPdf,
         }}
       >
         {children}

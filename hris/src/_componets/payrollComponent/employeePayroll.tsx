@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import globals from "../globals.module.css";
 import { usePayrollActions, usePayrollState } from "@/providers/payrollProfile";
+import { usePayrollTransactionActions} from "@/providers/payrolltransaction";
 import {
   Card,
   Table,
@@ -11,13 +12,14 @@ import {
   Divider,
   Tag,
   Button,
-  message,
 } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 
 const EmployeePayroll = () => {
   const { isPending, isError,PayrollProfile } = usePayrollState();
-  const { getPayrollProfileById } = usePayrollActions();
+  const { getPayrollProfileById} = usePayrollActions();
+  const {generatePayrollTransactionPdf}=usePayrollTransactionActions();
+ 
 
   useEffect(() => {
     getPayrollProfileById("4597b607-7ee2-4e73-581e-08dd7d8d6183");
@@ -37,20 +39,6 @@ const EmployeePayroll = () => {
   }
 
   const payrollProfile = PayrollProfile;
-
-  const handleDownloadPayslip = async (transaction) => {
-    try {
-      // TODO: Hook this to your backend PDF generation
-      console.log("Downloading payslip for:", transaction);
-      message.success(`Payslip download started for ${new Date(transaction.periodStart).toLocaleDateString()}`);
-      // Example:
-      // const response = await axios.get(`/api/download-payslip?id=${transaction.id}`, { responseType: 'blob' });
-      // downloadBlob(response.data, `Payslip-${transaction.periodStart}.pdf`);
-    } catch (error) {
-      console.error("Download failed:", error);
-      message.error("Failed to download payslip");
-    }
-  };
 
   const columns = [
     {
@@ -97,7 +85,7 @@ const EmployeePayroll = () => {
       render: (_, record) => (
         <Button
           icon={<DownloadOutlined />}
-          onClick={() => handleDownloadPayslip(record)}
+          onClick={() =>generatePayrollTransactionPdf(record.id)}
         >
           Download Payslip
         </Button>
