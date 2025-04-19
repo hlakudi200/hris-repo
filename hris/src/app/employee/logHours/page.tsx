@@ -1,8 +1,9 @@
 "use client";
 import AttendanceForm from "@/_componets/attandanceFormComponent/attandanceForm";
 import styles from "./styles/styles.module.css";
-import { Calendar, Card } from "antd";
+import { Card } from "antd";
 import AttendanceOverview from "@/_componets/attandaceComponent/attandanceOverview";
+import LeaveCalendar from "@/_componets/leaveCalendar/leaveCalendar";
 
 const LogHoursPage: React.FC = () => {
   return (
@@ -15,10 +16,7 @@ const LogHoursPage: React.FC = () => {
           title="Calendar"
           style={{ width: "100%", height: "100%", padding: 0 }}
         >
-          <Calendar
-            fullscreen={false}
-            style={{ height: 40, marginBottom: 10 }}
-          />
+          <LeaveCalendar />
         </Card>
       </div>
       <div className={styles.attendanceSection}>
