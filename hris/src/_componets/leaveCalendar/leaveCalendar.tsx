@@ -1,15 +1,13 @@
 "use client";
-import React, { useContext } from "react";
+import React from "react";
 import { Calendar, Badge } from "antd";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
-import {
-  ILeaveRequest,
-  LeaveRequestStateContext,
-} from "@/providers/leaveRequest/context";
+import { ILeaveRequest } from "@/providers/leaveRequest/context";
+import { useLeaveRequestState } from "@/providers/leaveRequest";
 
 const LeaveCalendar: React.FC = () => {
-  const { leaveRequests } = useContext(LeaveRequestStateContext);
+  const { leaveRequests } = useLeaveRequestState();
 
   const getLeaveDates = (): string[] => {
     if (!leaveRequests) return [];
@@ -42,27 +40,22 @@ const LeaveCalendar: React.FC = () => {
       <div
         style={{
           height: "100%",
-          padding: 8,
+          padding: 4,
           background: isLeave ? "#fff1f0" : undefined,
           borderRadius: 4,
         }}
       >
         <div>{current.date()}</div>
         {isLeave && (
-          <div style={{ marginTop: 4 }}>
-            <Badge status="error" text="Leave" />
+          <div>
+            <Badge status="error" />
           </div>
         )}
       </div>
     );
   };
 
-  return (
-    <div style={{ padding: 24, background: "#fff" }}>
-      <h2>Leave Calendar</h2>
-      <Calendar fullCellRender={fullCellRender} />
-    </div>
-  );
+  return <Calendar fullCellRender={fullCellRender} />;
 };
 
 export default LeaveCalendar;

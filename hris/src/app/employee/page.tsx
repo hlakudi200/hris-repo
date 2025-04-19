@@ -1,8 +1,9 @@
 import React from "react";
-import {Calendar, Card } from "antd";
+import {Card } from "antd";
 import AttendanceOverview from "@/_componets/attandaceComponent/attandanceOverview";
 import Profile from "@/_componets/profileComponent/profile";
 import styles from "./styles/global.module.css";
+import LeaveCalendar from "@/_componets/leaveCalendar/leaveCalendar";
 
 
 const Employee = () => {
@@ -13,7 +14,7 @@ const Employee = () => {
       </div>
       <div className={styles.midSection}>
         <Card title="Calendar" style={{ width: "100%", height: "100%" }}>
-          <Calendar fullscreen={false} style={{height: 50}}/>
+          <LeaveCalendar />
         </Card>
       </div>
       <div className={styles.rightSection}>
