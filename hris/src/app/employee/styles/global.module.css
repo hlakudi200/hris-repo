@@ -1,4 +1,4 @@
-.employeeContainer {
+.container {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -6,16 +6,16 @@
   flex-wrap: wrap;
 }
 
-.profileSection {
+.leftSection {
   width: 35%;
 }
 
-.calendarSection {
+.midSection {
   width: 30%;
   padding: 0 10px;
 }
 
-.attendanceSection {
+.rightSection {
   width: 35%;
   display: flex;
   flex-direction: column;
@@ -36,16 +36,16 @@
 }
 
 @media (max-width: 768px) {
-  .employeeContainer {
+  .container {
     flex-direction: column;
     align-items: center;
   }
 
-  .calendarSection{
+  .midSection{
     display: none;
   }
-  .profileSection,
-  .attendanceSection {
+  .rightSection,
+  .leftSection {
     width: 100%;
     margin-bottom: 16px;
   }

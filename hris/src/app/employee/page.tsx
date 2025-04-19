@@ -7,18 +7,17 @@ import styles from "./styles/global.module.css";
 
 const Employee = () => {
   return (
-    <div className={styles.employeeContainer} style={{marginTop: -40 }}>
-      <div className={styles.profileSection}>
+    <div className={styles.container} style={{marginTop: -40 }}>
+      <div className={styles.leftSection}>
         <Profile />
       </div>
-      <div className={styles.calendarSection}>
+      <div className={styles.midSection}>
         <Card title="Calendar" style={{ width: "100%", height: "100%" }}>
           <Calendar fullscreen={false} style={{height: 50}}/>
         </Card>
       </div>
-      <div className={styles.attendanceSection}>
+      <div className={styles.rightSection}>
         <AttendanceOverview />
-        {/* <Button onClick={()=>{()=>{router.push()}}}>Record Attandace</Button> */}
       </div>
     </div>
   );

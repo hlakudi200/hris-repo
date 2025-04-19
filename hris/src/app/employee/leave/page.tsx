@@ -2,6 +2,7 @@
 import LeaveForm from "@/_componets/leaveFormComponent/leaveForm";
 import LeaveOverview from "@/_componets/leaveOverviewComponent/leaveOverview";
 import styles from "./styles/global.module.css";
+import ViewLeaveRequests from "@/_componets/viewLeaveRequests/viewLeaveRequests";
 
 const LeavePage: React.FC = () => {
   return (
@@ -11,6 +12,9 @@ const LeavePage: React.FC = () => {
       </div>
       <div className={styles.subSection}>
         <LeaveForm />
+      </div>
+      <div className={styles.requestsSection}>
+        <ViewLeaveRequests />
       </div>
     </div>
   );

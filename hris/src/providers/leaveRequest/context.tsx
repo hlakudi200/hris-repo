@@ -6,6 +6,7 @@ export interface ILeaveRequest {
   startDate: string;
   endDate: string;
   status: string;
+  reason?: string;
 }
 
 export interface ILeaveRequestStateContext {
@@ -17,6 +18,7 @@ export interface ILeaveRequestStateContext {
 
 export interface ILeaveRequestActionContext {
   submitLeaveRequest: (request: ILeaveRequest) => Promise<void>;
+  getByEmpId: (empId: string) => void;
   resetStateFlags: () => void;
 }
 

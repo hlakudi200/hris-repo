@@ -74,7 +74,6 @@ export const InterviewProvider = ({
       }
     } catch (error) {
       console.error("Error getting interview:", error);
-      debugger;
       dispatch(getInterviewError(error.message || "Failed to get interview"));
 
       throw error;
@@ -88,9 +87,7 @@ export const InterviewProvider = ({
 
     try {
       const response = await instance.get(endpoint);
-      debugger;
       if (response.status === 200) {
-        debugger;
         dispatch(getAllInterviewsSuccess(response.data.result.items));
         return response.data.result.items;
       }
@@ -111,7 +108,6 @@ export const InterviewProvider = ({
     const endpoint = `/api/services/app/Interview/GetInterviewsByJobApplication?id=${jobApplicationId}`;
 
     try {
-      debugger;
       const response = await instance.get(endpoint);
 
       if (response.status === 200) {

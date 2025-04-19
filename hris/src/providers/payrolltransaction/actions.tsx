@@ -10,9 +10,25 @@ export enum PayrollTransactionActionEnums {
   createPayrollTransactionSuccess = "CREATE_PAYROLL_TRANSACTION_SUCCESS",
   createPayrollTransactionError = "CREATE_PAYROLL_TRANSACTION_ERROR",
 
+  generatePayrollTransactionPdfPending = "GENERATE_PAYROLL_TRANSACTION_PENDING",
+  generatePayrollTransactionPdfSuccess = "GENERATE_PAYROLL_TRANSACTION_SUCCESS",
+  generatePayrollTransactionPdfError = "GENERATE_PAYROLL_TRANSACTION_ERROR",
+
+  downloadPayrollTransactionPdfPending = "DOWNLOAD_PAYROLL_TRANSACTION_PENDING",
+  downloadPayrollTransactionPdfSuccess = "DOWNLOAD_PAYROLL_TRANSACTION_SUCCESS",
+  downloadPayrollTransactionPdfError = "DOWNLOAD_PAYROLL_TRANSACTION_ERROR",
+
   getPayrollTransactionPending = "GET_PAYROLL_TRANSACTION_PENDING",
   getPayrollTransactionSuccess = "GET_PAYROLL_TRANSACTION_SUCCESS",
   getPayrollTransactionError = "GET_PAYROLL_TRANSACTION_ERROR",
+
+  sentPaySlipPending = "SENTPAYSLIP_TRANSACTION_PENDING",
+  sentPaySlipSuccess = "SENTPAYSLIP_TRANSACTION_SUCCESS",
+  sentPaySlipError = "SENTPAYSLIP_TRANSACTION_ERROR",
+
+  sentPaySlipsPending = "SENTPAYSLIPS_TRANSACTION_PENDING",
+  sentPaySlipsSuccess = "SENTPAYSLIPS_TRANSACTION_SUCCESS",
+  sentPaySlipsError = "SENTPAYSLIPS_TRANSACTION_ERROR",
 
   resetStateFlagsAction = "RESET_STATE_FLAGS",
 }
@@ -42,6 +58,56 @@ export const createPayrollTransactionError =
     () => ({ isPending: false, isSuccess: false, isError: true })
   );
 
+// Sent Payslip
+export const sentPaySlipPending = createAction<IPayrollTransactionStateContext>(
+  PayrollTransactionActionEnums.sentPaySlipPending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
+export const sentPaySlipSuccess = createAction<
+  IPayrollTransactionStateContext,
+  IPayrollTransaction
+>(
+  PayrollTransactionActionEnums.sentPaySlipSuccess,
+  (payrollTransaction: IPayrollTransaction) => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+    payrollTransaction,
+  })
+);
+
+export const sentPaySlipError = createAction<IPayrollTransactionStateContext>(
+  PayrollTransactionActionEnums.sentPaySlipError,
+  () => ({ isPending: false, isSuccess: false, isError: true })
+);
+
+//sent Payslips
+
+export const sentPaySlipsPending =
+  createAction<IPayrollTransactionStateContext>(
+    PayrollTransactionActionEnums.sentPaySlipsPending,
+    () => ({ isPending: true, isSuccess: false, isError: false })
+  );
+
+export const sentPaySlipsSuccess = createAction<
+  IPayrollTransactionStateContext,
+  IPayrollTransaction
+>(
+  PayrollTransactionActionEnums.sentPaySlipsSuccess,
+  (payrollTransaction: IPayrollTransaction) => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+    payrollTransaction,
+  })
+);
+
+export const sentPaySlipsError = createAction<IPayrollTransactionStateContext>(
+  PayrollTransactionActionEnums.sentPaySlipsError,
+  () => ({ isPending: false, isSuccess: false, isError: true })
+);
+
 //Get payroll trasactions
 
 export const getPayrollTransactionPending =
@@ -49,7 +115,6 @@ export const getPayrollTransactionPending =
     PayrollTransactionActionEnums.getPayrollTransactionPending,
     () => ({ isPending: true, isSuccess: false, isError: false })
   );
-
 
 export const getPayrollTransactionSuccess = createAction<
   IPayrollTransactionStateContext,
@@ -73,4 +138,51 @@ export const resetStateFlagsAction =
   createAction<IPayrollTransactionStateContext>(
     PayrollTransactionActionEnums.resetStateFlagsAction,
     () => ({ isPending: false, isSuccess: false, isError: false })
+  );
+
+//Generate Payroll Transactions  pdf
+export const generatePayrollTransactionPdfPending =
+  createAction<IPayrollTransactionStateContext>(
+    PayrollTransactionActionEnums.generatePayrollTransactionPdfPending,
+    () => ({ isPending: true, isSuccess: false, isError: false })
+  );
+
+export const generatePayrollTransactionPdfSuccess =
+  createAction<IPayrollTransactionStateContext>(
+    PayrollTransactionActionEnums.generatePayrollTransactionPdfSuccess,
+    () => ({
+      isPending: false,
+      isSuccess: true,
+      isError: false,
+    })
+  );
+
+export const generatePayrollTransactionPdfError =
+  createAction<IPayrollTransactionStateContext>(
+    PayrollTransactionActionEnums.generatePayrollTransactionPdfError,
+    () => ({ isPending: false, isSuccess: false, isError: true })
+  );
+
+  //download PDF
+
+  export const downloadPayrollTransactionPdfPending =
+  createAction<IPayrollTransactionStateContext>(
+    PayrollTransactionActionEnums.downloadPayrollTransactionPdfPending,
+    () => ({ isPending: true, isSuccess: false, isError: false })
+  );
+
+export const downloadPayrollTransactionPdfSuccess =
+  createAction<IPayrollTransactionStateContext>(
+    PayrollTransactionActionEnums.downloadPayrollTransactionPdfSuccess,
+    () => ({
+      isPending: false,
+      isSuccess: true,
+      isError: false,
+    })
+  );
+
+export const downloadPayrollTransactionPdffError =
+  createAction<IPayrollTransactionStateContext>(
+    PayrollTransactionActionEnums.downloadPayrollTransactionPdfError,
+    () => ({ isPending: false, isSuccess: false, isError: true })
   );
