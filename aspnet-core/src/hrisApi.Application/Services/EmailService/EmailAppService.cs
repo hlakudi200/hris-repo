@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services;
+using Abp.UI;
 using hrisApi.Services.EmailService.DTO;
 
 namespace hrisApi.Services.EmailService
@@ -19,7 +17,33 @@ namespace hrisApi.Services.EmailService
 
         public async Task SendEmail(EmailRequestDto request)
         {
-            await _emailService.SendEmailAsync(request);
+            try
+            {
+
+                if (string.IsNullOrEmpty(request.To))
+                    throw new UserFriendlyException("Recipient email address is required");
+
+                if (string.IsNullOrEmpty(request.Subject))
+                    throw new UserFriendlyException("Email subject is required");
+
+                if (string.IsNullOrEmpty(request.Body))
+                    throw new UserFriendlyException("Email body is required");
+
+                if (request.Attachments != null && request.Attachments.Count > 0)
+                {
+                    Logger.Info($"Sending email with {request.Attachments.Count} attachment(s) to: {request.To}");
+                }
+
+
+                await _emailService.SendEmailAsync(request);
+
+                Logger.Info($"Email sent successfully to: {request.To}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Failed to send email: {ex.Message}", ex);
+                throw new UserFriendlyException($"Failed to send email: {ex.Message}");
+            }
         }
     }
 }
