@@ -54,29 +54,44 @@ export const PayrollTransactionReducer =
         ...action.payload,
       }),
 
+
+      //generate pdf 
+      [PayrollTransactionActionEnums.generatePayrollTransactionPdfPending]: (
+
       //send payslip
       [PayrollTransactionActionEnums.sentPaySlipPending]: (
+
         state,
         action
       ) => ({
         ...state,
         ...action.payload,
       }),
+
+      [PayrollTransactionActionEnums.generatePayrollTransactionPdfSuccess]: (
+
       [PayrollTransactionActionEnums.sentPaySlipSuccess]: (
+
         state,
         action
       ) => ({
         ...state,
         ...action.payload,
       }),
+
+      [PayrollTransactionActionEnums.generatePayrollTransactionPdfError]: (
+
       [PayrollTransactionActionEnums.sentPaySlipError]: (
+
         state,
         action
       ) => ({
         ...state,
         ...action.payload,
       }),
-      
+
+      //download pdf 
+      [PayrollTransactionActionEnums.downloadPayrollTransactionPdfPending]: (
       //sent payslips
       [PayrollTransactionActionEnums.sentPaySlipsPending]: (
         state,
@@ -85,20 +100,29 @@ export const PayrollTransactionReducer =
         ...state,
         ...action.payload,
       }),
+
+      [PayrollTransactionActionEnums.downloadPayrollTransactionPdfSuccess]: (
+
       [PayrollTransactionActionEnums.sentPaySlipsSuccess]: (
+
         state,
         action
       ) => ({
         ...state,
         ...action.payload,
       }),
+
+      [PayrollTransactionActionEnums.downloadPayrollTransactionPdfError]: (
+
       [PayrollTransactionActionEnums.sentPaySlipsError]: (
+
         state,
         action
       ) => ({
         ...state,
         ...action.payload,
       }),
+
 
       [PayrollTransactionActionEnums.resetStateFlagsAction]: (
         state,
