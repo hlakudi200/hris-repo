@@ -1,6 +1,7 @@
 import { createContext } from "react";
 
 export interface IPayrollTransaction {
+  id?:string
   payrollProfileId: string;
   periodStart: string;
   periodEnd: string;
@@ -22,6 +23,8 @@ export interface IPayrollTransactionActionContext {
   createPayrollTransaction: (transaction: IPayrollTransaction) => Promise<void>;
   getAllTrasactions:()=>void;
   resetStateFlags: () => void;
+  sentPaySlip:(id:string)=>void
+  sentPaySlips:(date:Date)=>void
 }
 
 export const INITIAL_STATE: IPayrollTransactionStateContext = {
