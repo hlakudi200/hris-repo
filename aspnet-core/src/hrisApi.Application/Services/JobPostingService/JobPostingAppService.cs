@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Domain.Repositories;
-using hrisApi.Domains.Payroll_Processing;
 using hrisApi.Domains.Recruitment_Module;
 using hrisApi.Services.JobPostingService.DTO;
-using hrisApi.Services.PayrollProfileService.DTO;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
 
 namespace hrisApi.Services.JobPostingService
 {

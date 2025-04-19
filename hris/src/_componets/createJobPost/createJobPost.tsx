@@ -20,12 +20,16 @@ interface FormValues {
   openDate: string;
   closeDate: string;
 }
+interface CreateJobPostProps {
+  onSuccess?: () => void;
+}
 
-const CreateJobPost: React.FC = () => {
+const CreateJobPost: React.FC<CreateJobPostProps> = ({ onSuccess }) => {
   const [form] = Form.useForm();
   const { createJobPosting } = useJobPostingActions();
 
-  const onFinish = (values: FormValues) => {
+  
+  const onFinish = async (values: FormValues) => {
     try {
       const payload: IJobPosting = {
         title: values.title,
@@ -36,9 +40,12 @@ const CreateJobPost: React.FC = () => {
         closeDate: values.closeDate.toString(),
         status: "Open",
       };
-
-      createJobPosting(payload);
+  
+      await createJobPosting(payload);
       toast("A new job post recorded successfully", "success");
+  
+      onSuccess?.(); 
+  
     } catch (err) {
       toast("Job Post submission failed. Please try again.", "error");
       console.log(err);
