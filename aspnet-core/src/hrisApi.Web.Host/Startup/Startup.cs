@@ -45,28 +45,36 @@ namespace hrisApi.Web.Host.Startup
                 options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
             });
 
+
+
             IdentityRegistrar.Register(services);
             AuthConfigurer.Configure(services, _appConfiguration);
 
             services.AddSignalR();
             services.Configure<SmtpSettings>(_appConfiguration.GetSection("SmtpSettings"));
             // Configure CORS for angular2 UI
-            services.AddCors(
-                options => options.AddPolicy(
-                    _defaultCorsPolicyName,
-                    builder => builder
-                        .WithOrigins(
-                            // App:CorsOrigins in appsettings.json can contain more than one address separated by comma.
-                            _appConfiguration["App:CorsOrigins"]
-                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                                .Select(o => o.RemovePostFix("/"))
-                                .ToArray()
-                        )
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials()
-                )
-            );
+            var corsOrigins = _appConfiguration["App:CorsOrigins"]
+     .Split(",", StringSplitOptions.RemoveEmptyEntries)
+     .Select(o => o.RemovePostFix("/"))
+     .ToArray();
+
+            Console.WriteLine(" Loaded CORS Origins:");
+            foreach (var origin in corsOrigins)
+            {
+                Console.WriteLine($"🔹 {origin}");
+            }
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(_defaultCorsPolicyName, builder =>
+                {
+                    builder.WithOrigins(corsOrigins)
+                           .AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .AllowCredentials();
+                });
+            });
+
 
             // Swagger - Enable this line and the related lines in Configure method to enable swagger UI
             ConfigureSwagger(services);
@@ -85,10 +93,17 @@ namespace hrisApi.Web.Host.Startup
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
 
             app.UseCors(_defaultCorsPolicyName); // Enable CORS!
+            app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
 
+
+            app.Use(async (context, next) =>
+            {
+                Console.WriteLine("Incoming Origin: " + context.Request.Headers["Origin"]);
+                await next.Invoke();
+                Console.WriteLine("Response Header: Access-Control-Allow-Origin = " + context.Response.Headers["Access-Control-Allow-Origin"]);
+            });
 
 
             app.UseRouting();
