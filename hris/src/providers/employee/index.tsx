@@ -7,6 +7,7 @@ import {
   EmployeeStateContext,
   ICreateEmployeeRequest,
   IEmployee,
+  ILeaves,
   INITIAL_STATE,
   IPayrollProfile,
 } from "./context";
@@ -32,6 +33,9 @@ import {
   updateEmployeeError,
   updateEmployeePending,
   updateEmployeeSuccess,
+  updateLeavesError,
+  updateLeavesPending,
+  updateLeavesSuccess,
 } from "./actions";
 import { getAxiosInstace } from "@/utils/axios-instance";
 
@@ -189,6 +193,21 @@ export const EmployeeProvider = ({
     }
   };
 
+  const updateLeaves = (leaves: ILeaves) => {
+    dispatch(updateLeavesPending());
+    const endpoint = "/api/services/app/Leave/Update";
+
+    instance
+      .put(endpoint, leaves)
+      .then((response) => {
+        dispatch(updateLeavesSuccess(response.data.result));
+      })
+      .catch((error) => {
+        console.error(error);
+        dispatch(updateLeavesError());
+      });
+  };
+
   return (
     <EmployeeStateContext.Provider value={state}>
       <EmployeeActionContext.Provider
@@ -200,6 +219,7 @@ export const EmployeeProvider = ({
           getPayrollProfile,
           getAllEmployees,
           deleteEmployee,
+          updateLeaves,
         }}
       >
         {children}

@@ -95,6 +95,25 @@ export const EmployeeReducer = handleActions<IEmployeeStateContext>(
       ...state,
       ...action.payload,
     }),
+
+    [EmployeeActionEnums.updateLeavesPending]: (
+      state,
+      action
+    ) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [EmployeeActionEnums.updateLeavesSuccess]: (
+      state,
+      action
+    ) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [EmployeeActionEnums.updateLeavesError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
   },
   INITIAL_STATE
 );
