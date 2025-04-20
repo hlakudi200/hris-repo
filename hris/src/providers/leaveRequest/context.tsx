@@ -1,7 +1,9 @@
 import { createContext } from "react";
-
+import { IEmployee } from "../employee/context";
 export interface ILeaveRequest {
+  id?:string;
   employeeId: string;
+  employee?: IEmployee;
   leaveType: string;
   startDate: string;
   endDate: string;

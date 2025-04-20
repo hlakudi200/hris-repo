@@ -5,17 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
+using hrisApi.Authorization.Users;
 using hrisApi.Domains.Employee_Management;
+using hrisApi.Users.Dto;
 
 namespace hrisApi.Services.Employee_Management.DTO
 {
     [AutoMapFrom(typeof(Employee))]
     [AutoMapTo(typeof(Employee))]
+    [AutoMap(typeof(Employee))]
     public class EmployeeDto : FullAuditedEntityDto<Guid>
     {
 
         public string EmployeeNumber { get; set; }
         public long UserId { get; set; }
+        public UserDto User {get;set;}
         public string ContactNo { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string NationalIdNumber { get; set; }

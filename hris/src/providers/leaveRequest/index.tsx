@@ -64,13 +64,13 @@ export const LeaveRequestProvider = ({
 
   const getLeaveRequests = async () => {
     dispatch(getLeaveRequestsPending());
-    const endpoint = `/api/services/app/LeaveRequest`;
+    const endpoint = `/api/services/app/LeaveRequest/GetAllInclude`;
 
     await instance
       .get(endpoint)
       .then((response) => {
-        dispatch(getLeaveRequestsSuccess(response.data.results));
-        console.log(response.data.results)
+        dispatch(getLeaveRequestsSuccess(response.data.result));
+        console.log(response.data.result)
       })
       .catch((err) => {
         console.log(err);

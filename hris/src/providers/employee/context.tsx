@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext } from "react";
+import { IUser } from "../auth/context";
 
 export interface IEmployee {
   id: string;
@@ -13,6 +14,7 @@ export interface IEmployee {
   contactNo: string;
   dateOfBirth: Date;
   nationalIdNumber: string;
+  user?:IUser
   hireDate: Date;
   position: string;
   department: string;
