@@ -1,33 +1,45 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Table,
-  Modal,
-  Form,
-  Input,
-  DatePicker,
-  Select,
-  message,
-  Popconfirm,
-  Space,
-} from "antd";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   useInterviewActions,
   useInterviewState,
 } from "@/providers/Interview/index";
+import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  message,
+  Modal,
+  Popconfirm,
+  Select,
+  Space,
+  Table,
+  Tag,
+  Typography,
+} from "antd";
 import moment from "moment";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const { Option } = Select;
 const { TextArea } = Input;
+const { Title } = Typography;
 
-const InterviewManagement = ({ jobApplicationId }) => {
+const InterviewManagement = ({ jobApplicationId: propJobApplicationId }) => {
   const [form] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentInterviewId, setCurrentInterviewId] = useState(null);
   const [localSubmitting, setLocalSubmitting] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(false);
+
+  // Get jobApplicationId from URL params if not provided via props
+  const searchParams = useSearchParams();
+  const urlJobApplicationId = searchParams.get("jobApplicationId");
+
+  // Use prop if available, otherwise use URL param
+  const jobApplicationId = propJobApplicationId || urlJobApplicationId;
 
   const { isPending, isSuccess, interviews } = useInterviewState();
   const {
@@ -35,11 +47,16 @@ const InterviewManagement = ({ jobApplicationId }) => {
     getInterviewsByJobApplication,
     updateInterview,
     deleteInterview,
+    getAllInterviews,
   } = useInterviewActions();
 
   useEffect(() => {
     if (jobApplicationId) {
-      fetchInterviews();
+      fetchInterviewsByJobApplication();
+      setIsFiltered(true);
+    } else {
+      fetchAllInterviews();
+      setIsFiltered(false);
     }
   }, [jobApplicationId]);
 
@@ -57,17 +74,34 @@ const InterviewManagement = ({ jobApplicationId }) => {
       setIsEditing(false);
       setCurrentInterviewId(null);
 
-      // Fetch interviews after a short delay to ensure state is updated
-      setTimeout(() => {
-        fetchInterviews();
-      }, 300);
+      // Refresh the interview list
+      if (isFiltered && jobApplicationId) {
+        fetchInterviewsByJobApplication();
+      } else {
+        fetchAllInterviews();
+      }
     }
   }, [isSuccess, isPending]);
 
-  const fetchInterviews = async () => {
+  const fetchInterviewsByJobApplication = async () => {
+    if (!jobApplicationId) {
+      message.error("No job application ID provided");
+      return;
+    }
+
     console.log("Fetching interviews for job application:", jobApplicationId);
     try {
       await getInterviewsByJobApplication(jobApplicationId);
+    } catch (error) {
+      message.error("Failed to fetch interviews");
+      console.error(error);
+    }
+  };
+
+  const fetchAllInterviews = async () => {
+    console.log("Fetching all interviews");
+    try {
+      await getAllInterviews();
     } catch (error) {
       message.error("Failed to fetch interviews");
       console.error(error);
@@ -85,6 +119,7 @@ const InterviewManagement = ({ jobApplicationId }) => {
     setIsEditing(true);
     setCurrentInterviewId(interview.id);
     form.setFieldsValue({
+      jobApplicationId: interview.jobApplicationId,
       scheduledDate: moment(interview.scheduledDate),
       interviewer: interview.interviewer,
       mode: interview.mode,
@@ -101,12 +136,22 @@ const InterviewManagement = ({ jobApplicationId }) => {
   };
 
   const handleSubmit = async (values) => {
+    // Use the jobApplicationId from the form if we're showing all interviews
+    const targetJobApplicationId = isFiltered
+      ? jobApplicationId
+      : values.jobApplicationId;
+
+    if (!targetJobApplicationId) {
+      message.error("Please select a job application");
+      return;
+    }
+
     setLocalSubmitting(true);
     try {
       if (isEditing && currentInterviewId) {
         await updateInterview({
           id: currentInterviewId,
-          jobApplicationId: jobApplicationId,
+          jobApplicationId: targetJobApplicationId,
           scheduledDate: values.scheduledDate.format("YYYY-MM-DD HH:mm:ss"),
           interviewer: values.interviewer,
           mode: values.mode,
@@ -115,22 +160,13 @@ const InterviewManagement = ({ jobApplicationId }) => {
         message.success("Interview updated successfully");
       } else {
         await createInterview({
-          jobApplicationId: jobApplicationId,
+          jobApplicationId: targetJobApplicationId,
           scheduledDate: values.scheduledDate.format("YYYY-MM-DD HH:mm:ss"),
           interviewer: values.interviewer,
           mode: values.mode,
           feedback: values.feedback || "",
         });
         message.success("Interview created successfully");
-      }
-
-      // If the above didn't trigger isSuccess
-      if (!isSuccess) {
-        setIsModalVisible(false);
-        form.resetFields();
-        setIsEditing(false);
-        setCurrentInterviewId(null);
-        fetchInterviews();
       }
     } catch (error) {
       setLocalSubmitting(false);
@@ -145,12 +181,23 @@ const InterviewManagement = ({ jobApplicationId }) => {
     try {
       await deleteInterview(id);
       message.success("Interview deleted successfully");
-      // Explicitly fetch after deletion
-      fetchInterviews();
+
+      // Refresh the interview list
+      if (isFiltered && jobApplicationId) {
+        fetchInterviewsByJobApplication();
+      } else {
+        fetchAllInterviews();
+      }
     } catch (error) {
       message.error("Failed to delete interview");
       console.error(error);
     }
+  };
+
+  const clearFilter = () => {
+    // This would typically redirect to the interviews page without the jobApplicationId parameter
+    fetchAllInterviews();
+    setIsFiltered(false);
   };
 
   const columns = [
@@ -171,7 +218,19 @@ const InterviewManagement = ({ jobApplicationId }) => {
       title: "Mode",
       dataIndex: "mode",
       key: "mode",
+      render: (mode) => <Tag color={getTagColor(mode)}>{mode}</Tag>,
     },
+    // Only show the Job Application ID column when viewing all interviews
+    ...(isFiltered
+      ? []
+      : [
+          {
+            title: "Job Application ID",
+            dataIndex: "jobApplicationId",
+            key: "jobApplicationId",
+            ellipsis: true,
+          },
+        ]),
     {
       title: "Feedback",
       dataIndex: "feedback",
@@ -210,6 +269,18 @@ const InterviewManagement = ({ jobApplicationId }) => {
     "Group",
   ];
 
+  // Function to get tag color based on mode
+  const getTagColor = (mode) => {
+    const colors = {
+      Virtual: "blue",
+      "In-person": "green",
+      Phone: "orange",
+      Technical: "purple",
+      Group: "cyan",
+    };
+    return colors[mode] || "default";
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       <div
@@ -217,9 +288,22 @@ const InterviewManagement = ({ jobApplicationId }) => {
           display: "flex",
           justifyContent: "space-between",
           marginBottom: "16px",
+          alignItems: "center",
         }}
       >
-        <h2>Interviews</h2>
+        <div>
+          <Title level={3} style={{ margin: 0 }}>
+            {isFiltered ? "Interviews for Job Application" : "All Interviews"}
+          </Title>
+          {isFiltered && (
+            <div>
+              <Tag color="blue">Job Application ID: {jobApplicationId}</Tag>
+              <Button type="link" size="small" onClick={clearFilter}>
+                View All Interviews
+              </Button>
+            </div>
+          )}
+        </div>
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -234,7 +318,7 @@ const InterviewManagement = ({ jobApplicationId }) => {
         dataSource={interviews || []}
         rowKey="id"
         loading={isPending}
-        pagination={{ pageSize: 5 }}
+        pagination={{ pageSize: 10 }}
       />
 
       <Modal
@@ -245,6 +329,20 @@ const InterviewManagement = ({ jobApplicationId }) => {
         destroyOnClose
       >
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
+          {/* Show Job Application ID field only when not filtered */}
+          {!isFiltered && (
+            <Form.Item
+              name="jobApplicationId"
+              label="Job Application ID"
+              initialValue={jobApplicationId || ""}
+              rules={[
+                { required: true, message: "Please enter job application ID" },
+              ]}
+            >
+              <Input placeholder="Enter job application ID" />
+            </Form.Item>
+          )}
+
           <Form.Item
             name="scheduledDate"
             label="Interview Date & Time"
