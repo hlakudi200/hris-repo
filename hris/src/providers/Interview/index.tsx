@@ -48,12 +48,10 @@ export const InterviewProvider = ({
       const response = await instance.post(endpoint, interview);
 
       if (response.status === 200) {
-        debugger;
         dispatch(createInterviewSuccess(response.data.result));
         return response.data.result;
       }
     } catch (error) {
-      debugger;
       console.error("Error creating interview:", error);
       dispatch(
         createInterviewError(error.message || "Failed to create interview")
