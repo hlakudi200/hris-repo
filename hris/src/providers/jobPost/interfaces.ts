@@ -1,12 +1,5 @@
 export interface IInterview {
   id: string;
-  creationTime: string;
-  creatorUserId: number;
-  lastModificationTime?: string;
-  lastModifierUserId?: number;
-  isDeleted: boolean;
-  deleterUserId?: number;
-  deletionTime?: string;
   jobApplicationId: string;
   scheduledDate: string;
   interviewer: string;
@@ -28,13 +21,13 @@ export interface IAbpResponse<T> {
 }
 
 export interface IJobApplication {
-  id: string;
+  id?: string;
   jobPostingId: string;
   applicantName: string;
   email: string;
   resumePath: string;
   status: string;
-  interviews: IInterview[];
+  interviews?: IInterview[];
 }
 
 export interface IJobPosting {

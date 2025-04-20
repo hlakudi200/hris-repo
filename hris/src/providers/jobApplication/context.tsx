@@ -7,7 +7,7 @@ export interface IJobApplication {
   email: string;
   resumePath: string;
   status: string;
-  interviews?: IInterview;
+  interviews?: IInterview[];
 }
 
 
