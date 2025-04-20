@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import globals from "../globals.module.css";
 import { usePayrollActions, usePayrollState } from "@/providers/payrollProfile";
-import { usePayrollTransactionActions} from "@/providers/payrolltransaction";
+import { usePayrollTransactionActions } from "@/providers/payrolltransaction";
 import {
   Card,
   Table,
@@ -14,16 +14,16 @@ import {
   Button,
 } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
+import { useEmployeeState } from "@/providers/employee";
 
 const EmployeePayroll = () => {
-  const { isPending, isError,PayrollProfile } = usePayrollState();
-  const { getPayrollProfileById} = usePayrollActions();
-  const {generatePayrollTransactionPdf}=usePayrollTransactionActions();
- 
+  const { isPending, isError, PayrollProfile } = usePayrollState();
+  const { currentEmployee } = useEmployeeState();
+  const { getPayrollProfileById } = usePayrollActions();
+  const { generatePayrollTransactionPdf } = usePayrollTransactionActions();
 
   useEffect(() => {
-    getPayrollProfileById("4597b607-7ee2-4e73-581e-08dd7d8d6183");
-    console.log("Updated PayrollProfile:", PayrollProfile);
+    getPayrollProfileById(currentEmployee.id);
   }, []);
 
   if (isPending) {
@@ -76,7 +76,9 @@ const EmployeePayroll = () => {
       dataIndex: "isPaid",
       key: "isPaid",
       render: (isPaid) => (
-        <Tag color={isPaid ? "green" : "red"}>{isPaid ? "Paid" : "Pending"}</Tag>
+        <Tag color={isPaid ? "green" : "red"}>
+          {isPaid ? "Paid" : "Pending"}
+        </Tag>
       ),
     },
     {
@@ -85,7 +87,7 @@ const EmployeePayroll = () => {
       render: (_, record) => (
         <Button
           icon={<DownloadOutlined />}
-          onClick={() =>generatePayrollTransactionPdf(record.id)}
+          onClick={() => generatePayrollTransactionPdf(record.id)}
         >
           Download Payslip
         </Button>
