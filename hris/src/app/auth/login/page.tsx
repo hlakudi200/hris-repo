@@ -41,7 +41,7 @@ const SignIn: React.FC = () => {
           router.push("/hrManager");
           break;
         default:
-          router.push("/auth/login");
+          router.push("/applicant");
           break;
       }
     }

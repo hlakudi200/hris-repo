@@ -30,8 +30,6 @@ namespace hrisApi.Services.ApplicantService
 
             var result = await _userManager.CreateAsync(user, input.Password);
 
-            await _userManager.AddToRoleAsync(user, "APPLICANT");
-
             if (!result.Succeeded)
             {
                 throw new UserFriendlyException($"Could not create the user: {result.Errors.JoinAsString(", ")}");
