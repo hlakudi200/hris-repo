@@ -9,6 +9,8 @@ using Abp.Domain.Repositories;
 using Abp.Domain.Services;
 using Abp.UI;
 using hrisApi.Authorization.Users;
+using hrisApi.Domains.Attendance_Management;
+using hrisApi.Domains.Payroll_Processing;
 
 namespace hrisApi.Domains.Employee_Management
 {
@@ -16,11 +18,15 @@ namespace hrisApi.Domains.Employee_Management
     {
         private readonly UserManager _userManager;
         private readonly IRepository<Employee, Guid> _employeeRepository;
+        private readonly IRepository<PayrollProfile, Guid> _payrollProfileRepository;
+        private readonly IRepository<Leave, Guid> _leaveRepository;
 
-        public EmployeeManager(UserManager userManager, IRepository<Employee, Guid> employeeRepository)
+        public EmployeeManager(UserManager userManager, IRepository<Employee, Guid> employeeRepository, IRepository<PayrollProfile, Guid> payrollProfileRepository, IRepository<Leave, Guid>  leaveRepository)
         {
             _userManager = userManager;
             _employeeRepository = employeeRepository;
+            _payrollProfileRepository = payrollProfileRepository;
+            _leaveRepository = leaveRepository;
         }
 
         public async Task<Employee> CreateEmployeeAsync(
@@ -85,6 +91,27 @@ namespace hrisApi.Domains.Employee_Management
             };
 
             await _employeeRepository.InsertAsync(employee);
+
+            var payrollProfile = new PayrollProfile
+            {
+                EmployeeId = employee.Id,
+                BasicSalary = 0,
+                TaxRate = 10
+            };
+
+            await _payrollProfileRepository.InsertAsync(payrollProfile);
+
+            var leave = new Leave
+            {
+                EmployeeId = employee.Id,
+                Annual = 5,
+                Sick = 5,
+                Study = 5,
+                FamilyResponsibility = 5
+            };
+
+            await _leaveRepository.InsertAsync(leave);
+
 
             return employee;
 
