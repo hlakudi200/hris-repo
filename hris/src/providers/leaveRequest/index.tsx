@@ -83,10 +83,11 @@ export const LeaveRequestProvider = ({
 
 
   const updateLeaveRequest=async(request:ILeaveRequest)=>{
+    console.log("request:",request)
     dispatch(updateLeaveRequestPending())
     const endpoint =`/api/services/app/LeaveRequest/Update`
     instance
-    .post(endpoint,request)
+    .put(endpoint,request)
     .then((response)=>{
       dispatch(updateLeaveRequestSuccess(response.data.result))
       console.log(response.data.result)
@@ -95,7 +96,8 @@ export const LeaveRequestProvider = ({
       dispatch(updateLeaveRequestError())
     })
 
-  }
+  };
+
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
   };

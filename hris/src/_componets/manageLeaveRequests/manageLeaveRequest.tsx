@@ -1,24 +1,28 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { Input, Table, Spin, Tag, Button, Modal, message } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-import { useLeaveRequestActions, useLeaveRequestState } from '@/providers/leaveRequest';
-import { ILeaveRequest } from '@/providers/leaveRequest/context';
-import moment from 'moment';
-import globals from '../globals.module.css';
-import styles from './styles/styles.module.css';
+"use client";
+import React, { useEffect, useState } from "react";
+import { Input, Table, Spin, Tag, Button, Modal} from "antd";
+import type { ColumnsType } from "antd/es/table";
+import {
+  useLeaveRequestActions,
+  useLeaveRequestState,
+} from "@/providers/leaveRequest";
+import { ILeaveRequest } from "@/providers/leaveRequest/context";
+import moment from "moment";
+import globals from "../globals.module.css";
+import styles from "./styles/styles.module.css";
+import { toast } from "@/providers/toast/toast";
 
 const { Search } = Input;
 
 const ManageLeaveRequest = () => {
-  const { getLeaveRequests } = useLeaveRequestActions();
+  const { getLeaveRequests, updateLeaveRequest } = useLeaveRequestActions();
   const { leaveRequests, isPending, isSuccess } = useLeaveRequestState();
   const [filteredData, setFilteredData] = useState<ILeaveRequest[]>([]);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [processingId, setProcessingId] = useState<string | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalAction, setModalAction] = useState<'approve' | 'decline' | null>(null);
+  const [modalAction, setModalAction] = useState<"approve" | "decline" | null>(null);
   const [selectedRequest, setSelectedRequest] = useState<ILeaveRequest | null>(null);
 
   useEffect(() => {
@@ -34,15 +38,16 @@ const ManageLeaveRequest = () => {
   const handleSearch = (value: string) => {
     setSearchText(value);
     const lowerSearch = value.toLowerCase();
-    const filtered = leaveRequests.filter((leave) =>
-      leave?.employee?.user?.name?.toLowerCase().includes(lowerSearch) ||
-      leave.leaveType.toLowerCase().includes(lowerSearch) ||
-      leave.status.toLowerCase().includes(lowerSearch)
+    const filtered = leaveRequests.filter(
+      (leave) =>
+        leave?.employee?.user?.name?.toLowerCase().includes(lowerSearch) ||
+        leave.leaveType.toLowerCase().includes(lowerSearch) ||
+        leave.status.toLowerCase().includes(lowerSearch)
     );
     setFilteredData(filtered);
   };
 
-  const openModal = (action: 'approve' | 'decline', record: ILeaveRequest) => {
+  const openModal = (action: "approve" | "decline", record: ILeaveRequest) => {
     setModalAction(action);
     setSelectedRequest(record);
     setIsModalOpen(true);
@@ -52,15 +57,25 @@ const ManageLeaveRequest = () => {
     if (!modalAction || !selectedRequest) return;
 
     try {
-      setProcessingId(selectedRequest.id ?? null);
+      setProcessingId(selectedRequest.id ?? "processing");
 
-      // Replace this with your actual API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const updatedRequest: ILeaveRequest = {
+        id: selectedRequest.id,
+        employeeId: selectedRequest.employeeId,
+        leaveType: selectedRequest.leaveType,
+        startDate: selectedRequest.startDate,
+        endDate: selectedRequest.endDate,
+        reason: selectedRequest.reason,
+        status: modalAction === "approve" ? "approved" : "declined",
+      };
 
-      message.success(`Leave request ${modalAction}d successfully`);
-      getLeaveRequests();
+      await updateLeaveRequest(updatedRequest);
+      toast(`Leave request ${modalAction}d successfully`, "success");
+
+      await getLeaveRequests();
     } catch (error) {
-      message.error(`Failed to ${modalAction} leave request`);
+      console.error(error);
+      toast(`Failed to ${modalAction} leave request`, "error");
     } finally {
       setProcessingId(null);
       setIsModalOpen(false);
@@ -69,62 +84,63 @@ const ManageLeaveRequest = () => {
 
   const columns: ColumnsType<ILeaveRequest> = [
     {
-      title: 'Employee Name',
-      dataIndex: ['employee', 'user', 'name'],
-      key: 'employeeName',
+      title: "Employee Name",
+      dataIndex: ["employee", "user", "name"],
+      key: "employeeName",
       sorter: (a, b) =>
-        (a.employee?.user?.name || '').localeCompare(b.employee?.user?.name || ''),
+        (a.employee?.user?.name || "").localeCompare(b.employee?.user?.name || ""),
     },
     {
-      title: 'Leave Type',
-      dataIndex: 'leaveType',
-      key: 'leaveType',
+      title: "Leave Type",
+      dataIndex: "leaveType",
+      key: "leaveType",
       sorter: (a, b) => a.leaveType.localeCompare(b.leaveType),
     },
     {
-      title: 'Start Date',
-      dataIndex: 'startDate',
-      key: 'startDate',
+      title: "Start Date",
+      dataIndex: "startDate",
+      key: "startDate",
       sorter: (a, b) => moment(a.startDate).unix() - moment(b.startDate).unix(),
-      render: (text) => moment(text).format('YYYY-MM-DD'),
+      render: (text) => moment(text).format("YYYY-MM-DD"),
     },
     {
-      title: 'End Date',
-      dataIndex: 'endDate',
-      key: 'endDate',
+      title: "End Date",
+      dataIndex: "endDate",
+      key: "endDate",
       sorter: (a, b) => moment(a.endDate).unix() - moment(b.endDate).unix(),
-      render: (text) => moment(text).format('YYYY-MM-DD'),
+      render: (text) => moment(text).format("YYYY-MM-DD"),
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
       render: (status: string) => {
-        const color = status === 'approved' ? 'green' : status === 'pending' ? 'orange' : 'red';
+        const color =
+          status === "approved" ? "green" : status === "pending" ? "orange" : "red";
         return <Tag color={color}>{status.toUpperCase()}</Tag>;
       },
     },
     {
-      title: 'Reason',
-      dataIndex: 'reason',
-      key: 'reason',
+      title: "Reason",
+      dataIndex: "reason",
+      key: "reason",
     },
     {
-      title: 'Actions',
-      key: 'actions',
+      title: "Actions",
+      key: "actions",
       render: (_, record) => (
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div style={{ display: "flex", gap: "0.5rem" }}>
           <Button
             type="primary"
-            disabled={processingId === record.id}
-            onClick={() => openModal('approve', record)}
+            disabled={processingId !== null}
+            onClick={() => openModal("approve", record)}
           >
             Approve
           </Button>
           <Button
             danger
-            disabled={processingId === record.id}
-            onClick={() => openModal('decline', record)}
+            disabled={processingId !== null}
+            onClick={() => openModal("decline", record)}
           >
             Decline
           </Button>
@@ -135,7 +151,7 @@ const ManageLeaveRequest = () => {
 
   return (
     <div className={styles.OuterContainer}>
-      <h2 style={{ marginBottom: '1rem' }} className={globals.heading}>
+      <h2 style={{ marginBottom: "1rem" }} className={globals.heading}>
         📅 Manage Leave Requests
       </h2>
 
@@ -155,13 +171,12 @@ const ManageLeaveRequest = () => {
         <Table
           columns={columns}
           dataSource={filteredData}
-          rowKey={(record) => record.id ?? ''}
+          rowKey={(record) => record.id ?? ""}
           pagination={{ pageSize: 5 }}
           bordered
         />
       )}
 
-      {/* Modal for approve/decline confirmation */}
       <Modal
         title={`Confirm ${modalAction}`}
         open={isModalOpen}
@@ -171,7 +186,9 @@ const ManageLeaveRequest = () => {
         okText="Yes"
         cancelText="No"
       >
-        <p>Are you sure you want to <b>{modalAction}</b> this leave request?</p>
+        <p>
+          Are you sure you want to <b>{modalAction}</b> this leave request?
+        </p>
         <p>
           <strong>Employee:</strong> {selectedRequest?.employee?.user?.name} <br />
           <strong>Leave Type:</strong> {selectedRequest?.leaveType}
