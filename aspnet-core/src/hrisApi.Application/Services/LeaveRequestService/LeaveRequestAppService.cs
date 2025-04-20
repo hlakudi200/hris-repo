@@ -4,17 +4,27 @@ using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Domain.Repositories;
 using hrisApi.Domains.Attendance_Management;
+using hrisApi.Services.LeaveRequestService.DTO;
 using hrisApi.Services.LeaveService.DTO;
-using NuGet.Protocol.Core.Types;
+using Microsoft.EntityFrameworkCore;
 
 namespace hrisApi.Services.LeaveService
 {
-    public class LeaveRequestAppService : AsyncCrudAppService<LeaveRequest, LeaveRequestDto, Guid>, ILeaveRequestAppService
+    public class LeaveRequestAppService : AsyncCrudAppService<LeaveRequest, LeaveRequestRequestDto, Guid>, ILeaveRequestAppService
     {
         private readonly IRepository<LeaveRequest, Guid> _repository;
         public LeaveRequestAppService(IRepository<LeaveRequest, Guid> repository) : base(repository)
         {
             _repository = repository;
+        }
+
+        public async Task<List<LeaveRequestDto>> GetAllInclude()
+        {
+            var querable = await _repository.GetAllAsync();
+            var leaveRequests = querable.Include(p => p.Employee).ThenInclude(p => p.User);
+            var results = ObjectMapper.Map<List<LeaveRequestDto>>(leaveRequests);
+
+            return results;
         }
 
         public async Task<IList<LeaveRequestDto>> GetByEmpId(Guid id)
@@ -25,5 +35,6 @@ namespace hrisApi.Services.LeaveService
 
             return result;
         }
+
     }
 }

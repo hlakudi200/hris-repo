@@ -1,7 +1,9 @@
 import { createContext } from "react";
-
+import { IEmployee } from "../employee/context";
 export interface ILeaveRequest {
+  id?:string;
   employeeId: string;
+  employee?: IEmployee;
   leaveType: string;
   startDate: string;
   endDate: string;
@@ -18,6 +20,8 @@ export interface ILeaveRequestStateContext {
 
 export interface ILeaveRequestActionContext {
   submitLeaveRequest: (request: ILeaveRequest) => Promise<void>;
+  getLeaveRequests: () => Promise<void>;
+  updateLeaveRequest:(request:ILeaveRequest)=>Promise<void>;
   getByEmpId: (empId: string) => void;
   resetStateFlags: () => void;
 }

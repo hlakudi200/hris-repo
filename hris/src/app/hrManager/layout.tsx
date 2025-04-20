@@ -13,6 +13,7 @@ import {
   FileTextOutlined,
   LogoutOutlined,
   UserOutlined,
+  CalendarOutlined,
 } from "@ant-design/icons";
 import { Button, Dropdown, Layout, Menu } from "antd";
 import { LeaveRequestProvider } from "@/providers/leaveRequest";
@@ -56,6 +57,11 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
       label: "Employees",
     },
     {
+      key: "/hrManager/manageleaverequests",
+      icon: <CalendarOutlined />,
+      label: "Leaves",
+    },
+    {
       key: "/hrManager/jobPost",
       icon: <UploadOutlined />,
       label: "Job Post",
@@ -73,7 +79,7 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
     {
       key: "/hrManager/jobApplications",
       icon: <FileTextOutlined />,
-      label: "Job Applications",
+      label: "Applications",
     },
     {
       key: "/hrManager/projects",
