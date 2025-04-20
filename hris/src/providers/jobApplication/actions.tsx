@@ -2,9 +2,9 @@ import { IJobApplication, IJobApplicationStateContext } from "./context";
 import { createAction } from "redux-actions";
 
 export enum JobApplicationActionEnums {
-  submitJobApplicationPending = "SUBMIT_LEAVE_REQUEST_USER_PENDING",
-  submitJobApplicationSuccess = "SUBMIT_LEAVE_REQUEST_SUCCESS",
-  submitJobApplicationError = "SUBMIT_LEAVE_REQUEST_ERROR",
+  submitJobApplicationPending = "SUBMIT_JOB_APPLICATION_PENDING",
+  submitJobApplicationSuccess = "SUBMIT_JOB_APPLICATION_SUCCESS",
+  submitJobApplicationError = "SUBMIT_JOB_APPLICATION_ERROR",
 
   getJobApplicationsPending = "GET_JOB_APPLICATIONS_PENDING",
   getJobApplicationsSuccess = "GET_JOB_APPLICATIONS_SUCCESS",
@@ -12,7 +12,7 @@ export enum JobApplicationActionEnums {
 
   UpdateJobApplicationPending = "UPDATE_JOB_APPLICATION_PENDING",
   UpdateJobApplicationSuccess = "UPDATE_JOB_APPLICATION_SUCCESS",
-  UpdateJobApplicationError = "UPDATEJOB_APPLICATION_ERROR",
+  UpdateJobApplicationError = "UPDATE_JOB_APPLICATION_ERROR",
 
   getJobApplicationByIdPending = "GET_JOB_APPLICATION_BY_ID_PENDING",
   getJobApplicationByIdSuccess = "GET_JOB_APPLICATION_BY_ID_SUCCESS",
@@ -96,7 +96,6 @@ export const UpdateJobApplicationError =
   );
 
 //get Job Application :
-
 export const getJobApplicationsPending =
   createAction<IJobApplicationStateContext>(
     JobApplicationActionEnums.getJobApplicationsPending,
