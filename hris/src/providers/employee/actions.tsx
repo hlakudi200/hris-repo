@@ -1,10 +1,5 @@
 import { createAction } from "redux-actions";
-import {
-  IEmployee,
-  IEmployeeStateContext,
-  ILeaves,
-  IPayrollProfile,
-} from "./context";
+import { IEmployee, IEmployeeStateContext, IPayrollProfile } from "./context";
 
 export enum EmployeeActionEnums {
   createEmployeePending = "CREATE_EMPLOYEE_PENDING",
@@ -14,10 +9,6 @@ export enum EmployeeActionEnums {
   getEmployeePending = "GET_EMPLOYEE_PENDING",
   getEmployeeSuccess = "GET_EMPLOYEE_SUCCESS",
   getEmployeeError = "GET_EMPLOYEE_ERROR",
-
-  getLeavesPending = "GET_LEAVES_PENDING",
-  getLeavesSuccess = "GET_LEAVES_SUCCESS",
-  getLeavesError = "GET_LEAVES_ERROR",
 
   updateEmployeePending = "UPDATE_EMPLOYEE_PENDING",
   updateEmployeeSuccess = "UPDATE_EMPLOYEE_SUCCESS",
@@ -34,10 +25,6 @@ export enum EmployeeActionEnums {
   deleteEmployeePending = "DELETE_EMPLOYEE_PENDING",
   deleteEmployeeSuccess = "DELETE_EMPLOYEE_SUCCESS",
   deleteEmployeeError = "DELETE_EMPLOYEE_ERROR",
-
-  updateLeavesPending = "UPDATE_LEAVES_PENDING",
-  updateLeavesSuccess = "UPDATE_LEAVES_SUCCESS",
-  updateLeavesError = "UPDATE_LEAVES_ERROR",
 }
 
 export const createEmployeePending = createAction<IEmployeeStateContext>(
@@ -81,25 +68,6 @@ export const getEmployeeSuccess = createAction<
 }));
 export const getEmployeeError = createAction<IEmployeeStateContext>(
   EmployeeActionEnums.getEmployeeError,
-  () => ({ isPending: false, isSuccess: false, isError: true })
-);
-
-// Creating actions for getLeaves statuses
-export const getLeavesPending = createAction<IEmployeeStateContext>(
-  EmployeeActionEnums.getLeavesPending,
-  () => ({ isPending: true, isSuccess: false, isError: false })
-);
-export const getLeavesSuccess = createAction<IEmployeeStateContext, ILeaves>(
-  EmployeeActionEnums.getLeavesSuccess,
-  (leaves: ILeaves) => ({
-    isPending: false,
-    isSuccess: true,
-    isError: false,
-    leaves,
-  })
-);
-export const getLeavesError = createAction<IEmployeeStateContext>(
-  EmployeeActionEnums.getLeavesError,
   () => ({ isPending: false, isSuccess: false, isError: true })
 );
 
@@ -198,26 +166,3 @@ export const deleteEmployeeError = createAction<IEmployeeStateContext, string>(
     errorMessage,
   })
 );
-
-export const updateLeavesPending=
-    createAction<IEmployeeStateContext>(
-      EmployeeActionEnums.updateLeavesPending,
-      () => ({ isPending: true, isSuccess: false, isError: false })
-    );
-  export const updateLeavesSuccess = createAction<
-    IEmployeeStateContext,
-    ILeaves
-  >(
-    EmployeeActionEnums.updateLeavesSuccess,
-    (leaves: ILeaves[]) => ({
-      isPending: false,
-      isSuccess: true,
-      isError: false,
-      leaves,
-    })
-  );
-  export const updateLeavesError =
-    createAction<IEmployeeStateContext>(
-      EmployeeActionEnums.updateLeavesError,
-      () => ({ isPending: false, isSuccess: false, isError: true })
-    );
