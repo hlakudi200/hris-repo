@@ -11,10 +11,14 @@ import moment from "moment";
 import globals from "../globals.module.css";
 import styles from "./styles/styles.module.css";
 import { toast } from "@/providers/toast/toast";
+import { useEmailActions } from "@/providers/email";
+import { rejectLeaveTemplate } from "@/providers/email/emailTemplates/rejectLeaveTemplate";
+import { approveLeaveTemplate } from "@/providers/email/emailTemplates/approveLeaveTemplate";
 
 const { Search } = Input;
 
 const ManageLeaveRequest = () => {
+  const{sendEmail}=useEmailActions();
   const { getLeaveRequests, updateLeaveRequest } = useLeaveRequestActions();
   const { leaveRequests, isPending, isSuccess } = useLeaveRequestState();
   const [filteredData, setFilteredData] = useState<ILeaveRequest[]>([]);
@@ -55,10 +59,11 @@ const ManageLeaveRequest = () => {
 
   const handleConfirm = async () => {
     if (!modalAction || !selectedRequest) return;
-
+  
     try {
       setProcessingId(selectedRequest.id ?? "processing");
-
+  
+      // Update the leave request
       const updatedRequest: ILeaveRequest = {
         id: selectedRequest.id,
         employeeId: selectedRequest.employeeId,
@@ -68,11 +73,35 @@ const ManageLeaveRequest = () => {
         reason: selectedRequest.reason,
         status: modalAction === "approve" ? "approved" : "declined",
       };
-
+  
       await updateLeaveRequest(updatedRequest);
+  
+      const body =
+        modalAction === "approve"
+          ? approveLeaveTemplate(
+              selectedRequest.employee?.user?.name || "",
+              selectedRequest.leaveType,
+              moment(selectedRequest.startDate).format("YYYY-MM-DD"),
+              moment(selectedRequest.endDate).format("YYYY-MM-DD")
+            )
+          : rejectLeaveTemplate(
+              selectedRequest.employee?.user?.name || "",
+              selectedRequest.leaveType,
+              moment(selectedRequest.startDate).format("YYYY-MM-DD"),
+              moment(selectedRequest.endDate).format("YYYY-MM-DD"),
+              selectedRequest.reason
+            );
+  
+      // Send the email
+      await sendEmail({
+        to: selectedRequest.employee?.user?.emailAddress || "",
+        subject: `Leave Request ${modalAction === "approve" ? "Approved" : "Declined"}`,
+        body,
+        isBodyHtml: true,
+      });
+  
       toast(`Leave request ${modalAction}d successfully`, "success");
-
-      await getLeaveRequests();
+      await getLeaveRequests();  
     } catch (error) {
       console.error(error);
       toast(`Failed to ${modalAction} leave request`, "error");
@@ -81,7 +110,7 @@ const ManageLeaveRequest = () => {
       setIsModalOpen(false);
     }
   };
-
+  
   const columns: ColumnsType<ILeaveRequest> = [
     {
       title: "Employee Name",

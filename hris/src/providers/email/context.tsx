@@ -8,7 +8,7 @@ export interface IEmail {
   bcc?:string;
   subject: string;
   body: string;
-  isBodyHtml:boolean;
+  isBodyHtml?:boolean;
   attachments?:IAttachments[];
 }
 
