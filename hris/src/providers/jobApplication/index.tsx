@@ -9,6 +9,9 @@ import {
   JobApplicationStateContext,
 } from "./context";
 import {
+  getJobApplicationByIdError,
+  getJobApplicationByIdPending,
+  getJobApplicationByIdSuccess,
   getJobApplicationsError,
   getJobApplicationsPending,
   resetStateFlagsAction,
@@ -20,7 +23,6 @@ import {
   UpdateJobApplicationSuccess,
 } from "./actions";
 import { getJobApplicationsSuccess } from "../jobApplication/actions";
-
 
 export const JobApplicationProvider = ({
   children,
@@ -67,7 +69,7 @@ export const JobApplicationProvider = ({
     dispatch(UpdateJobApplicationPending());
     const endPoint = `/api/services/app/JobApplication/Update`;
     await instance
-      .put(endPoint,request)
+      .put(endPoint, request)
       .then((response) => {
         dispatch(UpdateJobApplicationSuccess(response.data.resutls));
       })
@@ -75,6 +77,23 @@ export const JobApplicationProvider = ({
         dispatch(UpdateJobApplicationError());
         console.log(err);
       });
+  };
+
+  const getJobApplicationById = async (id: string) => {
+    dispatch(getJobApplicationByIdPending());
+    const endpoint = `/api/services/app/JobApplication/Get?id=${id}`;
+
+    try {
+      const response = await instance.get(endpoint);
+      if (response.status === 200) {
+        dispatch(getJobApplicationByIdSuccess(response.data.result));
+        return response.data.result;
+      }
+    } catch (error) {
+      console.error("Error getting job application:", error);
+      dispatch(getJobApplicationByIdError());
+      throw error;
+    }
   };
 
   const resetStateFlags = async () => {
@@ -89,6 +108,7 @@ export const JobApplicationProvider = ({
           resetStateFlags,
           getJobApplications,
           updateJobApplication,
+          getJobApplicationById,
         }}
       >
         {children}

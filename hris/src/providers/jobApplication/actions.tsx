@@ -14,11 +14,40 @@ export enum JobApplicationActionEnums {
   UpdateJobApplicationSuccess = "UPDATE_JOB_APPLICATION_SUCCESS",
   UpdateJobApplicationError = "UPDATEJOB_APPLICATION_ERROR",
 
+  getJobApplicationByIdPending = "GET_JOB_APPLICATION_BY_ID_PENDING",
+  getJobApplicationByIdSuccess = "GET_JOB_APPLICATION_BY_ID_SUCCESS",
+  getJobApplicationByIdError = "GET_JOB_APPLICATION_BY_ID_ERROR",
 
   resetStateFlagsAction = "RESET_STATE_FLAGS",
 }
 
-//Submit Job Application 
+//new action for getting job application by id
+export const getJobApplicationByIdPending =
+  createAction<IJobApplicationStateContext>(
+    JobApplicationActionEnums.getJobApplicationByIdPending,
+    () => ({ isPending: true, isSuccess: false, isError: false })
+  );
+
+export const getJobApplicationByIdSuccess = createAction<
+  IJobApplicationStateContext,
+  IJobApplication
+>(
+  JobApplicationActionEnums.getJobApplicationByIdSuccess,
+  (application: IJobApplication) => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+    application,
+  })
+);
+
+export const getJobApplicationByIdError =
+  createAction<IJobApplicationStateContext>(
+    JobApplicationActionEnums.getJobApplicationByIdError,
+    () => ({ isPending: false, isSuccess: false, isError: true })
+  );
+
+//Submit Job Application
 export const submitJobApplicationPending =
   createAction<IJobApplicationStateContext>(
     JobApplicationActionEnums.submitJobApplicationPending,
@@ -42,32 +71,37 @@ export const submitJobApplicationError =
     () => ({ isPending: false, isSuccess: false, isError: true })
   );
 
-
-//update job Application 
-export const UpdateJobApplicationPending = createAction<IJobApplicationStateContext>(
-  JobApplicationActionEnums.UpdateJobApplicationPending,
-  () => ({ isPending: true, isSuccess: false, isError: false })
-);
+//update job Application
+export const UpdateJobApplicationPending =
+  createAction<IJobApplicationStateContext>(
+    JobApplicationActionEnums.UpdateJobApplicationPending,
+    () => ({ isPending: true, isSuccess: false, isError: false })
+  );
 export const UpdateJobApplicationSuccess = createAction<
-IJobApplicationStateContext,
+  IJobApplicationStateContext,
   IJobApplication
->(JobApplicationActionEnums.UpdateJobApplicationSuccess, (jobApplication:IJobApplication) => ({
-  isPending: false,
-  isSuccess: true,
-  isError: false,
-  jobApplication,
-}));
-export const UpdateJobApplicationError = createAction<IJobApplicationStateContext>(
-  JobApplicationActionEnums.UpdateJobApplicationError,
-  () => ({ isPending: false, isSuccess: false, isError: true })
+>(
+  JobApplicationActionEnums.UpdateJobApplicationSuccess,
+  (jobApplication: IJobApplication) => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+    jobApplication,
+  })
 );
+export const UpdateJobApplicationError =
+  createAction<IJobApplicationStateContext>(
+    JobApplicationActionEnums.UpdateJobApplicationError,
+    () => ({ isPending: false, isSuccess: false, isError: true })
+  );
 
 //get Job Application :
 
-export const getJobApplicationsPending = createAction<IJobApplicationStateContext>(
-  JobApplicationActionEnums.getJobApplicationsPending,
-  () => ({ isPending: true, isSuccess: false, isError: false })
-);
+export const getJobApplicationsPending =
+  createAction<IJobApplicationStateContext>(
+    JobApplicationActionEnums.getJobApplicationsPending,
+    () => ({ isPending: true, isSuccess: false, isError: false })
+  );
 
 export const getJobApplicationsSuccess = createAction<
   IJobApplicationStateContext,
@@ -82,10 +116,11 @@ export const getJobApplicationsSuccess = createAction<
   })
 );
 
-export const getJobApplicationsError = createAction<IJobApplicationStateContext>(
-  JobApplicationActionEnums.getJobApplicationsError,
-  () => ({ isPending: false, isSuccess: false, isError: true })
-);
+export const getJobApplicationsError =
+  createAction<IJobApplicationStateContext>(
+    JobApplicationActionEnums.getJobApplicationsError,
+    () => ({ isPending: false, isSuccess: false, isError: true })
+  );
 
 export const resetStateFlagsAction = createAction<IJobApplicationStateContext>(
   JobApplicationActionEnums.resetStateFlagsAction,
