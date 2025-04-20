@@ -13,6 +13,9 @@ import {
   getLeaveRequestByEmpIdError,
   getLeaveRequestByEmpIdPending,
   getLeaveRequestByEmpIdSuccess,
+  getLeaveRequestsError,
+  getLeaveRequestsPending,
+  getLeaveRequestsSuccess,
   resetStateFlagsAction,
   submitLeaveRequestError,
   submitLeaveRequestPending,
@@ -59,6 +62,22 @@ export const LeaveRequestProvider = ({
       });
   };
 
+  const getLeaveRequests = async () => {
+    dispatch(getLeaveRequestsPending());
+    const endpoint = `/api/services/app/LeaveRequest`;
+
+    await instance
+      .get(endpoint)
+      .then((response) => {
+        dispatch(getLeaveRequestsSuccess(response.data.results));
+        console.log(response.data.results)
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(getLeaveRequestsError());
+      });
+  };
+
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
   };
@@ -66,7 +85,7 @@ export const LeaveRequestProvider = ({
   return (
     <LeaveRequestStateContext.Provider value={state}>
       <LeaveRequestActionContext.Provider
-        value={{ submitLeaveRequest, resetStateFlags, getByEmpId }}
+        value={{submitLeaveRequest, resetStateFlags, getByEmpId,getLeaveRequests }}
       >
         {children}
       </LeaveRequestActionContext.Provider>
