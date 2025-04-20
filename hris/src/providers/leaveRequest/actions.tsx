@@ -101,7 +101,6 @@ export const getLeaveRequestByEmpIdSuccess = createAction<
   LeaveRequestActionEnums.getLeaveRequestByEmpIdSuccess,
   (leaveRequests: ILeaveRequest[]) => ({
     isPending: false,
-    isSuccess: true,
     isError: false,
     leaveRequests,
   })
