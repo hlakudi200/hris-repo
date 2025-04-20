@@ -21,7 +21,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
     onChange(info) {
       if (info.file.status === "done") {
         toast(`${info.file.name} uploaded successfully`, "success");
-        const filePath = info.file.response?.filePath; // make sure this key matches your API response
+        const filePath = info.file.response?.result.filePath; 
         if (filePath) onUploadSuccess(filePath);
       } else if (info.file.status === "error") {
         toast(`${info.file.name} upload failed.`, "error");

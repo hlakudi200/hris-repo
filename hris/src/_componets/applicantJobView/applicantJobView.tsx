@@ -150,7 +150,7 @@ const ApplicantJobView: React.FC = () => {
             }
 
             const application: IJobApplication = {
-              jobPostingId: selectedJobId!,
+              jobPostingId: selectedJobId,
               applicantName: values.name,
               email: values.email,
               resumePath: resumePath,
