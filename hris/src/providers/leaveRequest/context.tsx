@@ -21,6 +21,7 @@ export interface ILeaveRequestStateContext {
 export interface ILeaveRequestActionContext {
   submitLeaveRequest: (request: ILeaveRequest) => Promise<void>;
   getLeaveRequests: () => Promise<void>;
+  updateLeaveRequest:(request:ILeaveRequest)=>Promise<void>;
   getByEmpId: (empId: string) => void;
   resetStateFlags: () => void;
 }

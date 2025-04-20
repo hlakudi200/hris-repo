@@ -20,6 +20,9 @@ import {
   submitLeaveRequestError,
   submitLeaveRequestPending,
   submitLeaveRequestSuccess,
+  updateLeaveRequestError,
+  updateLeaveRequestPending,
+  updateLeaveRequestSuccess,
 } from "./actions";
 
 export const LeaveRequestProvider = ({
@@ -78,6 +81,21 @@ export const LeaveRequestProvider = ({
       });
   };
 
+
+  const updateLeaveRequest=async(request:ILeaveRequest)=>{
+    dispatch(updateLeaveRequestPending())
+    const endpoint =`/api/services/app/LeaveRequest/Update`
+    instance
+    .post(endpoint,request)
+    .then((response)=>{
+      dispatch(updateLeaveRequestSuccess(response.data.result))
+      console.log(response.data.result)
+    }).catch((err)=>{
+      console.log(err)
+      dispatch(updateLeaveRequestError())
+    })
+
+  }
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
   };
@@ -85,7 +103,7 @@ export const LeaveRequestProvider = ({
   return (
     <LeaveRequestStateContext.Provider value={state}>
       <LeaveRequestActionContext.Provider
-        value={{submitLeaveRequest, resetStateFlags, getByEmpId,getLeaveRequests }}
+        value={{submitLeaveRequest, resetStateFlags, getByEmpId,getLeaveRequests,updateLeaveRequest }}
       >
         {children}
       </LeaveRequestActionContext.Provider>

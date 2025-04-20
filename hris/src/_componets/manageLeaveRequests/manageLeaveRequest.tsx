@@ -1,12 +1,12 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Input, Table, Spin, Tag } from 'antd';
+import { Input, Table, Spin, Tag, Button, Modal, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useLeaveRequestActions, useLeaveRequestState } from '@/providers/leaveRequest';
 import { ILeaveRequest } from '@/providers/leaveRequest/context';
 import moment from 'moment';
 import globals from '../globals.module.css';
-import styles from "./styles/styles.module.css";
+import styles from './styles/styles.module.css';
 
 const { Search } = Input;
 
@@ -15,6 +15,11 @@ const ManageLeaveRequest = () => {
   const { leaveRequests, isPending, isSuccess } = useLeaveRequestState();
   const [filteredData, setFilteredData] = useState<ILeaveRequest[]>([]);
   const [searchText, setSearchText] = useState('');
+  const [processingId, setProcessingId] = useState<string | null>(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalAction, setModalAction] = useState<'approve' | 'decline' | null>(null);
+  const [selectedRequest, setSelectedRequest] = useState<ILeaveRequest | null>(null);
 
   useEffect(() => {
     getLeaveRequests();
@@ -37,10 +42,35 @@ const ManageLeaveRequest = () => {
     setFilteredData(filtered);
   };
 
+  const openModal = (action: 'approve' | 'decline', record: ILeaveRequest) => {
+    setModalAction(action);
+    setSelectedRequest(record);
+    setIsModalOpen(true);
+  };
+
+  const handleConfirm = async () => {
+    if (!modalAction || !selectedRequest) return;
+
+    try {
+      setProcessingId(selectedRequest.id ?? null);
+
+      // Replace this with your actual API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      message.success(`Leave request ${modalAction}d successfully`);
+      getLeaveRequests();
+    } catch (error) {
+      message.error(`Failed to ${modalAction} leave request`);
+    } finally {
+      setProcessingId(null);
+      setIsModalOpen(false);
+    }
+  };
+
   const columns: ColumnsType<ILeaveRequest> = [
     {
       title: 'Employee Name',
-      dataIndex: ['employee', 'user', 'fullName'],
+      dataIndex: ['employee', 'user', 'name'],
       key: 'employeeName',
       sorter: (a, b) =>
         (a.employee?.user?.name || '').localeCompare(b.employee?.user?.name || ''),
@@ -79,11 +109,35 @@ const ManageLeaveRequest = () => {
       dataIndex: 'reason',
       key: 'reason',
     },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (_, record) => (
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <Button
+            type="primary"
+            disabled={processingId === record.id}
+            onClick={() => openModal('approve', record)}
+          >
+            Approve
+          </Button>
+          <Button
+            danger
+            disabled={processingId === record.id}
+            onClick={() => openModal('decline', record)}
+          >
+            Decline
+          </Button>
+        </div>
+      ),
+    },
   ];
 
   return (
     <div className={styles.OuterContainer}>
-      <h2 style={{ marginBottom: '1rem' }} className={globals.heading} >📅 Manage Leave Requests</h2>
+      <h2 style={{ marginBottom: '1rem' }} className={globals.heading}>
+        📅 Manage Leave Requests
+      </h2>
 
       <Search
         placeholder="Search by name, leave type or status"
@@ -106,6 +160,23 @@ const ManageLeaveRequest = () => {
           bordered
         />
       )}
+
+      {/* Modal for approve/decline confirmation */}
+      <Modal
+        title={`Confirm ${modalAction}`}
+        open={isModalOpen}
+        onOk={handleConfirm}
+        onCancel={() => setIsModalOpen(false)}
+        confirmLoading={processingId !== null}
+        okText="Yes"
+        cancelText="No"
+      >
+        <p>Are you sure you want to <b>{modalAction}</b> this leave request?</p>
+        <p>
+          <strong>Employee:</strong> {selectedRequest?.employee?.user?.name} <br />
+          <strong>Leave Type:</strong> {selectedRequest?.leaveType}
+        </p>
+      </Modal>
     </div>
   );
 };

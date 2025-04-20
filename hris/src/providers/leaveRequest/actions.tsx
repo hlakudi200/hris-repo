@@ -10,6 +10,10 @@ export enum LeaveRequestActionEnums {
   getLeaveRequestByEmpIdSuccess = "GET_LEAVE_REQUEST_BY_EMP_ID_SUCCESS",
   getLeaveRequestByEmpIdError = "GET_LEAVE_REQUEST_BY_EMP_ID_ERROR",
 
+  updateLeaveRequestPending = "UPDATE_LEAVE_REQUEST_PENDING",
+  updateLeaveRequestSuccess = "UPDATE_LEAVE_REQUEST_SUCCESS",
+  updateLeaveRequestError = "UPDATE_LEAVE_REQUEST_ERROR",
+
   getLeaveRequestsPending = "GET_LEAVE_REQUESTS_PENDING",
   getLeaveRequestsSuccess = "GET_LEAVE_REQUESTS_SUCCESS",
   getLeaveRequestsError = "GET_LEAVE_REQUESTS_ERROR",
@@ -36,6 +40,28 @@ export const submitLeaveRequestSuccess = createAction<
 );
 export const submitLeaveRequestError = createAction<ILeaveRequestStateContext>(
   LeaveRequestActionEnums.submitLeaveRequestError,
+  () => ({ isPending: false, isSuccess: false, isError: true })
+);
+//UPDATE LEAVE QUEST 
+export const updateLeaveRequestPending =
+  createAction<ILeaveRequestStateContext>(
+    LeaveRequestActionEnums.updateLeaveRequestPending,
+    () => ({ isPending: true, isSuccess: false, isError: false })
+  );
+export const updateLeaveRequestSuccess = createAction<
+  ILeaveRequestStateContext,
+  ILeaveRequest
+>(
+  LeaveRequestActionEnums.updateLeaveRequestSuccess,
+  (request: ILeaveRequest) => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+    request,
+  })
+);
+export const updateLeaveRequestError = createAction<ILeaveRequestStateContext>(
+  LeaveRequestActionEnums.updateLeaveRequestError,
   () => ({ isPending: false, isSuccess: false, isError: true })
 );
 
