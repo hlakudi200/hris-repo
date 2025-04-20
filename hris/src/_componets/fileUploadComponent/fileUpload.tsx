@@ -6,28 +6,34 @@ import { Button, Upload } from "antd";
 import { toast } from "@/providers/toast/toast";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-const props: UploadProps = {
-  name: "file",
-  action: `${baseUrl}/DocumentUpload`,
-  headers: {
-    authorization: "authorization-text",
-  },
-  onChange(info) {
-    if (info.file.status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === "done") {
-      toast(`${info.file.name} file uploaded successfully`, "success");
-    } else if (info.file.status === "error") {
-      toast(`${info.file.name} file upload failed.`, "error");
-    }
-  },
-};
 
-const FileUpload: React.FC = () => (
-  <Upload {...props}>
-    <Button icon={<UploadOutlined />}>Click to Upload</Button>
-  </Upload>
-);
+interface FileUploadProps {
+  onUploadSuccess: (filePath: string) => void;
+}
+
+const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
+  const props: UploadProps = {
+    name: "file",
+    action: `${baseUrl}/DocumentUpload`,
+    headers: {
+      authorization: "authorization-text",
+    },
+    onChange(info) {
+      if (info.file.status === "done") {
+        toast(`${info.file.name} uploaded successfully`, "success");
+        const filePath = info.file.response?.filePath; // make sure this key matches your API response
+        if (filePath) onUploadSuccess(filePath);
+      } else if (info.file.status === "error") {
+        toast(`${info.file.name} upload failed.`, "error");
+      }
+    },
+  };
+
+  return (
+    <Upload {...props}>
+      <Button icon={<UploadOutlined />}>Click to Upload</Button>
+    </Upload>
+  );
+};
 
 export default FileUpload;
