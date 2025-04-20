@@ -13,6 +13,8 @@ using Abp.Runtime.Validation;
 using Abp.UI;
 using hrisApi.Authorization.Users;
 using hrisApi.Domains.Employee_Management;
+using hrisApi.Services.EmailService;
+using hrisApi.Services.EmailService.DTO;
 using hrisApi.Services.Employee_Management.DTO;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -35,6 +37,7 @@ namespace hrisApi.Services.Employee_Management
         private readonly IRepository<EmployeeDocument, Guid> _documentRepository;
         private readonly UserManager _userManager;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly EmailAppService _emailAppService;
 
         private readonly EmployeeManager _employeeManager;
 
@@ -44,13 +47,15 @@ namespace hrisApi.Services.Employee_Management
             EmployeeManager employeeManager,
             IRepository<Employee, Guid> repository,
             IRepository<EmployeeDocument, Guid> documentRepository,
-            UserManager userManager)
+            UserManager userManager,
+            EmailAppService emailAppService)
             : base(repository)
         {
             _documentRepository = documentRepository;
             LocalizationSourceName = "hrisApi";
             _employeeManager = employeeManager;
             _userManager = userManager;
+            _emailAppService = emailAppService;
             _hostingEnvironment = hostingEnvironment;
         }
 
@@ -85,11 +90,82 @@ namespace hrisApi.Services.Employee_Management
 
                  );
 
+            await SendEmployeeCredentialsEmail(
+            input.Email,
+            input.Name,
+            input.Username,
+            input.Password,
+            input.Position,
+            input.Department
+        );
+
             var employeeDtoReturn = ObjectMapper.Map<EmployeeDto>(resultsEmployee);
 
 
             return employeeDtoReturn;
-        } 
+        }
+
+
+        private async Task SendEmployeeCredentialsEmail(
+        string employeeEmail,
+        string employeeName,
+        string username,
+        string password,
+        string position,
+        string department)
+        {
+            try
+            {
+                
+                string emailBody = $@"
+            <html>
+            <body style='font-family: Arial, sans-serif; line-height: 1.6;'>
+                <div style='max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 5px;'>
+                    <h2 style='color: #333; border-bottom: 1px solid #eee; padding-bottom: 10px;'>Welcome to Ubuntu HR!</h2>
+                    
+                    <p>Dear {employeeName},</p>
+                    
+                    <p>Congratulations on joining our team as <strong>{position}</strong> in the <strong>{department}</strong> department.</p>
+                    
+                    <p>Below are your system credentials to access our HRIS platform:</p>
+                    
+                    <div style='background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 15px 0;'>
+                        <p><strong>Username:</strong> {employeeEmail}</p>
+                        <p><strong>Password:</strong> {password}</p>
+                    </div>
+                    
+                    <p><strong>Important:</strong> Please change your password after your first login for security reasons.</p>
+                    
+                    <p>If you have any questions or need assistance, please contact your manager or the HR department.</p>
+                    
+                    <p>Best regards,<br>
+                    Human Resources Department</p>
+                </div>
+            </body>
+            </html>";
+
+                // Create email request
+                var emailRequest = new EmailRequestDto
+                {
+                    To = employeeEmail,
+                    Subject = "Welcome to Ubuntu HR - Your Account Details",
+                    Body = emailBody,
+                    IsBodyHtml = true
+                };
+
+                // Send email
+                await _emailAppService.SendEmail(emailRequest);
+
+                Logger.Info($"Employee credentials email sent successfully to: {employeeEmail}");
+            }
+            catch (Exception ex)
+            {
+                // Log error but don't fail employee creation if email fails
+                Logger.Error($"Failed to send employee credentials email: {ex.Message}", ex);
+            }
+        }
+
+ 
         public override async Task<EmployeeDto> UpdateAsync(UpdateEmployeeDto input)
         {
             // Check if National ID is being changed and if so, ensure it's unique
