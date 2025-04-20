@@ -4,8 +4,18 @@ import { createContext } from "react";
 
 export interface IEmail {
   to: string;
+  cc?:string;
+  bcc?:string;
   subject: string;
   body: string;
+  isBodyHtml?:boolean;
+  attachments?:IAttachments[];
+}
+
+export interface IAttachments{
+  fileName: string,
+  fileBytes: string,
+  contentType: string
 }
 
 export interface IEmailStateContext {

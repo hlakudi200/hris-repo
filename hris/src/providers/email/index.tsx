@@ -16,14 +16,14 @@ export const EmailProvider = ({ children }: { children: React.ReactNode }) => {
 
   const sendEmail = async (email: IEmail) => {
     dispatch(sendEmailPending());
-    const endpoint = `/api/services/app/AttendanceRecord/Create`;
+    const endpoint = `/api/services/app/Email/SendEmail`;
     await instance
       .post(endpoint, email)
       .then(() => {
         dispatch(sendEmailSuccess());
       })
       .catch((error) => {
-        console.error(error);
+        console.error("emailSendErr",error);
         dispatch(sendEmailError());
       });
   };

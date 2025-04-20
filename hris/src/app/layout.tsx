@@ -5,12 +5,12 @@ import { ConfigProvider } from "antd";
 import ToastProvider from "@/providers/toast/toast";
 import { EmployeeProvider } from "@/providers/employee";
 import { AttandanceProvider } from "@/providers/attandance";
-
 import { JobPostingProvider } from "@/providers/jobPost";
 
 import { JobApplicationProvider } from "@/providers/jobApplication";
 import { InterviewProvider } from "@/providers/Interview";
 import { PayrollProvider } from "@/providers/payrollProfile";
+import { EmailProvider } from "@/providers/email";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -73,22 +73,24 @@ export default function RootLayout({
           },
         }}
       >
-        <InterviewProvider>
-          <AuthProvider>
-            <ToastProvider />
-            <JobPostingProvider>
-              <EmployeeProvider>
-                <AttandanceProvider>
-                  <JobApplicationProvider>
-                    <PayrollProvider>
-                      <body>{children}</body>
-                    </PayrollProvider>
-                  </JobApplicationProvider>
-                </AttandanceProvider>
-              </EmployeeProvider>
-            </JobPostingProvider>
-          </AuthProvider>
-        </InterviewProvider>
+        <EmailProvider>
+          <InterviewProvider>
+            <AuthProvider>
+              <ToastProvider />
+              <JobPostingProvider>
+                <EmployeeProvider>
+                  <AttandanceProvider>
+                    <JobApplicationProvider>
+                      <PayrollProvider>
+                        <body>{children}</body>
+                      </PayrollProvider>
+                    </JobApplicationProvider>
+                  </AttandanceProvider>
+                </EmployeeProvider>
+              </JobPostingProvider>
+            </AuthProvider>
+          </InterviewProvider>
+        </EmailProvider>
       </ConfigProvider>
     </html>
   );
