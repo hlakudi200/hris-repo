@@ -1,4 +1,4 @@
-import { ILeaves } from "@/providers/employee/context";
+import { ILeaves } from "@/providers/leaves/context";
 
 export const subtractLeave = (
     leaves: ILeaves,

@@ -17,19 +17,6 @@ export const EmployeeReducer = handleActions<IEmployeeStateContext>(
       ...action.payload,
     }),
 
-    [EmployeeActionEnums.getLeavesPending]: (state, action) => ({
-      ...state,
-      ...action.payload,
-    }),
-    [EmployeeActionEnums.getLeavesSuccess]: (state, action) => ({
-      ...state,
-      ...action.payload,
-    }),
-    [EmployeeActionEnums.getLeavesError]: (state, action) => ({
-      ...state,
-      ...action.payload,
-    }),
-
     [EmployeeActionEnums.updateEmployeePending]: (state, action) => ({
       ...state,
       ...action.payload,
@@ -92,25 +79,6 @@ export const EmployeeReducer = handleActions<IEmployeeStateContext>(
       ...action.payload,
     }),
     [EmployeeActionEnums.createEmployeeError]: (state, action) => ({
-      ...state,
-      ...action.payload,
-    }),
-
-    [EmployeeActionEnums.updateLeavesPending]: (
-      state,
-      action
-    ) => ({
-      ...state,
-      ...action.payload,
-    }),
-    [EmployeeActionEnums.updateLeavesSuccess]: (
-      state,
-      action
-    ) => ({
-      ...state,
-      ...action.payload,
-    }),
-    [EmployeeActionEnums.updateLeavesError]: (state, action) => ({
       ...state,
       ...action.payload,
     }),

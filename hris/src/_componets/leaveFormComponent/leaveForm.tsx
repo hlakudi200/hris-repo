@@ -3,7 +3,7 @@ import React from "react";
 import { Form, DatePicker, Select, Button, Flex, Spin } from "antd";
 import globals from "../globals.module.css";
 import moment from "moment";
-import { useEmployeeActions, useEmployeeState } from "@/providers/employee";
+import { useEmployeeState } from "@/providers/employee";
 import {
   useLeaveRequestActions,
   useLeaveRequestState,
@@ -11,7 +11,8 @@ import {
 import { ILeaveRequest } from "@/providers/leaveRequest/context";
 import { toast } from "@/providers/toast/toast";
 import { subtractLeave } from "@/utils/subtractLeaves";
-import { ILeaves } from "@/providers/employee/context";
+import { ILeaves } from "@/providers/leaves/context";
+import { useLeaveActions, useLeaveState } from "@/providers/leaves";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -23,8 +24,9 @@ type LeaveFormValues = {
 
 const LeaveForm = () => {
   const [form] = Form.useForm<LeaveFormValues>();
-  const { currentEmployee, leaves } = useEmployeeState();
-  const { updateLeaves } = useEmployeeActions();
+  const { currentEmployee } = useEmployeeState();
+  const {leaves} = useLeaveState();
+  const { updateLeaves } = useLeaveActions();
   const { isPending, isSuccess } = useLeaveRequestState();
   const { submitLeaveRequest, resetStateFlags } = useLeaveRequestActions();
 

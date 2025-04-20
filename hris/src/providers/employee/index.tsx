@@ -7,7 +7,6 @@ import {
   EmployeeStateContext,
   ICreateEmployeeRequest,
   IEmployee,
-  ILeaves,
   INITIAL_STATE,
   IPayrollProfile,
 } from "./context";
@@ -24,18 +23,12 @@ import {
   getEmployeeError,
   getEmployeePending,
   getEmployeeSuccess,
-  getLeavesError,
-  getLeavesPending,
-  getLeavesSuccess,
   getPayrollProfileError,
   getPayrollProfilePending,
   getPayrollProfileSuccess,
   updateEmployeeError,
   updateEmployeePending,
   updateEmployeeSuccess,
-  updateLeavesError,
-  updateLeavesPending,
-  updateLeavesSuccess,
 } from "./actions";
 import { getAxiosInstace } from "@/utils/axios-instance";
 
@@ -82,22 +75,6 @@ export const EmployeeProvider = ({
       .catch((error) => {
         console.error(error);
         dispatch(getEmployeeError());
-      });
-  };
-
-  const getLeaves = async (employeeId: string) => {
-    dispatch(getLeavesPending());
-
-    const endpoint: string = `/api/services/app/Leave/GetByEmpId?employeeId=${employeeId}`;
-
-    await instance
-      .get(endpoint)
-      .then((response) => {
-        dispatch(getLeavesSuccess(response.data.result));
-      })
-      .catch((error) => {
-        console.error(error);
-        dispatch(getLeavesError());
       });
   };
 
@@ -192,34 +169,16 @@ export const EmployeeProvider = ({
       throw error;
     }
   };
-
-  const updateLeaves = (leaves: ILeaves) => {
-    dispatch(updateLeavesPending());
-    const endpoint = "/api/services/app/Leave/Update";
-
-    instance
-      .put(endpoint, leaves)
-      .then((response) => {
-        dispatch(updateLeavesSuccess(response.data.result));
-      })
-      .catch((error) => {
-        console.error(error);
-        dispatch(updateLeavesError());
-      });
-  };
-
   return (
     <EmployeeStateContext.Provider value={state}>
       <EmployeeActionContext.Provider
         value={{
           createEmployee,
           getEmployee,
-          getLeaves,
           updateEmployee,
           getPayrollProfile,
           getAllEmployees,
           deleteEmployee,
-          updateLeaves,
         }}
       >
         {children}
