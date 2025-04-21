@@ -34,7 +34,7 @@ namespace hrisApi.Services.PayrollProfileService
             var payrollProfiles = await _repository.GetAllIncludingAsync(p => p.Employee, p => p.Transactions);
 
             var result = await payrollProfiles.Select(p => new GetPayrollProfileDto
-            {
+            {   Id=p.Id,
                 EmployeeId = p.EmployeeId,
                 BasicSalary = p.BasicSalary,
                 EmployeeName = p.Employee.User.Name,
