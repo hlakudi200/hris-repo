@@ -10,6 +10,7 @@ import {
   useJobApplicationActions,
   useJobApplicationState,
 } from "../../../providers/jobApplication";
+import "@testing-library/jest-dom";
 
 // Mocking matchMedia for Ant Design components
 Object.defineProperty(window, "matchMedia", {
