@@ -1,19 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import type { TableColumnsType } from "antd";
-import {
-  Table,
-  Spin,
-  Alert,
-  Button,
-  Modal,
-  Form,
-  Input,
-} from "antd";
-import {
-  useJobPostingActions,
-  useJobPostingState,
-} from "@/providers/jobPost";
+import { Table, Spin, Alert, Button, Modal, Form, Input } from "antd";
+import { useJobPostingActions, useJobPostingState } from "@/providers/jobPost";
 import {
   useJobApplicationActions,
   useJobApplicationState,
@@ -21,6 +10,8 @@ import {
 import { IJobApplication } from "@/providers/jobApplication/context";
 import { toast } from "@/providers/toast/toast";
 import FileUpload from "../fileUploadComponent/fileUpload";
+import { submitApplicationTemplate } from "@/providers/email/emailTemplates/submitApplication";
+import { useEmailActions } from "@/providers/email";
 
 interface DataType {
   key: string;
@@ -38,6 +29,7 @@ const ApplicantJobView: React.FC = () => {
   const { isError: isApplicationError, isSuccess: IsApplicationSuccess } =
     useJobApplicationState();
   const { submitJobApplication, resetStateFlags } = useJobApplicationActions();
+  const { sendEmail } = useEmailActions();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
@@ -66,6 +58,11 @@ const ApplicantJobView: React.FC = () => {
       month: "long",
       day: "numeric",
     });
+  };
+
+  const getJobTitleById = (id: string | null): string => {
+    const job = JobPostings?.find((j) => j.id === id);
+    return job?.title ?? "Job Title";
   };
 
   if (isPending) return <Spin size="large" />;
@@ -158,6 +155,18 @@ const ApplicantJobView: React.FC = () => {
             };
 
             submitJobApplication(application);
+            const emailBody = submitApplicationTemplate(
+              values.name,
+              getJobTitleById(selectedJobId)
+            );
+
+            sendEmail({
+              to: values.email,
+              subject: `Application Submitted - ${getJobTitleById(selectedJobId)}`,
+              body: emailBody,
+              isBodyHtml: true,
+            });
+
             setIsModalVisible(false);
             form.resetFields();
             setResumePath("");
