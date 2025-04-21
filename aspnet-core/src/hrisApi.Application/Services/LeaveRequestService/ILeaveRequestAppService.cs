@@ -5,11 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using hrisApi.Services.AbsenceReportService.DTO;
+using hrisApi.Services.LeaveRequestService.DTO;
 using hrisApi.Services.LeaveService.DTO;
 
 namespace hrisApi.Services.LeaveService
 {
-    public interface ILeaveRequestAppService : IAsyncCrudAppService<LeaveRequestDto, Guid>
+    public interface ILeaveRequestAppService : IAsyncCrudAppService<LeaveRequestRequestDto, Guid>
     {
+        public Task<IList<LeaveRequestDto>> GetByEmpId(Guid id);
+        public Task<List<LeaveRequestDto>> GetAllInclude();
     }
 }

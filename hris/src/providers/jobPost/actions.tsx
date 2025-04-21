@@ -7,6 +7,12 @@ export enum JobPostingActionEnums {
   getJobPostingsSuccess = "GET_JOBPOSTINGS_SUCCESS",
   getJobPostingsError = "GET_JOBPOSTINGS_ERROR",
 
+
+  getJobPostingIncludedPending = "GET_JOBPOSTINGS_INCLUDE_PENDING",
+  getJobPostingIncludedSuccess = "GET_JOBPOSTINGS_INCLUDE_SUCCESS",
+  getJobPostingIncludedError = "GET_JOBPOSTINGS_INCLUDE_ERROR",
+
+
   getJobPostingPending = "GET_JOBPOSTING_PENDING",
   getJobPostingSuccess = "GET_JOBPOSTING_SUCCESS",
   getJobPostingError = "GET_JOBPOSTING_ERROR",
@@ -47,6 +53,34 @@ export const getJobPostingsError = createAction<IJobPostingStateContext>(
 
   () => ({ isPending: false, isSuccess: false, isError: true })
 );
+
+//get jpb posting include : 
+export const getJobPostingIncludedPending = createAction<IJobPostingStateContext>(
+  JobPostingActionEnums.getJobPostingIncludedPending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
+export const getJobPostingIncludedSuccess = createAction<
+  IJobPostingStateContext,
+  IJobPosting[]
+>(
+  JobPostingActionEnums.getJobPostingIncludedSuccess,
+  (JobPostings: IJobPosting[]) => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+    JobPostings,
+  })
+);
+
+export const getJobPostingIncludedError = createAction<IJobPostingStateContext>(
+  JobPostingActionEnums.getJobPostingIncludedError,
+
+  () => ({ isPending: false, isSuccess: false, isError: true })
+);
+
+
+//Get job posting 
 
 export const getJobPostingPending = createAction<IJobPostingStateContext>(
   JobPostingActionEnums.getJobPostingPending,

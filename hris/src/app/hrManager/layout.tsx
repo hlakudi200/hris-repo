@@ -1,70 +1,142 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
+  FileFilled,
+  FileSearchOutlined,
+  HomeOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  ProjectOutlined,
   UploadOutlined,
+  UsergroupAddOutlined,
+  FileTextOutlined,
+  LogoutOutlined,
   UserOutlined,
-  VideoCameraOutlined,
+  CalendarOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu } from "antd";
+import { Button, Dropdown, Layout, Menu } from "antd";
+import { LeaveRequestProvider } from "@/providers/leaveRequest";
+import { ItemType, MenuItemType } from "antd/es/menu/interface";
+import { PayrollTransactionProvider } from "@/providers/payrolltransaction";
+import { EmployeeProvider } from "@/providers/employee";
+import styels from "./styles/global.module.css";
+import { EmailProvider } from "@/providers/email";
+import { useAuthActions, useAuthState } from "@/providers/auth";
 
 const { Header, Sider, Content } = Layout;
 
-const HrManager = () => {
+const HrManager = ({ children }: { children: React.ReactNode }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const { currentUser } = useAuthState();
+  const { signOut } = useAuthActions();
+  const router = useRouter();
+  const userMenu = {
+    items: [
+      {
+        key: "signOut",
+        label: "Sign Out",
+        icon: <LogoutOutlined />,
+        onClick: () => {
+          router.replace("/");
+          signOut();
+        },
+      },
+    ],
+  };
+
+  const siderItems: ItemType<MenuItemType>[] = [
+    {
+      key: "/hrManager",
+      icon: <HomeOutlined />,
+      label: "Home",
+    },
+    {
+      key: "/hrManager/employees",
+      icon: <UsergroupAddOutlined />,
+      label: "Employees",
+    },
+    {
+      key: "/hrManager/manageleaverequests",
+      icon: <CalendarOutlined />,
+      label: "Leaves",
+    },
+    {
+      key: "/hrManager/jobPost",
+      icon: <UploadOutlined />,
+      label: "Job Post",
+    },
+    {
+      key: "/hrManager/payroll",
+      icon: <FileFilled />,
+      label: "Payroll",
+    },
+    {
+      key: "/hrManager/interview",
+      icon: <FileSearchOutlined />,
+      label: "Interviews",
+    },
+    {
+      key: "/hrManager/jobApplications",
+      icon: <FileTextOutlined />,
+      label: "Applications",
+    },
+    {
+      key: "/hrManager/projects",
+      icon: <ProjectOutlined />,
+      label: "Projects",
+    },
+  ];
 
   return (
-    <Layout style={{ height: "100vh" }}>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="demo-logo-vertical" />
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={["1"]}
-          items={[
-            {
-              key: "1",
-              icon: <UserOutlined />,
-              label: "nav 1",
-            },
-            {
-              key: "2",
-              icon: <VideoCameraOutlined />,
-              label: "nav 2",
-            },
-            {
-              key: "3",
-              icon: <UploadOutlined />,
-              label: "nav 3",
-            },
-          ]}
-        />
-      </Sider>
-      <Layout>
-        <Header style={{ padding: 0, backgroundColor: "white" }}>
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: "16px",
-              width: 64,
-              height: 64,
-            }}
-          />
-        </Header>
-        <Content
-          style={{
-            margin: "24px 16px",
-            padding: 24,
-            minHeight: 280,
-          }}
-        >
-          Content
-        </Content>
-      </Layout>
-    </Layout>
+    <EmailProvider>
+      <PayrollTransactionProvider>
+        <EmployeeProvider>
+          <LeaveRequestProvider>
+            <Layout className={styels.layout}>
+              <Sider trigger={null} collapsible collapsed={collapsed}>
+                <div className="demo-logo-vertical" />
+                <Menu
+                  onClick={({ key }) => router.push(key)}
+                  theme="dark"
+                  mode="inline"
+                  defaultSelectedKeys={["hrManager"]}
+                  items={siderItems}
+                />
+              </Sider>
+              <Layout>
+                <Header style={{ 
+                    padding: 0,
+                    backgroundColor: "white",
+                    display: "flex",
+                    alignItems: "center",}}>
+                  <Button
+                    type="text"
+                    icon={
+                      collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
+                    }
+                    onClick={() => setCollapsed(!collapsed)}
+                    style={{
+                      fontSize: "16px",
+                      width: 64,
+                      height: 64,
+                    }}
+                  />
+                  <div className={styels.profileMenu}>
+                    <Dropdown menu={userMenu} trigger={["click"]}>
+                      <Button type="text" icon={<UserOutlined />}>
+                        {currentUser?.emailAddress ?? "User"}
+                      </Button>
+                    </Dropdown>
+                  </div>
+                </Header>
+                <Content className={styels.content}>{children}</Content>
+              </Layout>
+            </Layout>
+          </LeaveRequestProvider>
+        </EmployeeProvider>
+      </PayrollTransactionProvider>
+    </EmailProvider>
   );
 };
 

@@ -13,8 +13,8 @@ namespace hrisApi.Domains.Attendance_Management
         public Guid ProjectId { get; set; }
         public DateTime ClockInTime { get; set; }
         public DateTime ClockOutTime { get; set; }
-        public string YearMonthWeek { get; set; }
-        public string Note { get; set; }
+        public string YearMonthWeek { get; set; } = string.Empty;
+        public string Note { get; set; } = string.Empty;
 
     }
 }

@@ -1,21 +1,23 @@
 import React from "react";
-import { Calendar, Card } from "antd";
+import {Card } from "antd";
 import AttendanceOverview from "@/_componets/attandaceComponent/attandanceOverview";
 import Profile from "@/_componets/profileComponent/profile";
 import styles from "./styles/global.module.css";
+import LeaveCalendar from "@/_componets/leaveCalendar/leaveCalendar";
+
 
 const Employee = () => {
   return (
-    <div className={styles.employeeContainer} style={{marginTop: -40 }}>
-      <div className={styles.profileSection}>
+    <div className={styles.container} style={{marginTop: -40 }}>
+      <div className={styles.leftSection}>
         <Profile />
       </div>
-      <div className={styles.calendarSection}>
+      <div className={styles.midSection}>
         <Card title="Calendar" style={{ width: "100%", height: "100%" }}>
-          <Calendar fullscreen={false} style={{height: 50}}/>
+          <LeaveCalendar />
         </Card>
       </div>
-      <div className={styles.attendanceSection}>
+      <div className={styles.rightSection}>
         <AttendanceOverview />
       </div>
     </div>

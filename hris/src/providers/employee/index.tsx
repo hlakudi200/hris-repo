@@ -14,12 +14,15 @@ import {
   createEmployeeError,
   createEmployeePending,
   createEmployeeSuccess,
+  deleteEmployeeError,
+  deleteEmployeePending,
+  deleteEmployeeSuccess,
+  getAllEmployeesError,
+  getAllEmployeesPending,
+  getAllEmployeesSuccess,
   getEmployeeError,
   getEmployeePending,
   getEmployeeSuccess,
-  getLeavesError,
-  getLeavesPending,
-  getLeavesSuccess,
   getPayrollProfileError,
   getPayrollProfilePending,
   getPayrollProfileSuccess,
@@ -42,26 +45,26 @@ export const EmployeeProvider = ({
 
     const endpoint = "/api/services/app/Employee/Create";
 
-    await instance
-      .post(endpoint, employee)
-      .then((response) => {
-        if (response.status === 200) {
-          dispatch(createEmployeeSuccess(response.data.result));
-        }
-      })
+    try {
+      const response = await instance.post(endpoint, employee);
+      if (response.status === 200) {
+        dispatch(createEmployeeSuccess(response.data.result));
 
-      .catch((error) => {
-        console.error("Error creating employee:", error);
-        dispatch(
-          createEmployeeError(error.message || "Failed to create employee")
-        );
-      });
+        await getAllEmployees();
+        return response.data.result;
+      }
+    } catch (error) {
+      console.error("Error creating employee:", error);
+      dispatch(
+        createEmployeeError(error.message || "Failed to create employee")
+      );
+      throw error;
+    }
   };
 
   const getEmployee = async (userId: number) => {
     dispatch(getEmployeePending());
 
-    //TODO: Add endpoint
     const endpoint: string = `/api/services/app/Employee/GetEmployeeById?userId=${userId}`;
 
     await instance
@@ -75,23 +78,6 @@ export const EmployeeProvider = ({
       });
   };
 
-  const getLeaves = async (employeeId: string) => {
-    dispatch(getLeavesPending());
-
-    const endpoint: string = `/api/services/app/Leave/GetByEmpId?employeeId=${employeeId}`;
-
-    await instance
-      .get(endpoint)
-      .then((response) => {
-        dispatch(getLeavesSuccess(response.data.result));
-      })
-      .catch((error) => {
-        console.error(error);
-        dispatch(getLeavesError());
-      });
-  };
-
-  // In EmployeeProvider, add this new function
   const updateEmployee = async (employee: IEmployee) => {
     dispatch(updateEmployeePending());
 
@@ -101,6 +87,8 @@ export const EmployeeProvider = ({
       const response = await instance.put(endpoint, employee);
       if (response.status === 200) {
         dispatch(updateEmployeeSuccess(response.data.result));
+        // After successfully updating an employee, fetch all employees
+        await getAllEmployees();
         return response.data.result;
       }
     } catch (error) {
@@ -131,15 +119,66 @@ export const EmployeeProvider = ({
       });
   };
 
+  // Implement getAllEmployees function
+  const getAllEmployees = async () => {
+    dispatch(getAllEmployeesPending());
+
+    const endpoint = "/api/services/app/Employee/GetAll";
+
+    try {
+      const response = await instance.get(endpoint);
+
+      if (response.status === 200 && response.data && response.data.result) {
+        // Ensure we're getting the items array from the response
+        const employees = Array.isArray(response.data.result.items)
+          ? response.data.result.items
+          : response.data.result;
+        dispatch(getAllEmployeesSuccess(employees));
+        return employees;
+      } else {
+        throw new Error("Invalid response format");
+      }
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+      dispatch(
+        getAllEmployeesError(error.message || "Failed to fetch employees")
+      );
+      throw error;
+    }
+  };
+
+  // Implement deleteEmployee function
+  const deleteEmployee = async (id: string) => {
+    dispatch(deleteEmployeePending());
+
+    const endpoint = `/api/services/app/Employee/Delete?id=${id}`;
+
+    try {
+      const response = await instance.delete(endpoint);
+      if (response.status === 200) {
+        dispatch(deleteEmployeeSuccess());
+        // After successfully deleting an employee, fetch all employees
+        await getAllEmployees();
+        return;
+      }
+    } catch (error) {
+      console.error("Error deleting employee:", error);
+      dispatch(
+        deleteEmployeeError(error.message || "Failed to delete employee")
+      );
+      throw error;
+    }
+  };
   return (
     <EmployeeStateContext.Provider value={state}>
       <EmployeeActionContext.Provider
         value={{
           createEmployee,
           getEmployee,
-          getLeaves,
           updateEmployee,
           getPayrollProfile,
+          getAllEmployees,
+          deleteEmployee,
         }}
       >
         {children}

@@ -12,8 +12,8 @@ namespace hrisApi.Domains.Employee_Management
 {
     public class Employee : FullAuditedEntity<Guid>
     {
-        
-        public string EmployeeNumber { get; set; }  //Year/first 4 digits of IdNo
+
+        public string EmployeeNumber { get; set; } = string.Empty;  //Year/first 4 digits of IdNo
 
         public long UserId { get; set; }
         [ForeignKey("UserId")]
@@ -22,8 +22,8 @@ namespace hrisApi.Domains.Employee_Management
 
         [Required]
         [Phone]
-        [StringLength(10, ErrorMessage =" Please make sure is 10 digits")]
-        public string ContactNo { get; set; }
+        [StringLength(10, ErrorMessage = " Please make sure is 10 digits")]
+        public string ContactNo { get; set; } = string.Empty;
 
         [Required]
         [DataType(DataType.Date)]
@@ -32,7 +32,7 @@ namespace hrisApi.Domains.Employee_Management
 
         [Required]
         [StringLength(13, ErrorMessage = "Please make sure is 13 digits")]
-        public string NationalIdNumber { get; set; }
+        public string NationalIdNumber { get; set; } = string.Empty;
 
 
         [Required]
@@ -42,13 +42,13 @@ namespace hrisApi.Domains.Employee_Management
 
         [Required]
         [StringLength(50)]
-        public string Position { get; set; }
+        public string Position { get; set; } = string.Empty;
 
         [Required]
         [StringLength(50)]
-        public string Department { get; set; }
-       
-        public Guid ManagerId { get; set; } 
+        public string Department { get; set; } = string.Empty;
+
+        public Guid ManagerId { get; set; }
 
         public ICollection<EmployeeDocument> Documents { get; set; }
     }

@@ -10,6 +10,9 @@ import {
 } from "@/providers/leaveRequest";
 import { ILeaveRequest } from "@/providers/leaveRequest/context";
 import { toast } from "@/providers/toast/toast";
+import { subtractLeave } from "@/utils/subtractLeaves";
+import { ILeaves } from "@/providers/leaves/context";
+import { useLeaveActions, useLeaveState } from "@/providers/leaves";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -22,6 +25,8 @@ type LeaveFormValues = {
 const LeaveForm = () => {
   const [form] = Form.useForm<LeaveFormValues>();
   const { currentEmployee } = useEmployeeState();
+  const {leaves} = useLeaveState();
+  const { updateLeaves } = useLeaveActions();
   const { isPending, isSuccess } = useLeaveRequestState();
   const { submitLeaveRequest, resetStateFlags } = useLeaveRequestActions();
 
@@ -34,9 +39,18 @@ const LeaveForm = () => {
       status: "pending",
     };
 
-    submitLeaveRequest(request);
-  };
+    const leaveType = values.leaveType as keyof Omit<ILeaves, "id">;
+    const leaveDays = values.dateRange[1].diff(values.dateRange[0], "days") + 1;
 
+    const updatedLeave = {
+      ...subtractLeave(leaves, leaveType, leaveDays),
+      id: leaves.id,
+    };
+
+
+    submitLeaveRequest(request);
+    updateLeaves(updatedLeave);
+  };
   if (isPending) {
     return (
       <Flex justify="center" style={{ marginBottom: 20 }}>
@@ -69,7 +83,10 @@ const LeaveForm = () => {
             <Select placeholder="Select leave type">
               <Option value="annual">Annual Leave</Option>
               <Option value="sick">Sick Leave</Option>
-              <Option value="family">Family Responsibility</Option>
+              <Option value="study">Study</Option>
+              <Option value="familyResponsibility">
+                Family Responsibility
+              </Option>
             </Select>
           </Form.Item>
 

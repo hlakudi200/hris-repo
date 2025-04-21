@@ -15,7 +15,7 @@ namespace hrisApi.Domains.Attendance_Management
         [ForeignKey("EmployeeId")]
         public Employee Employee { get; set; }
         public DateTime Date { get; set; }
-        public string AbsenceType { get; set; }
+        public string AbsenceType { get; set; } = string.Empty;
 
     }
 

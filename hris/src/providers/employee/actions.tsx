@@ -1,10 +1,5 @@
 import { createAction } from "redux-actions";
-import {
-  IEmployee,
-  IEmployeeStateContext,
-  ILeaves,
-  IPayrollProfile,
-} from "./context";
+import { IEmployee, IEmployeeStateContext, IPayrollProfile } from "./context";
 
 export enum EmployeeActionEnums {
   createEmployeePending = "CREATE_EMPLOYEE_PENDING",
@@ -15,10 +10,6 @@ export enum EmployeeActionEnums {
   getEmployeeSuccess = "GET_EMPLOYEE_SUCCESS",
   getEmployeeError = "GET_EMPLOYEE_ERROR",
 
-  getLeavesPending = "GET_LEAVES_PENDING",
-  getLeavesSuccess = "GET_LEAVES_SUCCESS",
-  getLeavesError = "GET_LEAVES_ERROR",
-
   updateEmployeePending = "UPDATE_EMPLOYEE_PENDING",
   updateEmployeeSuccess = "UPDATE_EMPLOYEE_SUCCESS",
   updateEmployeeError = "UPDATE_EMPLOYEE_ERROR",
@@ -26,6 +17,14 @@ export enum EmployeeActionEnums {
   getPayrollProfilePending = "GET_PAYROLL_PROFILE_PENDING",
   getPayrollProfileSuccess = "GET_PAYROLL_PROFILE_SUCCESS",
   getPayrollProfileError = "GET_PAYROLL_PROFILE_ERROR",
+
+  getAllEmployeesPending = "GET_ALL_EMPLOYEES_PENDING",
+  getAllEmployeesSuccess = "GET_ALL_EMPLOYEES_SUCCESS",
+  getAllEmployeesError = "GET_ALL_EMPLOYEES_ERROR",
+
+  deleteEmployeePending = "DELETE_EMPLOYEE_PENDING",
+  deleteEmployeeSuccess = "DELETE_EMPLOYEE_SUCCESS",
+  deleteEmployeeError = "DELETE_EMPLOYEE_ERROR",
 }
 
 export const createEmployeePending = createAction<IEmployeeStateContext>(
@@ -72,25 +71,6 @@ export const getEmployeeError = createAction<IEmployeeStateContext>(
   () => ({ isPending: false, isSuccess: false, isError: true })
 );
 
-// Creating actions for getLeaves statuses
-export const getLeavesPending = createAction<IEmployeeStateContext>(
-  EmployeeActionEnums.getLeavesPending,
-  () => ({ isPending: true, isSuccess: false, isError: false })
-);
-export const getLeavesSuccess = createAction<IEmployeeStateContext, ILeaves>(
-  EmployeeActionEnums.getLeavesSuccess,
-  (leaves: ILeaves) => ({
-    isPending: false,
-    isSuccess: true,
-    isError: false,
-    leaves,
-  })
-);
-export const getLeavesError = createAction<IEmployeeStateContext>(
-  EmployeeActionEnums.getLeavesError,
-  () => ({ isPending: false, isSuccess: false, isError: true })
-);
-
 // Creating actions for updateEmployee statuses
 export const updateEmployeePending = createAction<IEmployeeStateContext>(
   EmployeeActionEnums.updateEmployeePending,
@@ -134,4 +114,55 @@ export const getPayrollProfileSuccess = createAction<
 export const getPayrollProfileError = createAction<IEmployeeStateContext>(
   EmployeeActionEnums.getPayrollProfileError,
   () => ({ isPending: false, isSuccess: false, isError: true })
+);
+
+// New actions for getAllEmployees
+export const getAllEmployeesPending = createAction<IEmployeeStateContext>(
+  EmployeeActionEnums.getAllEmployeesPending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
+export const getAllEmployeesSuccess = createAction<
+  IEmployeeStateContext,
+  IEmployee[]
+>(EmployeeActionEnums.getAllEmployeesSuccess, (employees: IEmployee[]) => ({
+  isPending: false,
+  isSuccess: true,
+  isError: false,
+  employees,
+}));
+
+export const getAllEmployeesError = createAction<IEmployeeStateContext, string>(
+  EmployeeActionEnums.getAllEmployeesError,
+  (errorMessage: string) => ({
+    isPending: false,
+    isSuccess: false,
+    isError: true,
+    errorMessage,
+  })
+);
+
+// New actions for deleteEmployee
+export const deleteEmployeePending = createAction<IEmployeeStateContext>(
+  EmployeeActionEnums.deleteEmployeePending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
+export const deleteEmployeeSuccess = createAction<IEmployeeStateContext>(
+  EmployeeActionEnums.deleteEmployeeSuccess,
+  () => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+  })
+);
+
+export const deleteEmployeeError = createAction<IEmployeeStateContext, string>(
+  EmployeeActionEnums.deleteEmployeeError,
+  (errorMessage: string) => ({
+    isPending: false,
+    isSuccess: false,
+    isError: true,
+    errorMessage,
+  })
 );

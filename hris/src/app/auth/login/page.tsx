@@ -14,7 +14,7 @@ const SignIn: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { loginUser, resetStateFlags } = useAuthActions();
-  const { isPending, isSuccess, isError } = useAuthState();
+  const { isPending, isSuccess, isError, currentRole } = useAuthState();
   const router = useRouter();
 
   const handleSingIn = async () => {
@@ -32,7 +32,18 @@ const SignIn: React.FC = () => {
   useEffect(() => {
     if (isSuccess) {
       toast("Authorized", "success");
-      router.push("/employee");
+      resetStateFlags();
+      switch (currentRole) {
+        case "employee":
+          router.push("/employee");
+          break;
+        case "hrmanager":
+          router.push("/hrManager");
+          break;
+        default:
+          router.push("/applicant");
+          break;
+      }
     }
 
     if (isError) {
@@ -60,15 +71,15 @@ const SignIn: React.FC = () => {
       <div className={styles.rightContainer} id="rightContainer">
         <div>
           <Image
-            src="/images/logo.png"
+            src="/images/hrlogo.png"
             alt="HRMS logo"
             width={677}
             height={300}
-            style={{ objectFit: "contain" }}
+            style={{ objectFit: "contain"}}
             className={styles.logo}
           />
         </div>
-        <h1 style={{ fontSize: 50, marginBottom: 20 }}>Login.</h1>
+        <h1 style={{ fontSize: 50, marginBottom: 20 }} className={styles.heading}>Login.</h1>
         {isPending && (
           <Flex justify="center" style={{ marginBottom: 20 }}>
             <Spin size="large" />

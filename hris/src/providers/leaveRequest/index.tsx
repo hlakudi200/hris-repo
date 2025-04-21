@@ -10,10 +10,19 @@ import {
   LeaveRequestStateContext,
 } from "./context";
 import {
+  getLeaveRequestByEmpIdError,
+  getLeaveRequestByEmpIdPending,
+  getLeaveRequestByEmpIdSuccess,
+  getLeaveRequestsError,
+  getLeaveRequestsPending,
+  getLeaveRequestsSuccess,
   resetStateFlagsAction,
   submitLeaveRequestError,
   submitLeaveRequestPending,
   submitLeaveRequestSuccess,
+  updateLeaveRequestError,
+  updateLeaveRequestPending,
+  updateLeaveRequestSuccess,
 } from "./actions";
 
 export const LeaveRequestProvider = ({
@@ -24,10 +33,9 @@ export const LeaveRequestProvider = ({
   const [state, dispatch] = useReducer(LeaveRequestReducer, INITIAL_STATE);
   const instance = getAxiosInstace();
 
-  const endpoint = `/api/services/app/LeaveRequest/Create`;
-
   const submitLeaveRequest = async (request: ILeaveRequest) => {
     dispatch(submitLeaveRequestPending());
+    const endpoint = `/api/services/app/LeaveRequest/Create`;
 
     instance
       .post(endpoint, request)
@@ -42,6 +50,50 @@ export const LeaveRequestProvider = ({
       });
   };
 
+  const getByEmpId = (empId: string) => {
+    dispatch(getLeaveRequestByEmpIdPending());
+
+    const endpoint = `/api/services/app/LeaveRequest/GetByEmpId?id=${empId}`;
+    instance
+      .get(endpoint)
+      .then((response) => {
+        dispatch(getLeaveRequestByEmpIdSuccess(response.data.result));
+      })
+      .catch((error) => {
+        console.error(error);
+        dispatch(getLeaveRequestByEmpIdError());
+      });
+  };
+
+  const getLeaveRequests = async () => {
+    dispatch(getLeaveRequestsPending());
+    const endpoint = `/api/services/app/LeaveRequest/GetAllInclude`;
+
+    await instance
+      .get(endpoint)
+      .then((response) => {
+        dispatch(getLeaveRequestsSuccess(response.data.result));
+      })
+      .catch((err) => {
+        console.error(err);
+        dispatch(getLeaveRequestsError());
+      });
+  };
+
+  const updateLeaveRequest = async (request: ILeaveRequest) => {
+    dispatch(updateLeaveRequestPending());
+    const endpoint = `/api/services/app/LeaveRequest/Update`;
+    instance
+      .put(endpoint, request)
+      .then((response) => {
+        dispatch(updateLeaveRequestSuccess(response.data.result));
+      })
+      .catch((err) => {
+        console.error(err);
+        dispatch(updateLeaveRequestError());
+      });
+  };
+
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
   };
@@ -49,7 +101,13 @@ export const LeaveRequestProvider = ({
   return (
     <LeaveRequestStateContext.Provider value={state}>
       <LeaveRequestActionContext.Provider
-        value={{ submitLeaveRequest, resetStateFlags }}
+        value={{
+          submitLeaveRequest,
+          resetStateFlags,
+          getByEmpId,
+          getLeaveRequests,
+          updateLeaveRequest,
+        }}
       >
         {children}
       </LeaveRequestActionContext.Provider>

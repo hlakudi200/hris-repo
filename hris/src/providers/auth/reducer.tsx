@@ -45,8 +45,18 @@ export const AuthReducer = handleActions<IAuthStateContext>(
       ...state,
       ...action.payload,
     }),
-    
+
+    [AuthActionEnums.signOutUser]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+
     [AuthActionEnums.resetStateFlagsAction]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+
+    [AuthActionEnums.updateRoleAction]: (state, action) => ({
       ...state,
       ...action.payload,
     }),

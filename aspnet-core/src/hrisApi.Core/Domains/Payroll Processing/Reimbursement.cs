@@ -7,6 +7,6 @@ namespace hrisApi.Domains.Payroll_Processing
     {
         public Guid PayrollTransactionId { get; set; }
         public decimal Amount { get; set; }
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
     }
 }

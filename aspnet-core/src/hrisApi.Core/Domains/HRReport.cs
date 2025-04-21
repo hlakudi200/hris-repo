@@ -8,12 +8,12 @@ using Abp.Domain.Entities.Auditing;
 namespace hrisApi.Domains
 {
     public class HRReport : FullAuditedEntity<Guid>
-    {       
-        public string Title { get; set; }
-        public string ReportType { get; set; } 
-        
+    {
+        public string Title { get; set; } = string.Empty;
+        public string ReportType { get; set; } = string.Empty;
+
         public DateTime GeneratedOn { get; set; }
-        public string GeneratedBy { get; set; }
-        public string FilePath { get; set; }
+        public string GeneratedBy { get; set; } = string.Empty;
+        public string FilePath { get; set; } = string.Empty;
     }
 }

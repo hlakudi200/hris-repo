@@ -28,13 +28,16 @@ export interface IAuthStateContext {
   isError: boolean;
   currentUser?: IUser;
   jwtToken?: string;
+  currentRole?: string;
 }
 
 export interface IAuthActionContext {
   loginUser: (loginData: ILoginData) => Promise<void>;
   getCurrentUser: (jwtToken: string) => Promise<void>;
   signUp: (user: IUser) => Promise<void>;
+  signOut: () => void;
   resetStateFlags: () => void;
+  updateRole: (role: string) => void;
 }
 
 export const INITIAL_STATE: IAuthStateContext = {

@@ -5,11 +5,12 @@ import { ConfigProvider } from "antd";
 import ToastProvider from "@/providers/toast/toast";
 import { EmployeeProvider } from "@/providers/employee";
 import { AttandanceProvider } from "@/providers/attandance";
-
 import { JobPostingProvider } from "@/providers/jobPost";
 
 import { JobApplicationProvider } from "@/providers/jobApplication";
 import { InterviewProvider } from "@/providers/Interview";
+import { PayrollProvider } from "@/providers/payrollProfile";
+import { EmailProvider } from "@/providers/email";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -43,10 +44,10 @@ export default function RootLayout({
               controlHeight: 49,
             },
             Input: {
-              controlHeight: 48,
-              lineWidth: 2,
+              controlHeight: 45,
+              lineWidth: 1.7,
               borderRadius: 15,
-              activeBg: "rgba(226, 226, 226, 0.29)",
+              activeBg: "rgb(255, 255, 255)",
             },
             Layout: {
               headerHeight: 55,
@@ -72,20 +73,24 @@ export default function RootLayout({
           },
         }}
       >
-        <InterviewProvider>
-          <AuthProvider>
-            <ToastProvider />
-            <JobPostingProvider>
-              <EmployeeProvider>
-                <AttandanceProvider>
-                  <JobApplicationProvider>
-                    <body>{children}</body>
-                  </JobApplicationProvider>
-                </AttandanceProvider>
-              </EmployeeProvider>
-            </JobPostingProvider>
-          </AuthProvider>
-        </InterviewProvider>
+        <EmailProvider>
+          <InterviewProvider>
+            <AuthProvider>
+              <ToastProvider />
+              <JobPostingProvider>
+                <EmployeeProvider>
+                  <AttandanceProvider>
+                    <JobApplicationProvider>
+                      <PayrollProvider>
+                        <body>{children}</body>
+                      </PayrollProvider>
+                    </JobApplicationProvider>
+                  </AttandanceProvider>
+                </EmployeeProvider>
+              </JobPostingProvider>
+            </AuthProvider>
+          </InterviewProvider>
+        </EmailProvider>
       </ConfigProvider>
     </html>
   );

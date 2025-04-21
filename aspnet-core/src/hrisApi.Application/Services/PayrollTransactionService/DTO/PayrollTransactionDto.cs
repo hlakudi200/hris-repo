@@ -14,11 +14,12 @@ namespace hrisApi.Services.PayrollTransactionService.DTO
         public DateTime PeriodEnd { get; set; }
         public decimal GrossAmount { get; set; }
 
-
         public decimal TaxAmount { get; set; } = 0.0m; // Default value for tax amount
         public decimal NetAmount { get; set; } = 0.0m; // Default value for net amount
         public bool IsPaid { get; set; }
         //public ICollection<BonusOrCommission>? BonusesAndCommissions { get; set; }
-        
+
+        public string TransactionDate { get; set; }
+
     }
 }

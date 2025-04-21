@@ -19,6 +19,22 @@ export const JobPostingReducer = handleActions<
       ...state,
       ...action.payload,
     }),
+
+    //get job posting include 
+    [JobPostingActionEnums.getJobPostingIncludedPending]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [JobPostingActionEnums.getJobPostingIncludedSuccess]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [JobPostingActionEnums.getJobPostingIncludedError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    
+    //get job posting 
     [JobPostingActionEnums.getJobPostingPending]: (state, action) => ({
       ...state,
       ...action.payload,

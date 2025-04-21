@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const baseURL = "https://hrsystem-ntu7.onrender.com";
 
 export const getAxiosInstace = () => {
   const instance = axios.create({

@@ -22,7 +22,83 @@ export const JobApplicationReducer = handleActions<IJobApplicationStateContext>(
       ...state,
       ...action.payload,
     }),
+
+    //upload resume
+    [JobApplicationActionEnums.uploadResumePending]: (
+      state,
+      action
+    ) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [JobApplicationActionEnums.uploadResumeSuccess]: (
+      state,
+      action
+    ) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [JobApplicationActionEnums.uploadResumeError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    //
     [JobApplicationActionEnums.resetStateFlagsAction]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+
+    [JobApplicationActionEnums.getJobApplicationsPending]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [JobApplicationActionEnums.getJobApplicationsSuccess]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [JobApplicationActionEnums.getJobApplicationsError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+
+    //update job application
+    [JobApplicationActionEnums.UpdateJobApplicationPending]: (
+      state,
+      action
+    ) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [JobApplicationActionEnums.UpdateJobApplicationSuccess]: (
+      state,
+      action
+    ) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [JobApplicationActionEnums.UpdateJobApplicationError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+
+    [JobApplicationActionEnums.getJobApplicationByIdPending]: (
+      state,
+      action
+    ) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [JobApplicationActionEnums.getJobApplicationByIdSuccess]: (
+      state,
+      action
+    ) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [JobApplicationActionEnums.getJobApplicationByIdError]: (
+      state,
+      action
+    ) => ({
       ...state,
       ...action.payload,
     }),

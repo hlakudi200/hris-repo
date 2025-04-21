@@ -2,11 +2,13 @@
 import React, { useEffect } from "react";
 import globals from "../globals.module.css";
 import { Flex, Spin } from "antd";
-import { useEmployeeActions, useEmployeeState } from "@/providers/employee";
+import {useEmployeeState } from "@/providers/employee";
+import { useLeaveActions, useLeaveState } from "@/providers/leaves";
 
 const LeaveOverview = () => {
-  const { leaves, isPending, isError, currentEmployee } = useEmployeeState();
-  const { getLeaves } = useEmployeeActions();
+  const {currentEmployee } = useEmployeeState();
+  const { leaves, isPending, isError } = useLeaveState();
+  const { getLeaves } = useLeaveActions();
 
   //TODO: add use effect?
   useEffect(() => {
@@ -23,7 +25,7 @@ const LeaveOverview = () => {
     );
   }
   if (isError) {
-    return <div>Failed</div>;
+    return <div>Failed to retrieve leave information</div>;
   }
 
   return (

@@ -1,8 +1,9 @@
+import ApplicantJobView from '@/_componets/applicantJobView/applicantJobView'
 import React from 'react'
 
 const Applicant=()=> {
   return (
-    <div>ApplicantHomes</div>
+    <ApplicantJobView />
   )
 }
 

@@ -17,20 +17,6 @@ export const EmployeeReducer = handleActions<IEmployeeStateContext>(
       ...action.payload,
     }),
 
-    [EmployeeActionEnums.getLeavesPending]: (state, action) => ({
-      ...state,
-      ...action.payload,
-    }),
-    [EmployeeActionEnums.getLeavesSuccess]: (state, action) => ({
-      ...state,
-      ...action.payload,
-    }),
-    [EmployeeActionEnums.getLeavesError]: (state, action) => ({
-      ...state,
-      ...action.payload,
-    }),
-
-    // Add these new reducers
     [EmployeeActionEnums.updateEmployeePending]: (state, action) => ({
       ...state,
       ...action.payload,
@@ -53,6 +39,46 @@ export const EmployeeReducer = handleActions<IEmployeeStateContext>(
       ...action.payload,
     }),
     [EmployeeActionEnums.getPayrollProfileError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+
+    [EmployeeActionEnums.getAllEmployeesPending]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [EmployeeActionEnums.getAllEmployeesSuccess]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [EmployeeActionEnums.getAllEmployeesError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+
+    [EmployeeActionEnums.deleteEmployeePending]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [EmployeeActionEnums.deleteEmployeeSuccess]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [EmployeeActionEnums.deleteEmployeeError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+
+    // Add createEmployee reducers
+    [EmployeeActionEnums.createEmployeePending]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [EmployeeActionEnums.createEmployeeSuccess]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [EmployeeActionEnums.createEmployeeError]: (state, action) => ({
       ...state,
       ...action.payload,
     }),

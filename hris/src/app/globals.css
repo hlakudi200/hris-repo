@@ -9,7 +9,18 @@
     --foreground: #000000;
   }
 }
+.subheading {
+  font-weight: 700;
+  font-size: 21px;
+  color: #726D6D;
+}
 
+.heading {
+  font-weight: 700;
+  font-size: 31px;
+  color: #726D6D;
+  text-align: center;
+}
 html,
 body {
   max-width: 100vw;

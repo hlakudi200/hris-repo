@@ -1,5 +1,4 @@
 "use client";
-
 import { useContext, useReducer } from "react";
 import { AuthReducer } from "./reducer";
 import {
@@ -16,12 +15,15 @@ import {
   loginUserError,
   loginUserPending,
   loginUserSuccess,
+  resetStateFlagsAction,
+  signOutUser,
   signUpError,
   signUpPending,
   signUpSuccess,
+  updateRoleAction,
 } from "./actions";
 import { getAxiosInstace } from "@/utils/axios-instance";
-import { resetStateFlagsAction } from "../jobApplication/actions";
+import { getRole } from "@/utils/jwtDecoder";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
@@ -35,6 +37,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await instance
       .post(endpoint, loginData)
       .then((response) => {
+        const role = getRole(response.data.result.accessToken);
+        updateRole(role);
         getCurrentUser(response.data.result.accessToken);
         dispatch(loginUserSuccess(response.data.result.accessToken));
       })
@@ -67,12 +71,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signUp = async (user: IUser) => {
     dispatch(signUpPending());
-    const endpoint = `/api/services/app/User/Create`;
+    const endpoint = `/api/services/app/Applicant/CreateApplicant`;
 
     await instance
       .post(endpoint, user)
       .then((response) => {
-        if (response.status === 201) {
+        if (response.status === 200) {
           dispatch(signUpSuccess());
         }
       })
@@ -82,14 +86,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
   };
 
+  const signOut = () => {
+    dispatch(signOutUser());
+  };
+
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
+  };
+
+  const updateRole = (role: string) => {
+    dispatch(updateRoleAction(role));
   };
 
   return (
     <AuthStateContext.Provider value={state}>
       <AuthActionContext.Provider
-        value={{ loginUser, getCurrentUser, signUp, resetStateFlags }}
+        value={{
+          loginUser,
+          getCurrentUser,
+          signUp,
+          signOut,
+          resetStateFlags,
+          updateRole,
+        }}
       >
         {children}
       </AuthActionContext.Provider>

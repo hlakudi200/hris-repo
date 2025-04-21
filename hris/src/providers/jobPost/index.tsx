@@ -23,6 +23,9 @@ import {
   deleteJobPostingPending,
   deleteJobPostingSuccess,
   deleteJobPostingError,
+  getJobPostingIncludedPending,
+  getJobPostingIncludedSuccess,
+  getJobPostingIncludedError,
 } from "./actions";
 import { IJobPosting } from "./interfaces";
 
@@ -37,17 +40,41 @@ export const JobPostingProvider = ({
   const getJobPostings = async () => {
     dispatch(getJobPostingsPending());
     try {
-      const response = await instance.get("/api/services/app/JobPosting/GetAll", {
-        params: {
-          Sorting: "", 
-          SkipCount: 0, 
-          MaxResultCount: 10,
-        },
-      });
+      const response = await instance.get(
+        "/api/services/app/JobPosting/GetAll",
+        {
+          params: {
+            Sorting: "",
+            SkipCount: 0,
+            MaxResultCount: 10,
+          },
+        }
+      );
       dispatch(getJobPostingsSuccess(response.data.result.items));
     } catch (error) {
       console.error("API Error:", error);
       dispatch(getJobPostingsError());
+    }
+  };
+
+  //get job posting include :
+  const getJobPostingIncluded = async () => {
+    dispatch(getJobPostingIncludedPending());
+    try {
+      const response = await instance.get(
+        "/api/services/app/JobPosting/GetAllInclude",
+        {
+          params: {
+            Sorting: "",
+            SkipCount: 0,
+            MaxResultCount: 10,
+          },
+        }
+      );
+      dispatch(getJobPostingIncludedSuccess(response.data.result));
+    } catch (error) {
+      console.error("API Error:", error);
+      dispatch(getJobPostingIncludedError());
     }
   };
 
@@ -58,7 +85,6 @@ export const JobPostingProvider = ({
       .get(endpoint)
       .then((response) => {
         dispatch(getJobPostingSuccess(response.data));
-        
       })
       .catch((error) => {
         console.error(error);
@@ -94,13 +120,13 @@ export const JobPostingProvider = ({
       });
   };
 
-  const deleteJobPosting = async(id: string) => {
+  const deleteJobPosting = async (id: string) => {
     dispatch(deleteJobPostingPending());
     try {
-     await instance.delete(`/api/services/app/JobPosting/Delete/${id}`);
-      dispatch(deleteJobPostingSuccess(id));  
+      await instance.delete(`/api/services/app/JobPosting/Delete/${id}`);
+      dispatch(deleteJobPostingSuccess(id));
     } catch (error) {
-      console.error('Delete Error:', error);
+      console.error("Delete Error:", error);
       dispatch(deleteJobPostingError());
     }
   };
@@ -114,6 +140,7 @@ export const JobPostingProvider = ({
           createJobPosting,
           updateJobPosting,
           deleteJobPosting,
+          getJobPostingIncluded,
         }}
       >
         {children}
