@@ -11,14 +11,14 @@ namespace hrisApi.Domains.Recruitment_Module
     public class JobPosting : FullAuditedEntity<Guid>
     {
 
-        public string Title { get; set; }
-        public string Department { get; set; }
-        public string Description { get; set; }
-        public string Location { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Department { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
         public DateTime OpenDate { get; set; }
         public DateTime? CloseDate { get; set; }
 
-        public string Status { get; set; }
+        public string Status { get; set; } = string.Empty;
 
         public ICollection<JobApplication> Applications { get; set; }
 

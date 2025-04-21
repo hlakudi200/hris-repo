@@ -9,12 +9,12 @@ namespace hrisApi.Domains.Recruitment_Module
 {
     public class OfferLetter : FullAuditedEntity<Guid>
     {
-       
+
         public Guid JobApplicationId { get; set; }
         public DateTime OfferDate { get; set; }
-        public string PositionOffered { get; set; }
+        public string PositionOffered { get; set; } = string.Empty;
         public decimal SalaryOffered { get; set; }
-        public string LetterPath { get; set; }
+        public string LetterPath { get; set; } = string.Empty;
 
     }
 }
