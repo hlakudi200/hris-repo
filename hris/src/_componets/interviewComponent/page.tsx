@@ -21,6 +21,7 @@ import {
 import moment from "moment";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import styles from "./styles/styles.module.css"
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -33,12 +34,11 @@ const InterviewManagement = ({ jobApplicationId: propJobApplicationId }) => {
   const [currentInterviewId, setCurrentInterviewId] = useState(null);
   const [localSubmitting, setLocalSubmitting] = useState(false);
   const [isFiltered, setIsFiltered] = useState(false);
+  
 
-  // Get jobApplicationId from URL params if not provided via props
   const searchParams = useSearchParams();
   const urlJobApplicationId = searchParams.get("jobApplicationId");
 
-  // Use prop if available, otherwise use URL param
   const jobApplicationId = propJobApplicationId || urlJobApplicationId;
 
   const { isPending, isSuccess, interviews } = useInterviewState();
@@ -60,12 +60,10 @@ const InterviewManagement = ({ jobApplicationId: propJobApplicationId }) => {
     }
   }, [jobApplicationId]);
 
-  // Add this to track when interviews state changes
   useEffect(() => {
     console.log("Interviews updated:", interviews);
   }, [interviews]);
 
-  // Modified success handler
   useEffect(() => {
     if (isSuccess && !isPending && localSubmitting) {
       setLocalSubmitting(false);
@@ -74,7 +72,6 @@ const InterviewManagement = ({ jobApplicationId: propJobApplicationId }) => {
       setIsEditing(false);
       setCurrentInterviewId(null);
 
-      // Refresh the interview list
       if (isFiltered && jobApplicationId) {
         fetchInterviewsByJobApplication();
       } else {
@@ -89,7 +86,6 @@ const InterviewManagement = ({ jobApplicationId: propJobApplicationId }) => {
       return;
     }
 
-    console.log("Fetching interviews for job application:", jobApplicationId);
     try {
       await getInterviewsByJobApplication(jobApplicationId);
     } catch (error) {
@@ -99,7 +95,6 @@ const InterviewManagement = ({ jobApplicationId: propJobApplicationId }) => {
   };
 
   const fetchAllInterviews = async () => {
-    console.log("Fetching all interviews");
     try {
       await getAllInterviews();
     } catch (error) {
@@ -136,7 +131,6 @@ const InterviewManagement = ({ jobApplicationId: propJobApplicationId }) => {
   };
 
   const handleSubmit = async (values) => {
-    // Use the jobApplicationId from the form if we're showing all interviews
     const targetJobApplicationId = isFiltered
       ? jobApplicationId
       : values.jobApplicationId;
@@ -182,7 +176,6 @@ const InterviewManagement = ({ jobApplicationId: propJobApplicationId }) => {
       await deleteInterview(id);
       message.success("Interview deleted successfully");
 
-      // Refresh the interview list
       if (isFiltered && jobApplicationId) {
         fetchInterviewsByJobApplication();
       } else {
@@ -195,7 +188,6 @@ const InterviewManagement = ({ jobApplicationId: propJobApplicationId }) => {
   };
 
   const clearFilter = () => {
-    // This would typically redirect to the interviews page without the jobApplicationId parameter
     fetchAllInterviews();
     setIsFiltered(false);
   };
@@ -220,7 +212,7 @@ const InterviewManagement = ({ jobApplicationId: propJobApplicationId }) => {
       key: "mode",
       render: (mode) => <Tag color={getTagColor(mode)}>{mode}</Tag>,
     },
-    // Only show the Job Application ID column when viewing all interviews
+
     ...(isFiltered
       ? []
       : [
@@ -269,7 +261,6 @@ const InterviewManagement = ({ jobApplicationId: propJobApplicationId }) => {
     "Group",
   ];
 
-  // Function to get tag color based on mode
   const getTagColor = (mode) => {
     const colors = {
       Virtual: "blue",
@@ -282,7 +273,7 @@ const InterviewManagement = ({ jobApplicationId: propJobApplicationId }) => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className={styles.container}>
       <div
         style={{
           display: "flex",
@@ -329,7 +320,6 @@ const InterviewManagement = ({ jobApplicationId: propJobApplicationId }) => {
         destroyOnClose
       >
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
-          {/* Show Job Application ID field only when not filtered */}
           {!isFiltered && (
             <Form.Item
               name="jobApplicationId"

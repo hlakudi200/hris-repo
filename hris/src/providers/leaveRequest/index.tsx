@@ -73,29 +73,25 @@ export const LeaveRequestProvider = ({
       .get(endpoint)
       .then((response) => {
         dispatch(getLeaveRequestsSuccess(response.data.result));
-        console.log(response.data.result)
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         dispatch(getLeaveRequestsError());
       });
   };
 
-
-  const updateLeaveRequest=async(request:ILeaveRequest)=>{
-    console.log("request:",request)
-    dispatch(updateLeaveRequestPending())
-    const endpoint =`/api/services/app/LeaveRequest/Update`
+  const updateLeaveRequest = async (request: ILeaveRequest) => {
+    dispatch(updateLeaveRequestPending());
+    const endpoint = `/api/services/app/LeaveRequest/Update`;
     instance
-    .put(endpoint,request)
-    .then((response)=>{
-      dispatch(updateLeaveRequestSuccess(response.data.result))
-      console.log(response.data.result)
-    }).catch((err)=>{
-      console.log(err)
-      dispatch(updateLeaveRequestError())
-    })
-
+      .put(endpoint, request)
+      .then((response) => {
+        dispatch(updateLeaveRequestSuccess(response.data.result));
+      })
+      .catch((err) => {
+        console.error(err);
+        dispatch(updateLeaveRequestError());
+      });
   };
 
   const resetStateFlags = async () => {
@@ -105,7 +101,13 @@ export const LeaveRequestProvider = ({
   return (
     <LeaveRequestStateContext.Provider value={state}>
       <LeaveRequestActionContext.Provider
-        value={{submitLeaveRequest, resetStateFlags, getByEmpId,getLeaveRequests,updateLeaveRequest }}
+        value={{
+          submitLeaveRequest,
+          resetStateFlags,
+          getByEmpId,
+          getLeaveRequests,
+          updateLeaveRequest,
+        }}
       >
         {children}
       </LeaveRequestActionContext.Provider>

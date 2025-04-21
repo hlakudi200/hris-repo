@@ -48,7 +48,7 @@ const CreateJobPost: React.FC<CreateJobPostProps> = ({ onSuccess }) => {
   
     } catch (err) {
       toast("Job Post submission failed. Please try again.", "error");
-      console.log(err);
+      console.error(err);
     }
   };
 

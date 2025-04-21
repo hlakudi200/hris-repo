@@ -67,7 +67,6 @@ export const AttandanceProvider = ({
 
       .then((response) => {
         dispatch(getProjectsSuccess(response.data.result.items));
-        console.log("Projects", response.data.result);
       })
       .catch((error) => {
         console.error(error);

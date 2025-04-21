@@ -72,7 +72,6 @@ export const JobPostingProvider = ({
         }
       );
       dispatch(getJobPostingIncludedSuccess(response.data.result));
-      console.log("data",response.data.result)
     } catch (error) {
       console.error("API Error:", error);
       dispatch(getJobPostingIncludedError());

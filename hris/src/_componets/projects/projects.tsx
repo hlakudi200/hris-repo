@@ -61,7 +61,7 @@ const Projects = () => {
         description: 'Something went wrong while creating the project.',
       });
 
-      console.log(error)
+      console.error(error)
     }
   };
   const columns = [
@@ -112,7 +112,7 @@ const Projects = () => {
             dataSource={filteredProjects ?? []}
             columns={columns}
             rowKey="id"
-            pagination={{ pageSize: 5 }}
+            pagination={{ pageSize: 3 }}
           />
         )}
       </Card>
