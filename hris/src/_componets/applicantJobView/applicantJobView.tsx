@@ -37,11 +37,11 @@ const ApplicantJobView: React.FC = () => {
   const { getJobPostings } = useJobPostingActions();
   const { isError: isApplicationError, isSuccess: IsApplicationSuccess } =
     useJobApplicationState();
-  const { submitJobApplication, resetStateFlags } = useJobApplicationActions();
+  const { submitJobApplication, resetStateFlags} = useJobApplicationActions();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
-  const [resumePath, setResumePath] = useState<string>("");
+  const [resumePath, setResumePath] = useState<string>(""); // Store the resume URL
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -153,7 +153,7 @@ const ApplicantJobView: React.FC = () => {
               jobPostingId: selectedJobId,
               applicantName: values.name,
               email: values.email,
-              resumePath: resumePath,
+              resumePath: resumePath,  // This is the public URL
               status: "Pending",
             };
 

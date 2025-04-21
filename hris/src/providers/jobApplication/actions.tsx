@@ -6,6 +6,10 @@ export enum JobApplicationActionEnums {
   submitJobApplicationSuccess = "SUBMIT_JOB_APPLICATION_SUCCESS",
   submitJobApplicationError = "SUBMIT_JOB_APPLICATION_ERROR",
 
+  uploadResumePending = "UPLOAD_RESUME_PENDING",
+  uploadResumeSuccess = "UPLOAD_RESUME_SUCCESS",
+  uploadResumeError = "UPLOAD_RESUME_ERROR",
+
   getJobApplicationsPending = "GET_JOB_APPLICATIONS_PENDING",
   getJobApplicationsSuccess = "GET_JOB_APPLICATIONS_SUCCESS",
   getJobApplicationsError = "GET_JOB_APPLICATIONS_ERROR",
@@ -40,12 +44,29 @@ export const getJobApplicationByIdSuccess = createAction<
     application,
   })
 );
-
 export const getJobApplicationByIdError =
   createAction<IJobApplicationStateContext>(
     JobApplicationActionEnums.getJobApplicationByIdError,
     () => ({ isPending: false, isSuccess: false, isError: true })
   );
+//upload resume action
+export const uploadResumePending = createAction<IJobApplicationStateContext>(
+  JobApplicationActionEnums.uploadResumePending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
+export const uploadResumeSuccess = createAction<IJobApplicationStateContext>(
+  JobApplicationActionEnums.uploadResumeSuccess,
+  () => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+  })
+);
+export const uploadResumeError = createAction<IJobApplicationStateContext>(
+  JobApplicationActionEnums.uploadResumeError,
+  () => ({ isPending: false, isSuccess: false, isError: true })
+);
 
 //Submit Job Application
 export const submitJobApplicationPending =

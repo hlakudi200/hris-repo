@@ -2,6 +2,7 @@
 import { getAxiosInstace } from "@/utils/axios-instance";
 import { JobApplicationReducer } from "./reducer";
 import { useContext, useReducer } from "react";
+import { v4 as uuidv4 } from "uuid";
 import {
   IJobApplication,
   INITIAL_STATE,
@@ -21,8 +22,12 @@ import {
   UpdateJobApplicationError,
   UpdateJobApplicationPending,
   UpdateJobApplicationSuccess,
+  uploadResumeError,
+  uploadResumePending,
+  uploadResumeSuccess,
 } from "./actions";
 import { getJobApplicationsSuccess } from "../jobApplication/actions";
+import { supabase } from "@/utils/supabaseClient";
 
 export const JobApplicationProvider = ({
   children,
@@ -64,7 +69,7 @@ export const JobApplicationProvider = ({
         dispatch(getJobApplicationsError());
       });
   };
-
+ 
   const updateJobApplication = async (request: IJobApplication) => {
     dispatch(UpdateJobApplicationPending());
     const endPoint = `/api/services/app/JobApplication/Update`;
@@ -96,6 +101,37 @@ export const JobApplicationProvider = ({
     }
   };
 
+
+  const uploadResume = async (file: File): Promise<string> => {
+    dispatch(uploadResumePending());
+  
+    const uniqueId = uuidv4();
+    const filePath = `resume/${uniqueId}_${file.name}`;
+  
+    const { error } = await supabase.storage
+      .from("storage")
+      .upload(filePath, file, {
+        cacheControl: "3600",
+        upsert: true,
+      });
+  
+    if (error) {
+      dispatch(uploadResumeError());
+      console.error("Resume upload error:", error);
+      throw error;
+    }
+  
+    dispatch(uploadResumeSuccess());
+  
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("storage").getPublicUrl(filePath);
+
+   console.log("public url:",publicUrl)
+    return publicUrl; 
+  };
+
+
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
   };
@@ -104,6 +140,7 @@ export const JobApplicationProvider = ({
     <JobApplicationStateContext.Provider value={state}>
       <JobApplicationActionContext.Provider
         value={{
+          uploadResume,
           submitJobApplication,
           resetStateFlags,
           getJobApplications,
