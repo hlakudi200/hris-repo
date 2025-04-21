@@ -42,7 +42,7 @@ export const LeaveProvider = ({ children }: { children: React.ReactNode }) => {
     const endpoint = `/api/services/app/Leave/Update`;
 
     instance
-      .post(endpoint, leaves)
+      .put(endpoint, leaves)
       .then((response) => {
         if (response.status === 200) {
           dispatch(updateLeavesSuccess());
