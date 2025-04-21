@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://localhost:44311";
+const baseURL = "https://hrsystem-ntu7.onrender.com";
 
 export const getAxiosInstace = () => {
   const instance = axios.create({
