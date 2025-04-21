@@ -1,5 +1,5 @@
 import { createAction } from "redux-actions";
-import { IInterview, IInterviewStateContext } from "./context";
+import { IInterview, IInterviewStateContext, IJobApplication } from "./context";
 
 export enum InterviewActionEnums {
   createInterviewPending = "CREATE_INTERVIEW_PENDING",
@@ -25,6 +25,19 @@ export enum InterviewActionEnums {
   deleteInterviewPending = "DELETE_INTERVIEW_PENDING",
   deleteInterviewSuccess = "DELETE_INTERVIEW_SUCCESS",
   deleteInterviewError = "DELETE_INTERVIEW_ERROR",
+
+  // New action types
+  scheduleInterviewPending = "SCHEDULE_INTERVIEW_PENDING",
+  scheduleInterviewSuccess = "SCHEDULE_INTERVIEW_SUCCESS",
+  scheduleInterviewError = "SCHEDULE_INTERVIEW_ERROR",
+
+  getApplicantDetailsPending = "GET_APPLICANT_DETAILS_PENDING",
+  getApplicantDetailsSuccess = "GET_APPLICANT_DETAILS_SUCCESS",
+  getApplicantDetailsError = "GET_APPLICANT_DETAILS_ERROR",
+
+  getPendingApplicationsPending = "GET_PENDING_APPLICATIONS_PENDING",
+  getPendingApplicationsSuccess = "GET_PENDING_APPLICATIONS_SUCCESS",
+  getPendingApplicationsError = "GET_PENDING_APPLICATIONS_ERROR",
 }
 
 // Create interview actions
@@ -189,6 +202,94 @@ export const deleteInterviewError = createAction<
   IInterviewStateContext,
   string
 >(InterviewActionEnums.deleteInterviewError, (errorMessage: string) => ({
+  isPending: false,
+  isSuccess: false,
+  isError: true,
+  errorMessage,
+}));
+
+// Schedule interview actions
+export const scheduleInterviewPending = createAction<IInterviewStateContext>(
+  InterviewActionEnums.scheduleInterviewPending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
+export const scheduleInterviewSuccess = createAction<
+  IInterviewStateContext,
+  IInterview
+>(
+  InterviewActionEnums.scheduleInterviewSuccess,
+  (currentInterview: IInterview) => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+    currentInterview,
+  })
+);
+
+export const scheduleInterviewError = createAction<
+  IInterviewStateContext,
+  string
+>(InterviewActionEnums.scheduleInterviewError, (errorMessage: string) => ({
+  isPending: false,
+  isSuccess: false,
+  isError: true,
+  errorMessage,
+}));
+
+// Get applicant details actions
+export const getApplicantDetailsPending = createAction<IInterviewStateContext>(
+  InterviewActionEnums.getApplicantDetailsPending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+
+export const getApplicantDetailsSuccess = createAction<
+  IInterviewStateContext,
+  IJobApplication
+>(
+  InterviewActionEnums.getApplicantDetailsSuccess,
+  (applicant: IJobApplication) => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+    applicant,
+  })
+);
+
+export const getApplicantDetailsError = createAction<
+  IInterviewStateContext,
+  string
+>(InterviewActionEnums.getApplicantDetailsError, (errorMessage: string) => ({
+  isPending: false,
+  isSuccess: false,
+  isError: true,
+  errorMessage,
+}));
+
+// Get pending applications actions
+export const getPendingApplicationsPending =
+  createAction<IInterviewStateContext>(
+    InterviewActionEnums.getPendingApplicationsPending,
+    () => ({ isPending: true, isSuccess: false, isError: false })
+  );
+
+export const getPendingApplicationsSuccess = createAction<
+  IInterviewStateContext,
+  IJobApplication[]
+>(
+  InterviewActionEnums.getPendingApplicationsSuccess,
+  (pendingApplications: IJobApplication[]) => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+    pendingApplications,
+  })
+);
+
+export const getPendingApplicationsError = createAction<
+  IInterviewStateContext,
+  string
+>(InterviewActionEnums.getPendingApplicationsError, (errorMessage: string) => ({
   isPending: false,
   isSuccess: false,
   isError: true,

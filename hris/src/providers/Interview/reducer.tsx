@@ -96,6 +96,49 @@ export const InterviewReducer = handleActions<IInterviewStateContext>(
       ...state,
       ...action.payload,
     }),
+
+    // Schedule interview reducers
+    [InterviewActionEnums.scheduleInterviewPending]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [InterviewActionEnums.scheduleInterviewSuccess]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [InterviewActionEnums.scheduleInterviewError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+
+    // Get applicant details reducers
+    [InterviewActionEnums.getApplicantDetailsPending]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [InterviewActionEnums.getApplicantDetailsSuccess]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [InterviewActionEnums.getApplicantDetailsError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+
+    // Get pending applications reducers
+    [InterviewActionEnums.getPendingApplicationsPending]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [InterviewActionEnums.getPendingApplicationsSuccess]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [InterviewActionEnums.getPendingApplicationsError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
   },
+
   INITIAL_STATE
 );
