@@ -1,187 +1,123 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import {
-  App, // Import App component for notifications
-  Button,
-  Table,
-  Modal,
-  Form,
-  Input,
-  DatePicker,
-  Select,
-  Space,
-  Popconfirm,
-} from "antd";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+
 import {
   useInterviewActions,
   useInterviewState,
 } from "@/providers/Interview/index";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  App,
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Modal,
+  Popconfirm,
+  Select,
+  Space,
+  Table,
+  Tabs,
+} from "antd";
 import moment from "moment";
+import { useEffect, useState } from "react";
 
 const { Option } = Select;
 const { TextArea } = Input;
 
-const InterviewManagement = ({
-  jobApplicationId = "93C5DDD6-1590-40EF-E5D4-08DD7B2CF2CB",
-}) => {
-  const { message } = App.useApp(); // Use App.useApp() for notifications
+const InterviewsPage = () => {
+  const { message } = App.useApp();
   const [form] = Form.useForm();
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [currentInterviewId, setCurrentInterviewId] = useState(null);
+  const interviewActions = useInterviewActions();
+  const interviewState = useInterviewState();
+  const [selectedTab, setSelectedTab] = useState("all");
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+  const [pendingApplications, setPendingApplications] = useState([]);
+  const [selectedJobApplication, setSelectedJobApplication] = useState("");
   const [localSubmitting, setLocalSubmitting] = useState(false);
 
-  const { isPending, isSuccess, interviews } = useInterviewState();
-  const {
-    createInterview,
-    getAllInterviews,
-    getInterviewsByJobApplication,
-    updateInterview,
-    deleteInterview,
-  } = useInterviewActions();
-
   useEffect(() => {
+    loadInterviews();
+    loadPendingApplications();
+  }, []);
+
+  const loadInterviews = async () => {
+    try {
+      await interviewActions.getAllInterviews();
+    } catch (error) {
+      message.error("Failed to load interviews");
+      console.error("Failed to load interviews", error);
+    }
+  };
+
+  const loadPendingApplications = async () => {
+    try {
+      const applications = await interviewActions.getPendingApplications();
+      setPendingApplications(applications);
+    } catch (error) {
+      message.error("Failed to load pending applications");
+      console.error("Failed to load pending applications", error);
+    }
+  };
+
+  const handleScheduleModalOpen = (jobApplicationId) => {
     if (jobApplicationId) {
-      fetchInterviews();
+      setSelectedJobApplication(jobApplicationId);
+      form.setFieldsValue({
+        jobApplicationId: jobApplicationId,
+      });
     }
-  }, [jobApplicationId]);
-
-  // Filter interviews for the current job application when all interviews are loaded
-  useEffect(() => {
-    if (interviews && jobApplicationId) {
-      const filtered = interviews.filter(
-        (interview) => interview.jobApplicationId === jobApplicationId
-      );
-
-      console.log("Filtered interviews for job application:", filtered);
-    }
-  }, [interviews, jobApplicationId]);
-
-  // Modified success handler
-  useEffect(() => {
-    if (isSuccess && !isPending && localSubmitting) {
-      setLocalSubmitting(false);
-      setIsModalVisible(false);
-      form.resetFields();
-      setIsEditing(false);
-      setCurrentInterviewId(null);
-
-      // Fetch all interviews after a short delay to ensure state is updated
-      setTimeout(() => {
-        fetchAllInterviews();
-      }, 300);
-    }
-  }, [isSuccess, isPending]);
-
-  const fetchInterviews = async () => {
-    console.log(
-      "Fetching interviews for job application:",
-      (jobApplicationId = "B32CF44C-C568-420C-0DF6-08DD7C07B94A")
-    );
-    try {
-      await getInterviewsByJobApplication(jobApplicationId);
-    } catch (error) {
-      message.error("Failed to fetch interviews");
-      console.error(error);
-    }
+    setIsScheduleModalOpen(true);
   };
 
-  const fetchAllInterviews = async () => {
-    console.log("Fetching all interviews");
-    try {
-      await getAllInterviews();
-    } catch (error) {
-      message.error("Failed to fetch all interviews");
-      console.error(error);
-    }
-  };
-
-  const showCreateModal = () => {
+  const handleScheduleModalClose = () => {
+    setIsScheduleModalOpen(false);
     form.resetFields();
-    setIsEditing(false);
-    setCurrentInterviewId(null);
-    setIsModalVisible(true);
+    setSelectedJobApplication("");
   };
 
-  const showEditModal = (interview) => {
-    setIsEditing(true);
-    setCurrentInterviewId(interview.id);
-    form.setFieldsValue({
-      scheduledDate: moment(interview.scheduledDate),
-      interviewer: interview.interviewer,
-      mode: interview.mode,
-      feedback: interview.feedback,
-    });
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    form.resetFields();
-    setIsEditing(false);
-    setCurrentInterviewId(null);
-  };
-
-  const handleSubmit = async (values) => {
+  const handleScheduleInterview = async (values) => {
     setLocalSubmitting(true);
     try {
-      if (isEditing && currentInterviewId) {
-        await updateInterview({
-          id: currentInterviewId,
-          jobApplicationId: jobApplicationId,
-          scheduledDate: values.scheduledDate.format("YYYY-MM-DD HH:mm:ss"),
-          interviewer: values.interviewer,
-          mode: values.mode,
-          feedback: values.feedback || "",
-        });
-        message.success("Interview updated successfully");
-      } else {
-        await createInterview({
-          jobApplicationId: jobApplicationId,
-          scheduledDate: values.scheduledDate.format("YYYY-MM-DD HH:mm:ss"),
-          interviewer: values.interviewer,
-          mode: values.mode,
-          feedback: values.feedback || "",
-        });
-        message.success("Interview created successfully");
-      }
-
-      // If the above didn't trigger isSuccess
-      if (!isSuccess) {
-        setIsModalVisible(false);
-        form.resetFields();
-        setIsEditing(false);
-        setCurrentInterviewId(null);
-        fetchAllInterviews(); // Use fetchAllInterviews instead of fetchInterviews
-      }
+      await interviewActions.scheduleInterview({
+        jobApplicationId: values.jobApplicationId,
+        scheduledDate: values.scheduledDate.format("YYYY-MM-DD HH:mm:ss"),
+        interviewer: values.interviewer,
+        mode: values.mode,
+        location: values.location || "",
+        additionalInformation: values.additionalInformation || "",
+      });
+      message.success("Interview scheduled successfully");
+      handleScheduleModalClose();
+      loadInterviews();
     } catch (error) {
+      message.error("Failed to schedule interview");
+      console.error("Failed to schedule interview", error);
+    } finally {
       setLocalSubmitting(false);
-      message.error(
-        isEditing ? "Failed to update interview" : "Failed to create interview"
-      );
-      console.error(error);
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDeleteInterview = async (id) => {
     try {
-      await deleteInterview(id);
+      await interviewActions.deleteInterview(id);
       message.success("Interview deleted successfully");
-      // Explicitly fetch all interviews after deletion
-      fetchAllInterviews();
+      loadInterviews();
     } catch (error) {
       message.error("Failed to delete interview");
-      console.error(error);
+      console.error("Failed to delete interview", error);
     }
   };
 
-  const columns = [
+  const formatDateTime = (dateTime) => {
+    return moment(dateTime).format("MMM DD, YYYY - HH:mm");
+  };
+
+  const interviewColumns = [
     {
       title: "Date & Time",
       dataIndex: "scheduledDate",
       key: "scheduledDate",
-      render: (text) => moment(text).format("MMM DD, YYYY - HH:mm"),
+      render: (text) => formatDateTime(text),
       sorter: (a, b) =>
         moment(a.scheduledDate).unix() - moment(b.scheduledDate).unix(),
     },
@@ -200,21 +136,17 @@ const InterviewManagement = ({
       dataIndex: "feedback",
       key: "feedback",
       ellipsis: true,
+      render: (text) => text || "-",
     },
     {
       title: "Actions",
       key: "actions",
       render: (_, record) => (
         <Space size="small">
-          <Button
-            icon={<EditOutlined />}
-            onClick={() => showEditModal(record)}
-            type="text"
-          />
           <Popconfirm
             title="Delete Interview"
             description="Are you sure you want to delete this interview?"
-            onConfirm={() => handleDelete(record.id)}
+            onConfirm={() => handleDeleteInterview(record.id)}
             okText="Yes"
             cancelText="No"
           >
@@ -225,58 +157,142 @@ const InterviewManagement = ({
     },
   ];
 
-  const interviewModes = [
-    "Virtual",
-    "In-person",
-    "Phone",
-    "Technical",
-    "Group",
+  const applicationColumns = [
+    {
+      title: "Applicant Name",
+      dataIndex: "applicantName",
+      key: "applicantName",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (_, record) => (
+        <Button type="link" onClick={() => handleScheduleModalOpen(record.id)}>
+          Schedule Interview
+        </Button>
+      ),
+    },
+  ];
+
+  const items = [
+    {
+      key: "all",
+      label: "All Interviews",
+      children: (
+        <>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginBottom: 16,
+            }}
+          >
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => handleScheduleModalOpen(null)}
+            >
+              Schedule New Interview
+            </Button>
+          </div>
+          <Table
+            columns={interviewColumns}
+            dataSource={interviewState.interviews || []}
+            rowKey="id"
+            loading={interviewState.isPending}
+            pagination={{ pageSize: 5 }}
+            locale={{
+              emptyText: (
+                <div style={{ padding: "40px 0", textAlign: "center" }}>
+                  No interviews found. Schedule your first interview.
+                </div>
+              ),
+            }}
+          />
+        </>
+      ),
+    },
+    {
+      key: "pending",
+      label: "Pending Applications",
+      children: (
+        <>
+          <h2
+            style={{ fontSize: "1.25rem", fontWeight: 600, marginBottom: 16 }}
+          >
+            Pending Applications
+          </h2>
+          <Table
+            columns={applicationColumns}
+            dataSource={pendingApplications || []}
+            rowKey="id"
+            loading={interviewState.isPending}
+            pagination={{ pageSize: 5 }}
+            locale={{
+              emptyText: (
+                <div style={{ padding: "40px 0", textAlign: "center" }}>
+                  No pending applications found.
+                </div>
+              ),
+            }}
+          />
+        </>
+      ),
+    },
   ];
 
   return (
     <div style={{ padding: "20px" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "16px",
-        }}
-      >
-        <h2>Interviews</h2>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={showCreateModal}
-        >
-          Schedule Interview
-        </Button>
-      </div>
+      <h1 style={{ fontSize: "1.875rem", fontWeight: 700, marginBottom: 24 }}>
+        Interviews Management
+      </h1>
 
-      <Table
-        columns={columns}
-        dataSource={
-          interviews
-            ? interviews
-            : interviews?.filter(
-                (i) => i.jobApplicationId === jobApplicationId
-              ) || []
-        }
-        rowKey="id"
-        loading={isPending}
-        pagination={{ pageSize: 5 }}
+      <Tabs
+        activeKey={selectedTab}
+        onChange={setSelectedTab}
+        items={items}
+        style={{ marginBottom: 24 }}
       />
 
       <Modal
-        title={isEditing ? "Edit Interview" : "Schedule New Interview"}
-        open={isModalVisible}
-        onCancel={handleCancel}
+        title="Schedule Interview"
+        open={isScheduleModalOpen}
+        onCancel={handleScheduleModalClose}
         footer={null}
         destroyOnClose
       >
-        <Form form={form} layout="vertical" onFinish={handleSubmit}>
+        <Form form={form} layout="vertical" onFinish={handleScheduleInterview}>
+          {!selectedJobApplication && (
+            <Form.Item
+              name="jobApplicationId"
+              label="Job Application"
+              rules={[
+                { required: true, message: "Please select job application" },
+              ]}
+            >
+              <Select placeholder="Select Job Application">
+                {pendingApplications.map((application) => (
+                  <Option key={application.id} value={application.id}>
+                    {application.applicantName} - {application.status}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+          )}
+
           <Form.Item
             name="scheduledDate"
-            label="Interview Date & Time"
+            label="Date and Time"
             rules={[{ required: true, message: "Please select date and time" }]}
           >
             <DatePicker
@@ -304,18 +320,23 @@ const InterviewManagement = ({
             ]}
           >
             <Select placeholder="Select interview mode">
-              {interviewModes.map((mode) => (
-                <Option key={mode} value={mode}>
-                  {mode}
-                </Option>
-              ))}
+              <Option value="In-person">In-person</Option>
+              <Option value="Video">Video</Option>
+              <Option value="Phone">Phone</Option>
             </Select>
           </Form.Item>
 
-          <Form.Item name="feedback" label="Feedback">
+          <Form.Item name="location" label="Location / Link">
+            <Input placeholder="Enter location or meeting link" />
+          </Form.Item>
+
+          <Form.Item
+            name="additionalInformation"
+            label="Additional Information"
+          >
             <TextArea
-              rows={4}
-              placeholder="Enter feedback or notes about the interview"
+              rows={3}
+              placeholder="Enter additional information about the interview"
             />
           </Form.Item>
 
@@ -327,13 +348,13 @@ const InterviewManagement = ({
                 gap: "8px",
               }}
             >
-              <Button onClick={handleCancel}>Cancel</Button>
+              <Button onClick={handleScheduleModalClose}>Cancel</Button>
               <Button
                 type="primary"
                 htmlType="submit"
-                loading={isPending || localSubmitting}
+                loading={localSubmitting}
               >
-                {isEditing ? "Update" : "Schedule"}
+                Schedule
               </Button>
             </div>
           </Form.Item>
@@ -344,10 +365,10 @@ const InterviewManagement = ({
 };
 
 // Wrap with App component to provide message context
-const InterviewManagementWithApp = (props) => (
+const InterviewsPageWithApp = () => (
   <App>
-    <InterviewManagement {...props} />
+    <InterviewsPage />
   </App>
 );
 
-export default InterviewManagementWithApp;
+export default InterviewsPageWithApp;
