@@ -37,7 +37,8 @@ export interface IJobApplicationStateContext {
 export interface IJobApplicationActionContext {
   submitJobApplication: (application: IJobApplication) => Promise<void>;
   getJobApplications: () => void;
-  getJobApplicationById: (id: string) => Promise<void>; // Add this new action
+  getJobApplicationById: (id: string) => Promise<void>; 
+  uploadResume: (file: File)=>Promise<string>
   updateJobApplication: (jobApplication: IJobApplication) => Promise<void>;
   resetStateFlags: () => void;
 }

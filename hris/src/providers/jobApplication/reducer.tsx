@@ -22,6 +22,27 @@ export const JobApplicationReducer = handleActions<IJobApplicationStateContext>(
       ...state,
       ...action.payload,
     }),
+
+    //upload resume
+    [JobApplicationActionEnums.uploadResumePending]: (
+      state,
+      action
+    ) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [JobApplicationActionEnums.uploadResumeSuccess]: (
+      state,
+      action
+    ) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [JobApplicationActionEnums.uploadResumeError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    //
     [JobApplicationActionEnums.resetStateFlagsAction]: (state, action) => ({
       ...state,
       ...action.payload,
