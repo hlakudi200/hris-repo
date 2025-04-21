@@ -21,7 +21,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
         setUploading(true);
 
         const filePath = await uploadResume(file as RcFile);
-        console.log("File uploaded, public URL:", filePath);
+     
 
         toast("Resume uploaded successfully", "success");
         onUploadSuccess(filePath);

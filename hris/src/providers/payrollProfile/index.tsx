@@ -49,14 +49,12 @@ export const PayrollProvider = ({
     await instance
       .get(endpoint)
       .then((response) => {
- 
         if (response.status === 200) {
           dispatch(getPayrollProfileSuccess(response.data.result));
-          console.log("PayrollProfile:",response.data.result)
         }
       })
       .catch((error) => {
-        console.error("Error:",error);
+        console.error("Error:", error);
         dispatch(getAllNamedError());
       });
   };
@@ -67,7 +65,7 @@ export const PayrollProvider = ({
   return (
     <PayrollStateContext.Provider value={state}>
       <PayrollActionContext.Provider
-        value={{getAllNamed, resetStateFlags, getPayrollProfileById }}
+        value={{ getAllNamed, resetStateFlags, getPayrollProfileById }}
       >
         {children}
       </PayrollActionContext.Provider>

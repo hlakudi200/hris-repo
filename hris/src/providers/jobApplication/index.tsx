@@ -62,14 +62,13 @@ export const JobApplicationProvider = ({
 
       .then((response) => {
         dispatch(getJobApplicationsSuccess(response.data.result.items));
-        console.log("JobApplications", response.data.result.items);
       })
       .catch((error) => {
         console.error(error);
         dispatch(getJobApplicationsError());
       });
   };
- 
+
   const updateJobApplication = async (request: IJobApplication) => {
     dispatch(UpdateJobApplicationPending());
     const endPoint = `/api/services/app/JobApplication/Update`;
@@ -80,7 +79,7 @@ export const JobApplicationProvider = ({
       })
       .catch((err) => {
         dispatch(UpdateJobApplicationError());
-        console.log(err);
+        console.error(err);
       });
   };
 
@@ -101,36 +100,33 @@ export const JobApplicationProvider = ({
     }
   };
 
-
   const uploadResume = async (file: File): Promise<string> => {
     dispatch(uploadResumePending());
-  
+
     const uniqueId = uuidv4();
     const filePath = `resume/${uniqueId}_${file.name}`;
-  
+
     const { error } = await supabase.storage
       .from("storage")
       .upload(filePath, file, {
         cacheControl: "3600",
         upsert: true,
       });
-  
+
     if (error) {
       dispatch(uploadResumeError());
       console.error("Resume upload error:", error);
       throw error;
     }
-  
+
     dispatch(uploadResumeSuccess());
-  
+
     const {
       data: { publicUrl },
     } = supabase.storage.from("storage").getPublicUrl(filePath);
 
-   console.log("public url:",publicUrl)
-    return publicUrl; 
+    return publicUrl;
   };
-
 
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());

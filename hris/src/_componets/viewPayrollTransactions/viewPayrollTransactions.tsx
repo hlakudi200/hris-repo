@@ -55,7 +55,7 @@ const ViewPayrollTransactions: React.FC<ViewPayrollTransactionsProps> = ({
       toast("Payslip sent successfully","success")
     } catch (err) {
       toast("Failed to send payslip","error")
-      console.log(err)
+      console.error(err)
     } finally {
       setLoadingId(null);
       setSelectedId(null);

@@ -16,21 +16,18 @@ import {
   getPayrollTransactionError,
   getPayrollTransactionSuccess,
   getPayrollTransactionPending,
-
   generatePayrollTransactionPdfPending,
   generatePayrollTransactionPdfSuccess,
   generatePayrollTransactionPdfError,
   downloadPayrollTransactionPdfPending,
   downloadPayrollTransactionPdfSuccess,
   downloadPayrollTransactionPdffError,
-
   sentPaySlipsPending,
   sentPaySlipSuccess,
   sentPaySlipsSuccess,
   sentPaySlipsError,
   sentPaySlipPending,
   sentPaySlipError,
-
 } from "./actions";
 
 export const PayrollTransactionProvider = ({
@@ -43,8 +40,6 @@ export const PayrollTransactionProvider = ({
     INITIAL_STATE
   );
   const instance = getAxiosInstace();
-
- 
 
   const createPayrollTransaction = async (transaction: IPayrollTransaction) => {
     const endpoint = `/api/services/app/PayrollTransaction/Create`;
@@ -83,10 +78,9 @@ export const PayrollTransactionProvider = ({
       })
       .catch((err) => {
         getPayrollTransactionError();
-        console.log("getPayrollTrasactions:", err);
+        console.error(err);
       });
   };
-
 
   //Generate Pdf
   const generatePayrollTransactionPdf = async (
@@ -98,7 +92,7 @@ export const PayrollTransactionProvider = ({
       .post(endpoint)
       .then(() => {
         dispatch(generatePayrollTransactionPdfSuccess());
-        downloadPayrollTransactionPdf(payrollTransactionId)
+        downloadPayrollTransactionPdf(payrollTransactionId);
       })
       .catch((error) => {
         console.error(error);
@@ -110,22 +104,22 @@ export const PayrollTransactionProvider = ({
   const downloadPayrollTransactionPdf = async (id: string) => {
     dispatch(downloadPayrollTransactionPdfPending());
     const endpoint: string = `/api/payroll/download-pdf/${id}`;
-  
+
     try {
       const response = await instance.get(endpoint);
-  
+
       if (response.status === 200) {
         const result = response.data.result;
-        const byteCharacters = atob(result.fileBytes); 
+        const byteCharacters = atob(result.fileBytes);
         const byteNumbers = new Array(byteCharacters.length);
-  
+
         for (let i = 0; i < byteCharacters.length; i++) {
           byteNumbers[i] = byteCharacters.charCodeAt(i);
         }
-  
+
         const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([byteArray], { type: result.contentType });
-  
+
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
@@ -134,7 +128,7 @@ export const PayrollTransactionProvider = ({
         a.click();
         a.remove();
         window.URL.revokeObjectURL(url);
-  
+
         dispatch(downloadPayrollTransactionPdfSuccess());
       }
     } catch (error) {
@@ -142,11 +136,10 @@ export const PayrollTransactionProvider = ({
       dispatch(downloadPayrollTransactionPdffError());
     }
   };
-  
 
-  const sentPaySlips = async (date:Date) => {
+  const sentPaySlips = async (date: Date) => {
     dispatch(sentPaySlipsPending());
-    const  endpoint =`/api/payroll/send-payslips-for-date?id=${date}`
+    const endpoint = `/api/payroll/send-payslips-for-date?id=${date}`;
 
     instance
       .post(endpoint)
@@ -161,10 +154,10 @@ export const PayrollTransactionProvider = ({
       });
   };
 
-  const sentPaySlip = async (id:string) => {
+  const sentPaySlip = async (id: string) => {
     dispatch(sentPaySlipPending());
 
-  const  endpoint =`/api/payroll/send-payslip-email/${id}`
+    const endpoint = `/api/payroll/send-payslip-email/${id}`;
 
     instance
       .post(endpoint)
@@ -178,7 +171,6 @@ export const PayrollTransactionProvider = ({
         dispatch(sentPaySlipError());
       });
   };
-
 
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
@@ -195,8 +187,7 @@ export const PayrollTransactionProvider = ({
           downloadPayrollTransactionPdf,
           generatePayrollTransactionPdf,
           sentPaySlip,
-          sentPaySlips
-
+          sentPaySlips,
         }}
       >
         {children}
