@@ -105,11 +105,14 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
                 />
               </Sider>
               <Layout>
-                <Header style={{ 
+                <Header
+                  style={{
                     padding: 0,
                     backgroundColor: "white",
                     display: "flex",
-                    alignItems: "center",}}>
+                    alignItems: "center",
+                  }}
+                >
                   <Button
                     type="text"
                     icon={
