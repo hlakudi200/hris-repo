@@ -1,19 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import type { TableColumnsType } from "antd";
-import {
-  Table,
-  Spin,
-  Alert,
-  Button,
-  Modal,
-  Form,
-  Input,
-} from "antd";
-import {
-  useJobPostingActions,
-  useJobPostingState,
-} from "@/providers/jobPost";
+import { Table, Spin, Alert, Button, Modal, Form, Input } from "antd";
+import { useJobPostingActions, useJobPostingState } from "@/providers/jobPost";
 import {
   useJobApplicationActions,
   useJobApplicationState,
@@ -21,7 +10,8 @@ import {
 import { IJobApplication } from "@/providers/jobApplication/context";
 import { toast } from "@/providers/toast/toast";
 import FileUpload from "../fileUploadComponent/fileUpload";
-
+import { useEmailActions } from "@/providers/email";
+import { applicationSubmittedTemplate } from "@/providers/email/emailTemplates/applicationSubmitted";
 interface DataType {
   key: string;
   id: string;
@@ -37,11 +27,13 @@ const ApplicantJobView: React.FC = () => {
   const { getJobPostings } = useJobPostingActions();
   const { isError: isApplicationError, isSuccess: IsApplicationSuccess } =
     useJobApplicationState();
-  const { submitJobApplication, resetStateFlags} = useJobApplicationActions();
+  const { submitJobApplication, resetStateFlags } = useJobApplicationActions();
+  const { sendEmail } = useEmailActions();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
-  const [resumePath, setResumePath] = useState<string>(""); // Store the resume URL
+  const [selectedJobName, setSelctedJobName] = useState<string | null>(null);
+  const [resumePath, setResumePath] = useState<string>("");
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -117,6 +109,7 @@ const ApplicantJobView: React.FC = () => {
           type="primary"
           onClick={() => {
             setSelectedJobId(record.id);
+            setSelctedJobName(record.title);
             setIsModalVisible(true);
           }}
         >
@@ -153,11 +146,22 @@ const ApplicantJobView: React.FC = () => {
               jobPostingId: selectedJobId,
               applicantName: values.name,
               email: values.email,
-              resumePath: resumePath,  // This is the public URL
+              resumePath: resumePath,
               status: "Pending",
             };
 
             submitJobApplication(application);
+            const body = applicationSubmittedTemplate(
+              values.name,
+              selectedJobName
+            );
+              sendEmail({
+                to: values.email || "",
+                subject: `Application for Job post ${selectedJobName} Recived`,
+                body,
+                isBodyHtml: true,
+              });
+
             setIsModalVisible(false);
             form.resetFields();
             setResumePath("");

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Upload } from "antd";
 import type { UploadProps } from "antd";
@@ -13,30 +13,40 @@ interface FileUploadProps {
 
 const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
   const { uploadResume } = useJobApplicationActions();
+  const [uploading, setUploading] = useState(false);
 
   const props: UploadProps = {
     customRequest: async ({ file, onSuccess, onError }) => {
       try {
-        
+        setUploading(true);
+
         const filePath = await uploadResume(file as RcFile);
-        console.log("File uploaded, public URL:", filePath); 
+        console.log("File uploaded, public URL:", filePath);
 
-        
         toast("Resume uploaded successfully", "success");
-        onUploadSuccess(filePath);  
+        onUploadSuccess(filePath);
 
-        onSuccess && onSuccess("ok"); 
+        if (onSuccess) {
+          onSuccess("ok");
+        }
       } catch (error) {
         toast("Failed to upload resume", "error");
-        onError && onError(error as Error); 
+
+        if (onError) {
+          onError(error as Error);
+        }
+      } finally {
+        setUploading(false);
       }
     },
-    showUploadList: false, 
+    showUploadList: false,
   };
 
   return (
     <Upload {...props}>
-      <Button icon={<UploadOutlined />}>Click to Upload</Button>
+      <Button icon={<UploadOutlined />} loading={uploading}>
+        {uploading ? "Uploading..." : "Click to Upload"}
+      </Button>
     </Upload>
   );
 };
