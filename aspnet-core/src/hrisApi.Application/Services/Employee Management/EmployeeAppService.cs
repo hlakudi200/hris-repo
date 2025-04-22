@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
+using Abp.Authorization;
 using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
 using Abp.Runtime.Validation;
@@ -26,6 +27,7 @@ using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace hrisApi.Services.Employee_Management
 {
+    [AbpAuthorize]
     public class EmployeeAppService : AsyncCrudAppService<
         Employee,
         EmployeeDto,
@@ -191,22 +193,13 @@ namespace hrisApi.Services.Employee_Management
             // Update employee using manager
             Employee updatedEmployee = await _employeeManager.UpdateEmployeeAsync(
                 input.Id,
-                //input.Name,
-                //input.Surname,
-                //input.Email,
-                //input.Username,
-                //input.Password,
-
-
-                //input.DateOfBirth,
-
-                //input.HireDate,
+                input.Surname,
+                input.Email,
                 input.Position,
                 input.Department,
                 input.EmployeeNumber,
-                 input.NationalIdNumber,
-                 input.ContactNo
-            //input.ManagerId
+                input.NationalIdNumber,
+                input.ContactNo
 
 
             );
