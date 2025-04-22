@@ -1,9 +1,12 @@
 import React from 'react'
 import HrCharts from '@/_componets/hrCharts/hrChart'
+import HrBot from '@/_componets/hrchatbot/chatbot'
 
 const HrManager=()=> {
   return (
-    <div><HrCharts/></div>
+    <div><HrCharts/>
+     <HrBot></HrBot>
+    </div>
   )
 }
 
