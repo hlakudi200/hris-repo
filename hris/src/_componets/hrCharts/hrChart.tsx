@@ -15,7 +15,7 @@ import {
 } from "chart.js";
 import { Line, Bar, Pie } from "react-chartjs-2";
 import moment from "moment";
-import { Spin, Alert, Modal, Select, Radio } from "antd";
+import { Spin, Alert, Modal, Radio } from "antd";
 import { CalendarOutlined, FilterOutlined, InfoCircleOutlined } from "@ant-design/icons";
 
 import {
@@ -29,7 +29,6 @@ import {
 import globals from "../globals.module.css";
 import styles from "./styles/styles.module.css";
 
-const { Option } = Select;
 
 ChartJS.register(
   CategoryScale,
