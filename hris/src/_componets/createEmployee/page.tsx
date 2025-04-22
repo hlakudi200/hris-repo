@@ -107,6 +107,7 @@ const EmployeeManagement = () => {
     try {
       const employeeData = {
         ...values,
+        employeeNumber:" ",
         dateOfBirth: values.dateOfBirth?.format("YYYY-MM-DD"),
         hireDate: values.hireDate?.format("YYYY-MM-DD"),
       };
@@ -148,10 +149,10 @@ const EmployeeManagement = () => {
     {
       title: "Name",
       key: "fullName",
-      render: (_, record) => `${record.fullName} ${record.surname}`,
+      render: (_, record) => `${record.user.name} ${record.user.surname}`,
       sorter: (a, b) =>
-        `${a.fullName} ${a.surname}`.localeCompare(
-          `${b.fullName} ${b.surname}`
+        `${a.user.name} ${a.user.surname}`.localeCompare(
+          `${b.user.name} ${b.user.surname}`
         ),
     },
     {

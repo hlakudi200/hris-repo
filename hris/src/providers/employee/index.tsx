@@ -46,14 +46,17 @@ export const EmployeeProvider = ({
     const endpoint = "/api/services/app/Employee/Create";
 
     try {
+      debugger;
       const response = await instance.post(endpoint, employee);
       if (response.status === 200) {
+        console.log(response.data.result);
         dispatch(createEmployeeSuccess(response.data.result));
 
         await getAllEmployees();
         return response.data.result;
       }
     } catch (error) {
+
       console.error("Error creating employee:", error);
       dispatch(
         createEmployeeError(error.message || "Failed to create employee")
@@ -123,12 +126,13 @@ export const EmployeeProvider = ({
   const getAllEmployees = async () => {
     dispatch(getAllEmployeesPending());
 
-    const endpoint = "/api/services/app/Employee/GetAll";
+    const endpoint = "/api/services/app/Employee/GetAllEmployees";
 
     try {
       const response = await instance.get(endpoint);
 
       if (response.status === 200 && response.data && response.data.result) {
+        debugger;
         // Ensure we're getting the items array from the response
         const employees = Array.isArray(response.data.result.items)
           ? response.data.result.items

@@ -23,12 +23,12 @@ export interface IEmployee {
 }
 
 export interface ICreateEmployeeRequest {
-  fullName: string;
+  name: string;
   surname: string;
   email: string;
   username: string;
   password: string;
-  employeeNumber: string;
+  employeeNumber?: string;
   contactNo: string;
   dateOfBirth: Date | string;
   nationalIdNumber: string;

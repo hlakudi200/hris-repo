@@ -116,7 +116,7 @@ namespace hrisApi.Services.Employee_Management
         {
             try
             {
-                
+
                 string emailBody = $@"
             <html>
             <body style='font-family: Arial, sans-serif; line-height: 1.6;'>
@@ -134,7 +134,6 @@ namespace hrisApi.Services.Employee_Management
                         <p><strong>Password:</strong> {password}</p>
                     </div>
                     
-                    <p><strong>Important:</strong> Please change your password after your first login for security reasons.</p>
                     
                     <p>If you have any questions or need assistance, please contact your manager or the HR department.</p>
                     
@@ -165,7 +164,7 @@ namespace hrisApi.Services.Employee_Management
             }
         }
 
- 
+
         public override async Task<EmployeeDto> UpdateAsync(UpdateEmployeeDto input)
         {
             // Check if National ID is being changed and if so, ensure it's unique
@@ -197,17 +196,17 @@ namespace hrisApi.Services.Employee_Management
                 //input.Email,
                 //input.Username,
                 //input.Password,
-                
-                
+
+
                 //input.DateOfBirth,
-               
+
                 //input.HireDate,
                 input.Position,
                 input.Department,
                 input.EmployeeNumber,
                  input.NationalIdNumber,
                  input.ContactNo
-                //input.ManagerId
+            //input.ManagerId
 
 
             );
@@ -284,54 +283,6 @@ namespace hrisApi.Services.Employee_Management
             // Start with an Include for the User entity
             var query = Repository.GetAll().Include(e => e.User);
 
-            // Apply filtering
-            //if (!string.IsNullOrWhiteSpace(input.Keyword))
-            //{
-            //    query = query.Where(e =>
-            //        e.User.Name.Contains(input.Keyword) ||
-            //        e.User.Surname.Contains(input.Keyword) ||
-            //        e.EmployeeNumber.Contains(input.Keyword) ||
-            //        e.NationalIdNumber.Contains(input.Keyword) ||
-            //        e.Position.Contains(input.Keyword) ||
-            //        e.Department.Contains(input.Keyword)
-            //    );
-            //}
-
-            // Additional filters for the new properties
-            //if (!string.IsNullOrWhiteSpace(input.FullName))
-            //{
-            //    query = query.Where(e => e.User.Name.Contains(input.FullName));
-            //}
-
-            //if (!string.IsNullOrWhiteSpace(input.Surname))
-            //{
-            //    query = query.Where(e => e.User.Surname.Contains(input.Surname));
-            //}
-
-            //if (!string.IsNullOrWhiteSpace(input.Email))
-            //{
-            //    query = query.Where(e => e.User.EmailAddress.Contains(input.Email));
-            //}
-
-            //if (!string.IsNullOrWhiteSpace(input.Position))
-            //{
-            //    query = query.Where(e => e.Position.Contains(input.Position));
-            //}
-
-            //if (!string.IsNullOrWhiteSpace(input.Department))
-            //{
-            //    query = query.Where(e => e.Department == input.Department);
-            //}
-
-            //// Apply sorting
-            //if (!string.IsNullOrWhiteSpace(input.Sorting))
-            //{
-            //    query = ApplySorting(query, input);
-            //}
-            //else
-            //{
-            //    query = query.OrderBy(e => e.User.Name);
-            //}
 
             // Apply paging
             var totalCount = await query.CountAsync();
@@ -343,7 +294,7 @@ namespace hrisApi.Services.Employee_Management
             // Map to DTOs
             var employeeDtos = ObjectMapper.Map<List<EmployeeDto>>(employees);
 
-    
+
             foreach (var dto in employeeDtos)
             {
                 var employee = employees.First(e => e.Id == dto.Id);
@@ -355,6 +306,15 @@ namespace hrisApi.Services.Employee_Management
             return new PagedResultDto<EmployeeDto>(totalCount, employeeDtos);
         }
 
+        public async Task<List<EmployeeDto>> GetAllEmployees()
+        {
+
+            var employees = await Repository.GetAll().Include(e => e.User).ToListAsync();
+
+            var results = ObjectMapper.Map<List<EmployeeDto>>(employees);
+
+            return results;
+        }
 
 
 
@@ -372,9 +332,9 @@ namespace hrisApi.Services.Employee_Management
                 // Create document entity
                 var employeeDocument = new EmployeeDocument
                 {
-                    
+
                     FileName = input.File.FileName,
-                    
+
                     FileExtension = Path.GetExtension(input.File.FileName),
                     FileSizeInBytes = input.File.Length,
                     FilePath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads", "employee-documents", $"{Guid.NewGuid()}{Path.GetExtension(input.File.FileName)}")
@@ -412,7 +372,7 @@ namespace hrisApi.Services.Employee_Management
 
         private void ValidateFileUpload(CreateEmployeeDocumentDto input)
         {
-           
+
             var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png", ".pdf" };
 
             if (input.File == null)
@@ -474,13 +434,13 @@ namespace hrisApi.Services.Employee_Management
             }
         }
 
-        
+
 
         public async Task DeleteDocumentAsync(EntityDto<Guid> input)
         {
             await _documentRepository.DeleteAsync(input.Id);
         }
 
-        
+
     }
 }
