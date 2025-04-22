@@ -407,7 +407,10 @@ public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransacti
                     GrossAmount = grossAmount,
                     TaxAmount = taxAmount,
                     NetAmount = netAmount,
-                    CreationTime = date
+                    PeriodStart = date,
+                    PeriodEnd = date.AddDays(30),
+                    CreationTime = date,
+
                 };
 
                 await Repository.InsertAsync(transaction);
