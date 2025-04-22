@@ -27,8 +27,10 @@ import {
 import moment from "moment";
 
 const { Option } = Select;
-const { Password } = Input;
+
+
 const { Search } = Input;
+
 
 const EmployeeManagement = () => {
   const { message } = App.useApp();
@@ -114,6 +116,7 @@ const EmployeeManagement = () => {
     setCurrentEmployeeId(employee.id);
     form.setFieldsValue({
       ...employee,
+      ...employee.user,
       dateOfBirth: employee.dateOfBirth ? moment(employee.dateOfBirth) : null,
       hireDate: employee.hireDate ? moment(employee.hireDate) : null,
     });
@@ -132,18 +135,19 @@ const EmployeeManagement = () => {
     try {
       const employeeData = {
         ...values,
-        employeeNumber: " ",
+
         dateOfBirth: values.dateOfBirth?.format("YYYY-MM-DD"),
         hireDate: values.hireDate?.format("YYYY-MM-DD"),
       };
 
       if (isEditing && currentEmployeeId) {
-        await updateEmployee({
+        debugger;
+        await updateEmployee( {
           id: currentEmployeeId,
           ...employeeData,
         });
       } else {
-        await createEmployee(employeeData);
+        await createEmployee({...employeeData, email: employeeData.emailAddress});
       }
     } catch (error) {
       setLocalSubmitting(false);
@@ -197,6 +201,7 @@ const EmployeeManagement = () => {
       dataIndex: "email",
       key: "email",
       ellipsis: true,
+      render: (_, record) => record.user.emailAddress,
     },
     {
       title: "Hire Date",
@@ -325,7 +330,7 @@ const EmployeeManagement = () => {
 
             <div style={{ display: "flex", gap: "20px" }}>
               <Form.Item
-                name="email"
+                name="emailAddress"
                 label="Email"
                 rules={[
                   { required: true, message: "Please enter email" },
@@ -350,26 +355,13 @@ const EmployeeManagement = () => {
 
             <div style={{ display: "flex", gap: "20px" }}>
               <Form.Item
-                name="username"
+                name="userName"
                 label="Username"
                 rules={[{ required: true, message: "Please enter username" }]}
                 style={{ flex: 1 }}
               >
                 <Input placeholder="Enter username" />
               </Form.Item>
-
-              {!isEditing && (
-                <Form.Item
-                  name="password"
-                  label="Password"
-                  rules={[
-                    { required: !isEditing, message: "Please enter password" },
-                  ]}
-                  style={{ flex: 1 }}
-                >
-                  <Password placeholder="Enter password" />
-                </Form.Item>
-              )}
             </div>
 
             <div style={{ display: "flex", gap: "20px" }}>

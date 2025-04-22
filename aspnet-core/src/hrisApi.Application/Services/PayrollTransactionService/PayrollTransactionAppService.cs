@@ -24,8 +24,9 @@ using hrisApi.Services.EmailService;
 using hrisApi.Services.EmailService.DTO;
 using Microsoft.EntityFrameworkCore;
 using Abp.EntityFrameworkCore.Repositories;
+using Abp.Authorization;
 
-
+[AbpAuthorize]
 public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransaction, PayrollTransactionDto, Guid>, IPayrollTransactionAppService
 {
     private readonly EmailAppService _emailAppService;

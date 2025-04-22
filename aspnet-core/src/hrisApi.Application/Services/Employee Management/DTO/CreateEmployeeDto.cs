@@ -22,11 +22,8 @@ namespace hrisApi.Services.Employee_Management.DTO
 
         public string Email { get; set; }
 
-       
-        public string Username { get; set; }
 
-        public string Password { get; set; }
-        public string EmployeeNumber { get; set; }
+        public string Username { get; set; }
 
         [Required]
         [Phone]

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using hrisApi.Domains.Payroll_Processing;
 using hrisApi.Services.LeaveService.DTO;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hrisApi.Services.PayrollProfileService
 {
+    [AbpAuthorize]
     public class PayrollProfileAppService : AsyncCrudAppService<PayrollProfile, PayrollProfileDto, Guid>, IPayrollProfileAppService
     {
         private readonly IRepository<PayrollProfile, Guid> _repository;
