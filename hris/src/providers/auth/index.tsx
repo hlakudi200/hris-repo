@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await instance
       .post(endpoint, loginData)
       .then((response) => {
+        sessionStorage.setItem("accessToken", response.data.result.accessToken);
         const role = getRole(response.data.result.accessToken);
         updateRole(role);
         getCurrentUser(response.data.result.accessToken);
@@ -92,6 +93,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
+    sessionStorage.clear();
   };
 
   const updateRole = (role: string) => {
