@@ -44,8 +44,6 @@ namespace hrisApi.Domains.Employee_Management
             string Position,
             string Department,
             Guid ManagerId
-
-
             )
         {
             var user = new User
@@ -72,8 +70,6 @@ namespace hrisApi.Domains.Employee_Management
             {
                 await _userManager.AddToRoleAsync(user, "EMPLOYEE");
             }
-
-
 
             var employee = new Employee
             {
@@ -111,8 +107,6 @@ namespace hrisApi.Domains.Employee_Management
             };
 
             await _leaveRepository.InsertAsync(leave);
-
-
             return employee;
 
         }
@@ -159,11 +153,10 @@ namespace hrisApi.Domains.Employee_Management
             return employee;
         }
 
-
-
-
         public async Task<Employee> UpdateEmployeeAsync(
             Guid id,
+            string surname = null,
+            string email = null,
             string? position = null,
             string? department = null,
             string? employeeNumber = null,
@@ -187,12 +180,18 @@ namespace hrisApi.Domains.Employee_Management
 
             await _employeeRepository.UpdateAsync(employee);
 
+            var user = await _userManager.GetUserByIdAsync(employee.UserId);
+
+            if (!string.IsNullOrEmpty(surname)) user.Surname = surname;
+            if (!string.IsNullOrEmpty(email)) user.EmailAddress = email;
+
+            await _userManager.UpdateAsync(user);
+
             return employee;
         }
 
         public async Task<List<Employee>> GetAllAsync()
-        {
-            
+        {    
             return await _employeeRepository.GetAllListAsync();
         }
 
@@ -213,8 +212,6 @@ namespace hrisApi.Domains.Employee_Management
             );
         }
     }
-
-
 }
 
 
