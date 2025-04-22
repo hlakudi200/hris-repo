@@ -27,7 +27,6 @@ import {
 import moment from "moment";
 
 const { Option } = Select;
-const { Password } = Input;
 
 const EmployeeManagement = () => {
   const { message } = App.useApp();
