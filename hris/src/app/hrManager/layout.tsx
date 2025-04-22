@@ -100,16 +100,19 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
                   onClick={({ key }) => router.push(key)}
                   theme="dark"
                   mode="inline"
-                  defaultSelectedKeys={["hrManager"]}
+                  defaultSelectedKeys={["/hrManager"]}
                   items={siderItems}
                 />
               </Sider>
               <Layout>
-                <Header style={{ 
+                <Header
+                  style={{
                     padding: 0,
                     backgroundColor: "white",
                     display: "flex",
-                    alignItems: "center",}}>
+                    alignItems: "center",
+                  }}
+                >
                   <Button
                     type="text"
                     icon={

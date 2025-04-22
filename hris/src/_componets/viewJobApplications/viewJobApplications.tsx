@@ -1,12 +1,7 @@
-'use client';
+"use client";
 import React, { useEffect, useState } from "react";
-import {
-  useJobApplicationActions,
-} from "@/providers/jobApplication";
-import {
-  useJobPostingActions,
-  useJobPostingState,
-} from "@/providers/jobPost";
+import { useJobApplicationActions } from "@/providers/jobApplication";
+import { useJobPostingActions, useJobPostingState } from "@/providers/jobPost";
 import {
   Alert,
   Spin,
@@ -22,9 +17,9 @@ import type { ColumnsType } from "antd/es/table";
 import { IJobApplication, IJobPosting } from "@/providers/jobPost/interfaces";
 import { toast } from "@/providers/toast/toast";
 import type { ColumnType } from "antd/es/table";
-import { approveApplicationTemplate,} from "@/providers/email/emailTemplates/approveApplication";
+import { approveApplicationTemplate } from "@/providers/email/emailTemplates/approveApplication";
 import { declineApplicationTemplate } from "@/providers/email/emailTemplates/declineApplication";
-import { useEmailActions } from "@/providers/email"; 
+import { useEmailActions } from "@/providers/email";
 
 interface ApplicationWithPostTitle extends IJobApplication {
   jobPostTitle: string;
@@ -35,15 +30,12 @@ type DataIndex = keyof ApplicationWithPostTitle;
 const ViewJobApplications = () => {
   const { updateJobApplication } = useJobApplicationActions();
   const { getJobPostingIncluded } = useJobPostingActions();
-  const { sendEmail } = useEmailActions(); 
-  const {
-    isPending,
-    isSuccess,
-    isError,
-    JobPostings,
-  } = useJobPostingState();
+  const { sendEmail } = useEmailActions();
+  const { isPending, isSuccess, isError, JobPostings } = useJobPostingState();
 
-  const [applications, setApplications] = useState<ApplicationWithPostTitle[]>([]);
+  const [applications, setApplications] = useState<ApplicationWithPostTitle[]>(
+    []
+  );
 
   useEffect(() => {
     getJobPostingIncluded();
@@ -51,56 +43,73 @@ const ViewJobApplications = () => {
 
   useEffect(() => {
     if (JobPostings?.length) {
-      const flattenedApps: ApplicationWithPostTitle[] = JobPostings.flatMap((post: IJobPosting) =>
-        (post.applications || []).map((app) => ({
-          ...app,
-          jobPostTitle: post.title,
-        }))
+      const flattenedApps: ApplicationWithPostTitle[] = JobPostings.flatMap(
+        (post: IJobPosting) =>
+          (post.applications || []).map((app) => ({
+            ...app,
+            jobPostTitle: post.title,
+          }))
       );
       setApplications(flattenedApps);
     }
   }, [JobPostings]);
 
-  const handleUpdateStatus = async (record: ApplicationWithPostTitle, newStatus: string) => {
+  const handleUpdateStatus = async (
+    record: ApplicationWithPostTitle,
+    newStatus: string
+  ) => {
     try {
       const updatedRecord = {
         ...record,
         status: newStatus,
-        interviews: record.interviews?.map(interview => ({
-          ...interview,
-          jobApplicationId: interview.jobApplicationId || record.id,
-          scheduledDate: interview.scheduledDate || "",
-          interviewer: interview.interviewer || "",
-          mode: interview.mode || "",
-          feedback: interview.feedback || "",
-        })) || [],
+        interviews:
+          record.interviews?.map((interview) => ({
+            ...interview,
+            jobApplicationId: interview.jobApplicationId || record.id,
+            scheduledDate: interview.scheduledDate || "",
+            interviewer: interview.interviewer || "",
+            mode: interview.mode || "",
+            feedback: interview.feedback || "",
+          })) || [],
       };
-  
+
       await updateJobApplication(updatedRecord);
       await getJobPostingIncluded();
-  
-   
+
       const emailBody =
         newStatus === "Approved"
-          ? approveApplicationTemplate(record.applicantName, record.jobPostTitle)
-          : declineApplicationTemplate(record.applicantName, record.jobPostTitle, "");
-  
- 
+          ? approveApplicationTemplate(
+              record.applicantName,
+              record.jobPostTitle
+            )
+          : declineApplicationTemplate(
+              record.applicantName,
+              record.jobPostTitle,
+              ""
+            );
+
       await sendEmail({
         to: record.email,
         subject: `Your Application for ${record.jobPostTitle} - ${newStatus}`,
         body: emailBody,
         isBodyHtml: true,
       });
-  
+
       toast(`Application ${newStatus.toLowerCase()} successfully`, "success");
     } catch {
       toast("Failed to update status! Please try again.", "error");
     }
   };
-  
-  const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<ApplicationWithPostTitle> => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+
+  const getColumnSearchProps = (
+    dataIndex: DataIndex
+  ): ColumnType<ApplicationWithPostTitle> => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
       <div style={{ padding: 8 }}>
         <Input
           placeholder={`Search ${dataIndex}`}
@@ -126,7 +135,6 @@ const ViewJobApplications = () => {
           <Button
             onClick={() => {
               clearFilters();
-             
             }}
             size="small"
             style={{ width: 90 }}
@@ -167,11 +175,14 @@ const ViewJobApplications = () => {
       title: "Resume",
       dataIndex: "resumePath",
       key: "resumePath",
-      render: (path: string) => (
-        <a href={path} target="_blank" rel="noopener noreferrer">
-          View Resume
-        </a>
-      ),
+      render: (path: string) =>
+        path === "Internal Applicant" ? (
+          <Tag color="blue">Internal Applicant</Tag>
+        ) : (
+          <a href={path} target="_blank" rel="noopener noreferrer">
+            View Resume
+          </a>
+        ),
     },
     {
       title: "Status",
