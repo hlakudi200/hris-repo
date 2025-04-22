@@ -18,10 +18,10 @@ const Profile = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (currentUser !== null) {
+    if (currentUser !== null && currentEmployee === undefined) {
       getEmployee(currentUser.id);
     }
-  }, []);
+  }, [currentUser, currentEmployee]);
 
   useEffect(() => {
     if (isModalVisible && currentEmployee) {
