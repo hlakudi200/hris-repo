@@ -88,12 +88,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signOut = () => {
+    sessionStorage.clear();
     dispatch(signOutUser());
   };
 
   const resetStateFlags = async () => {
     dispatch(resetStateFlagsAction());
-    sessionStorage.clear();
   };
 
   const updateRole = (role: string) => {
