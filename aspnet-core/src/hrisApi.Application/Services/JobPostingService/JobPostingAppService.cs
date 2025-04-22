@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abp.Application.Services;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using hrisApi.Domains.Recruitment_Module;
 using hrisApi.Services.JobPostingService.DTO;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hrisApi.Services.JobPostingService
 {
+    [AbpAuthorize]
     public class JobPostingAppService : AsyncCrudAppService<JobPosting, JobPostingDto, Guid>, IJobPostingAppService
     {
         private readonly IRepository<JobPosting, Guid> _repository;

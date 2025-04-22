@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.UI;
 using hrisApi.Domains.Recruitment_Module;
@@ -14,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hrisApi.Services.InterviewService
 {
+    [AbpAuthorize]
     public class InterviewAppService : AsyncCrudAppService<Interview, InterviewDto, Guid>, IInterviewAppService
     {
         private readonly IRepository<JobApplication, Guid> _jobApplicationRepository;

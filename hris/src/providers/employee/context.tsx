@@ -27,8 +27,6 @@ export interface ICreateEmployeeRequest {
   surname: string;
   email: string;
   username: string;
-  password: string;
-  employeeNumber?: string;
   contactNo: string;
   dateOfBirth: Date | string;
   nationalIdNumber: string;

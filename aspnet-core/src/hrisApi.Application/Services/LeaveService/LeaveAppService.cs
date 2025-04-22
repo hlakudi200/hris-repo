@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Abp.Application.Services;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using hrisApi.Domains.Attendance_Management;
 using hrisApi.Services.LeaveService.DTO;
 
 namespace hrisApi.Services.LeaveService
 {
+    [AbpAuthorize]
     public class LeaveAppService : AsyncCrudAppService<Leave, LeaveDto, Guid>, ILeaveAppService
     {
         private readonly IRepository<Leave, Guid> _leaveRepository;

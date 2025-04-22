@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using hrisApi.Domains.Attendance_Management;
 using hrisApi.Services.AttendaceRecordService.DTO;
@@ -10,6 +11,7 @@ using NuGet.Protocol.Core.Types;
 
 namespace hrisApi.Services.AttendaceRecordService
 {
+    [AbpAuthorize]
     public class AttendanceRecordAppService : AsyncCrudAppService<AttendanceRecord, AttendanceRecordDto, Guid>, IAttendanceRecordAppService
     {
         public AttendanceRecordAppService(IRepository<AttendanceRecord, Guid> repository) : base(repository)
