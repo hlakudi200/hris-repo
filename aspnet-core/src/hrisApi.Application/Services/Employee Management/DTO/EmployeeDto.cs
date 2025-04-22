@@ -14,12 +14,12 @@ namespace hrisApi.Services.Employee_Management.DTO
     [AutoMapFrom(typeof(Employee))]
     [AutoMapTo(typeof(Employee))]
     [AutoMap(typeof(Employee))]
-    public class EmployeeDto : FullAuditedEntityDto<Guid>
+    public class EmployeeDto : EntityDto<Guid>
     {
 
         public string EmployeeNumber { get; set; }
         public long UserId { get; set; }
-        public UserDto User {get;set;}
+        public UserDto User { get; set; }
         public string ContactNo { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string NationalIdNumber { get; set; }
