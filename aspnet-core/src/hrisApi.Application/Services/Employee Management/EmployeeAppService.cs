@@ -17,6 +17,7 @@ using hrisApi.Domains.Employee_Management;
 using hrisApi.Services.EmailService;
 using hrisApi.Services.EmailService.DTO;
 using hrisApi.Services.Employee_Management.DTO;
+using hrisApi.Services.Employee_Management.Helpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -73,15 +74,17 @@ namespace hrisApi.Services.Employee_Management
             // Generate employee number (Year/first 4 digits of IdNo)
             string currentYear = DateTime.Now.Year.ToString();
             string idPrefix = input.NationalIdNumber.Length >= 9 ? input.NationalIdNumber.Substring(0, 9) : input.NationalIdNumber;
-            input.EmployeeNumber = $"{currentYear}/{idPrefix}";
+
+            string employeeNumber = $"{currentYear}/{idPrefix}";
+            string password = PasswordGenerator.GeneratePassword();
 
             Employee resultsEmployee = await _employeeManager.CreateEmployeeAsync(
                 input.Name,
                  input.Surname,
                  input.Email,
                  input.Username,
-                 input.Password,
-                 input.EmployeeNumber,
+                 password,
+                 employeeNumber,
                  input.ContactNo,
                  input.DateOfBirth,
                  input.NationalIdNumber,
@@ -96,7 +99,7 @@ namespace hrisApi.Services.Employee_Management
             input.Email,
             input.Name,
             input.Username,
-            input.Password,
+            password,
             input.Position,
             input.Department
         );

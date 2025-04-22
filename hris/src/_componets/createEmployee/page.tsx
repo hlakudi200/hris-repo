@@ -119,7 +119,7 @@ const EmployeeManagement = () => {
           ...employeeData,
         });
       } else {
-        await createEmployee(employeeData);
+        await createEmployee({...employeeData, email: employeeData.emailAddress});
       }
     } catch (error) {
       setLocalSubmitting(false);
@@ -324,19 +324,6 @@ const EmployeeManagement = () => {
               >
                 <Input placeholder="Enter username" />
               </Form.Item>
-
-              {!isEditing && (
-                <Form.Item
-                  name="password"
-                  label="Password"
-                  rules={[
-                    { required: !isEditing, message: "Please enter password" },
-                  ]}
-                  style={{ flex: 1 }}
-                >
-                  <Password placeholder="Enter password" />
-                </Form.Item>
-              )}
             </div>
 
             <div style={{ display: "flex", gap: "20px" }}>
