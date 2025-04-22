@@ -28,6 +28,7 @@ import moment from "moment";
 
 const { Option } = Select;
 const { Password } = Input;
+const { Search } = Input;
 
 const EmployeeManagement = () => {
   const { message } = App.useApp();
@@ -36,6 +37,8 @@ const EmployeeManagement = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentEmployeeId, setCurrentEmployeeId] = useState(null);
   const [localSubmitting, setLocalSubmitting] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
 
   const { isPending, isSuccess, isError, errorMessage, employees } =
     useEmployeeState();
@@ -77,6 +80,28 @@ const EmployeeManagement = () => {
     }
   }, [isError, errorMessage]);
 
+  useEffect(() => {
+    if (Array.isArray(employees)) {
+      setFilteredData(employees);
+    }
+  }, [employees]);
+
+  const handleSearch = (value) => {
+    setSearchText(value);
+    const lowerSearch = value.toLowerCase();
+    const filtered = Array.isArray(employees)
+      ? employees.filter(
+          (employee) =>
+            (employee.user?.name + " " + employee.user?.surname)
+              .toLowerCase()
+              .includes(lowerSearch) ||
+            employee.position?.toLowerCase().includes(lowerSearch) ||
+            employee.department?.toLowerCase().includes(lowerSearch)
+        )
+      : [];
+    setFilteredData(filtered);
+  };
+
   const showCreateModal = () => {
     form.resetFields();
     setIsEditing(false);
@@ -107,7 +132,7 @@ const EmployeeManagement = () => {
     try {
       const employeeData = {
         ...values,
-        employeeNumber:" ",
+        employeeNumber: " ",
         dateOfBirth: values.dateOfBirth?.format("YYYY-MM-DD"),
         hireDate: values.hireDate?.format("YYYY-MM-DD"),
       };
@@ -217,6 +242,15 @@ const EmployeeManagement = () => {
         }}
       >
         <h2 style={{ margin: 0 }}>Employees</h2>
+        <Search
+          placeholder="Search by name, position or department"
+          onSearch={handleSearch}
+          onChange={(e) => handleSearch(e.target.value)}
+          value={searchText}
+          enterButton
+          allowClear
+          style={{ maxWidth: 400, marginBottom: 20 }}
+        />
         <Space>
           <Button
             icon={<ReloadOutlined />}
@@ -225,6 +259,7 @@ const EmployeeManagement = () => {
           >
             Refresh
           </Button>
+
           <Button
             type="primary"
             icon={<PlusOutlined />}
@@ -247,7 +282,7 @@ const EmployeeManagement = () => {
 
       <Table
         columns={columns}
-        dataSource={Array.isArray(employees) ? employees : []}
+        dataSource={filteredData}
         rowKey="id"
         loading={isPending}
         pagination={{
@@ -351,20 +386,6 @@ const EmployeeManagement = () => {
               >
                 <Input placeholder="Enter national ID number" />
               </Form.Item>
-
-              {/* <Form.Item
-                name="employeeNumber"
-                label="Employee Number"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter employee number",
-                  },
-                ]}
-                style={{ flex: 1 }}
-              >
-                <Input placeholder="Enter employee number" />
-              </Form.Item> */}
             </div>
 
             <div style={{ display: "flex", gap: "20px" }}>
