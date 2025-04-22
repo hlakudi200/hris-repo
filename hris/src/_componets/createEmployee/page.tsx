@@ -89,6 +89,7 @@ const EmployeeManagement = () => {
     setCurrentEmployeeId(employee.id);
     form.setFieldsValue({
       ...employee,
+      ...employee.user,
       dateOfBirth: employee.dateOfBirth ? moment(employee.dateOfBirth) : null,
       hireDate: employee.hireDate ? moment(employee.hireDate) : null,
     });
@@ -107,13 +108,13 @@ const EmployeeManagement = () => {
     try {
       const employeeData = {
         ...values,
-        employeeNumber:" ",
         dateOfBirth: values.dateOfBirth?.format("YYYY-MM-DD"),
         hireDate: values.hireDate?.format("YYYY-MM-DD"),
       };
 
       if (isEditing && currentEmployeeId) {
-        await updateEmployee({
+        debugger;
+        await updateEmployee( {
           id: currentEmployeeId,
           ...employeeData,
         });
@@ -172,6 +173,7 @@ const EmployeeManagement = () => {
       dataIndex: "email",
       key: "email",
       ellipsis: true,
+      render: (_, record) => record.user.emailAddress,
     },
     {
       title: "Hire Date",
@@ -290,7 +292,7 @@ const EmployeeManagement = () => {
 
             <div style={{ display: "flex", gap: "20px" }}>
               <Form.Item
-                name="email"
+                name="emailAddress"
                 label="Email"
                 rules={[
                   { required: true, message: "Please enter email" },
@@ -315,7 +317,7 @@ const EmployeeManagement = () => {
 
             <div style={{ display: "flex", gap: "20px" }}>
               <Form.Item
-                name="username"
+                name="userName"
                 label="Username"
                 rules={[{ required: true, message: "Please enter username" }]}
                 style={{ flex: 1 }}
@@ -351,20 +353,6 @@ const EmployeeManagement = () => {
               >
                 <Input placeholder="Enter national ID number" />
               </Form.Item>
-
-              {/* <Form.Item
-                name="employeeNumber"
-                label="Employee Number"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter employee number",
-                  },
-                ]}
-                style={{ flex: 1 }}
-              >
-                <Input placeholder="Enter employee number" />
-              </Form.Item> */}
             </div>
 
             <div style={{ display: "flex", gap: "20px" }}>
