@@ -1,15 +1,17 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getRole } from "@/utils/jwtDecoder";
+
 interface LayoutProps {
-  children?: React.ReactNode; // Children are optional to prevent errors
+  children?: React.ReactNode;
 }
 
 const withAuth = (WrappedLayout: React.ComponentType<LayoutProps>) => {
   const WithAuthWrapper: React.FC<LayoutProps> = ({ children, ...props }) => {
     const router = useRouter();
+    const [isRedirecting, setIsRedirecting] = useState(true);
 
     useEffect(() => {
       const token = sessionStorage.getItem("accessToken");
@@ -22,21 +24,24 @@ const withAuth = (WrappedLayout: React.ComponentType<LayoutProps>) => {
       try {
         const role = getRole(token);
 
-        // Redirect based on role
-        if (role === "employee") {
-          router.push("/employee");
-        } else if (role === "hrmanager") {
-          router.push("/hrManager");
-        } else if (role === "applicant") {
-          router.push("/applicant");
-        } else {
-          router.push("/");
-        }
+        const roleRedirectMap: Record<string, string> = {
+          employee: "/employee",
+          hrmanager: "/hrManager",
+          applicant: "/applicant",
+        };
+
+        const destination = roleRedirectMap[role] || "/";
+        router.push(destination);
       } catch (error) {
         console.error("Error decoding token:", error);
-        router.push("/"); //if decoding fails
+        router.push("/");
+      } finally {
+        setIsRedirecting(false);
       }
     }, [router]);
+
+    if (isRedirecting) return null; 
+
     return <WrappedLayout {...props}>{children}</WrappedLayout>;
   };
 
