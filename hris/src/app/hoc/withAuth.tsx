@@ -1,63 +1,46 @@
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuthState } from "@/providers/auth";
-import { Flex, Spin } from "antd";
-import React from "react";
+"use client";
 
-interface IWithAuthProps {
-  allowedRoles?: string[];
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { getRole } from "@/utils/jwtDecoder";
+interface LayoutProps {
+  children?: React.ReactNode; // Children are optional to prevent errors
 }
 
-const roleMap: Record<number, string> = {
-  1: "admin",
-  2: "employee",
-  3: "hrManager",
-};
-
-const withAuth = <P extends object>(
-  WrappedComponent: React.ComponentType<P>,
-  { allowedRoles = [] }: IWithAuthProps = {}
-) => {
-  const Wrapper: React.FC<P> = (props) => {
-    const { isSuccess, isPending, currentUser, isError } = useAuthState();
+const withAuth = (WrappedLayout: React.ComponentType<LayoutProps>) => {
+  const WithAuthWrapper: React.FC<LayoutProps> = ({ children, ...props }) => {
     const router = useRouter();
 
-    const userRoles = currentUser?.roles?.map((r) => roleMap[r.roleId]) || [];
-
     useEffect(() => {
-      if (!isPending && currentUser) {
-        const hasValidRole =
-          allowedRoles.length === 0 ||
-          userRoles.some((role) => allowedRoles.includes(role));
+      const token = sessionStorage.getItem("accessToken");
 
-        if (isError || !hasValidRole) {
-          if (userRoles.includes("admin")) {
-            router.replace("/hrManager");
-          } else if (userRoles.includes("employee")) {
-            router.replace("/employee");
-          } else {
-            router.replace("/");
-          }
-        }
+      if (!token) {
+        router.push("/");
+        return;
       }
-    }, [isPending, isError, currentUser, allowedRoles, router, userRoles]);
 
-    if (isPending || !isSuccess) {
-      return (
-        <Flex justify="center" style={{ marginBottom: 20 }}>
-          <Spin size="large" />
-        </Flex>
-      );
-    }
+      try {
+        const role = getRole(token);
 
-    const isAuthorized =
-      allowedRoles.length === 0 ||
-      userRoles.some((role) => allowedRoles.includes(role));
-
-    return isAuthorized ? <WrappedComponent {...props} /> : null;
+        // Redirect based on role
+        if (role === "employee") {
+          router.push("/employee");
+        } else if (role === "hrmanager") {
+          router.push("/hrManager");
+        } else if (role === "applicant") {
+          router.push("/applicant");
+        } else {
+          router.push("/");
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        router.push("/"); //if decoding fails
+      }
+    }, [router]);
+    return <WrappedLayout {...props}>{children}</WrappedLayout>;
   };
 
-  return Wrapper;
+  return WithAuthWrapper;
 };
 
 export default withAuth;
