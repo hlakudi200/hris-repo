@@ -21,7 +21,7 @@ import { PayrollTransactionProvider } from "@/providers/payrolltransaction";
 import { EmailProvider } from "@/providers/email";
 import { LeaveProvider } from "@/providers/leaves";
 import { ApplicantProvider } from "@/providers/jobApplicant";
-import styles from "./styles/global.module.css"; 
+
 import withAuth from "../hoc/withAuth";
 
 const { Header, Sider, Content } = Layout;
