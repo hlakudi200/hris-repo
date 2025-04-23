@@ -5,6 +5,8 @@ using Abp.Domain.Repositories;
 using hrisApi.Domains.Payroll_Processing;
 using hrisApi.Domains.Recruitment_Module;
 using hrisApi.Services.JobApllicantService.DTO;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 
 namespace hrisApi.Services.JobApllicantService
 {
@@ -15,13 +17,17 @@ namespace hrisApi.Services.JobApllicantService
         {
             _repository = repository;
         }
-        public async Task<JobApplicantDto> GetJobApplicantById(long UserId)
+        public async Task<JobApplicantResponseDto> GetJobApplicantById(long UserId)
         {
-            var query = await _repository.FirstOrDefaultAsync(p => p.UserId == UserId);
+            var query = await _repository
+             .GetAll()
+             .Include(p => p.User)
+             .FirstOrDefaultAsync(p => p.UserId == UserId);
 
-            var jobApplicant = ObjectMapper.Map<JobApplicantDto>(query);
+            var jobApplicant = ObjectMapper.Map<JobApplicantResponseDto>(query);
 
             return jobApplicant;
         }
+
     }
 }

@@ -19,7 +19,7 @@ import styels from "./styles/global.module.css";
 import { PayrollTransactionProvider } from "@/providers/payrolltransaction";
 import { EmailProvider } from "@/providers/email";
 import { LeaveProvider } from "@/providers/leaves";
-
+import { ApplicantProvider } from "@/providers/jobApplicant";
 const { Header, Sider, Content } = Layout;
 
 const siderItems: ItemType<MenuItemType>[] = [
@@ -76,7 +76,8 @@ const Applicant = ({ children }: { children: React.ReactNode }) => {
     <EmailProvider>
       <PayrollTransactionProvider>
         <EmployeeProvider>
-          <LeaveProvider>
+        <ApplicantProvider>
+        <LeaveProvider>
             <LeaveRequestProvider>
               <Layout className={styels.layout}>
                 <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -127,6 +128,8 @@ const Applicant = ({ children }: { children: React.ReactNode }) => {
               </Layout>
             </LeaveRequestProvider>
           </LeaveProvider>
+        </ApplicantProvider>
+          
         </EmployeeProvider>
       </PayrollTransactionProvider>
     </EmailProvider>

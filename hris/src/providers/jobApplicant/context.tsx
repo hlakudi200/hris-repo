@@ -2,10 +2,12 @@
 'use client';
 import { createContext } from "react";
 import { IJobApplication } from "../jobApplication/context";
+import { IUser } from "../auth/context";
 
 export interface IJobApplicant {
     id?: string; 
     userId: number;
+    user?:IUser
     nationalIdNo: number;
     gender: string;
     dateofBirth: string; 

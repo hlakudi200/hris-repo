@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import type { TableColumnsType } from "antd";
+import type { TableColumnsType, TablePaginationConfig } from "antd";
 import { 
   Table, 
   Spin, 
@@ -21,15 +21,17 @@ import {
   useJobApplicationActions,
   useJobApplicationState,
 } from "@/providers/jobApplication";
+
 import { IJobApplication } from "@/providers/jobApplication/context";
 import { toast } from "@/providers/toast/toast";
 import FileUpload from "../fileUploadComponent/fileUpload";
 import { useEmailActions } from "@/providers/email";
 import { applicationSubmittedTemplate } from "@/providers/email/emailTemplates/applicationSubmitted";
+import { SortOrder } from "antd/es/table/interface";
 
 const { Search } = AntdInput;
 const { Option } = Select;
-const { Paragraph, Title } = Typography;
+const { Paragraph} = Typography;
 
 interface DataType {
   key: string;
@@ -233,14 +235,21 @@ const ApplicantJobView: React.FC = () => {
     },
   ];
 
-  const handleTableChange = (pagination: any, filters: any, sorter: any) => {
-    // Handle sorting
+  interface Sorter {
+    field?: string;
+    order?: SortOrder;
+  }
+
+  const handleTableChange = (
+    _pagination: TablePaginationConfig,
+    _filters: Record<string, (string | number | boolean)[] | null>,
+    sorter: Sorter
+  ) => {
     if (sorter.field) {
       setSortField(sorter.field);
       setSortOrder(sorter.order || "ascend");
     }
   };
-
   return (
     <div style={{ padding: "1rem", overflowY: "auto", height: "76vh" }}>
       <div style={{ marginBottom: "1rem" }}>
