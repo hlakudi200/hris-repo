@@ -24,6 +24,7 @@ import styels from "./styles/global.module.css";
 import { EmailProvider } from "@/providers/email";
 import { useAuthActions, useAuthState } from "@/providers/auth";
 import withAuth from "../hoc/withAuth";
+import { LeaveProvider } from "@/providers/leaves";
 
 const { Header, Sider, Content } = Layout;
 
@@ -93,51 +94,57 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
     <EmailProvider>
       <PayrollTransactionProvider>
         <EmployeeProvider>
-          <LeaveRequestProvider>
-            <Layout className={styels.layout}>
-              <Sider trigger={null} collapsible collapsed={collapsed}>
-                <div className="demo-logo-vertical" />
-                <Menu
-                  onClick={({ key }) => router.push(key)}
-                  theme="dark"
-                  mode="inline"
-                  defaultSelectedKeys={["/hrManager"]}
-                  items={siderItems}
-                />
-              </Sider>
-              <Layout>
-                <Header
-                  style={{
-                    padding: 0,
-                    backgroundColor: "white",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Button
-                    type="text"
-                    icon={
-                      collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
-                    }
-                    onClick={() => setCollapsed(!collapsed)}
-                    style={{
-                      fontSize: "16px",
-                      width: 64,
-                      height: 64,
-                    }}
+          <LeaveProvider>
+            <LeaveRequestProvider>
+              <Layout className={styels.layout}>
+                <Sider trigger={null} collapsible collapsed={collapsed}>
+                  <div className="demo-logo-vertical" />
+                  <Menu
+                    onClick={({ key }) => router.push(key)}
+                    theme="dark"
+                    mode="inline"
+                    defaultSelectedKeys={["/hrManager"]}
+                    items={siderItems}
                   />
-                  <div className={styels.profileMenu}>
-                    <Dropdown menu={userMenu} trigger={["click"]}>
-                      <Button type="text" icon={<UserOutlined />}>
-                        {currentUser?.emailAddress ?? "User"}
-                      </Button>
-                    </Dropdown>
-                  </div>
-                </Header>
-                <Content className={styels.content}>{children}</Content>
+                </Sider>
+                <Layout>
+                  <Header
+                    style={{
+                      padding: 0,
+                      backgroundColor: "white",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Button
+                      type="text"
+                      icon={
+                        collapsed ? (
+                          <MenuUnfoldOutlined />
+                        ) : (
+                          <MenuFoldOutlined />
+                        )
+                      }
+                      onClick={() => setCollapsed(!collapsed)}
+                      style={{
+                        fontSize: "16px",
+                        width: 64,
+                        height: 64,
+                      }}
+                    />
+                    <div className={styels.profileMenu}>
+                      <Dropdown menu={userMenu} trigger={["click"]}>
+                        <Button type="text" icon={<UserOutlined />}>
+                          {currentUser?.emailAddress ?? "User"}
+                        </Button>
+                      </Dropdown>
+                    </div>
+                  </Header>
+                  <Content className={styels.content}>{children}</Content>
+                </Layout>
               </Layout>
-            </Layout>
-          </LeaveRequestProvider>
+            </LeaveRequestProvider>
+          </LeaveProvider>
         </EmployeeProvider>
       </PayrollTransactionProvider>
     </EmailProvider>
