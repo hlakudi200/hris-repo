@@ -25,16 +25,21 @@ using hrisApi.Services.EmailService.DTO;
 using Microsoft.EntityFrameworkCore;
 using Abp.EntityFrameworkCore.Repositories;
 using Abp.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Image = iTextSharp.text.Image;
+using System.Globalization;
 
 [AbpAuthorize]
 public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransaction, PayrollTransactionDto, Guid>, IPayrollTransactionAppService
 {
     private readonly EmailAppService _emailAppService;
     private readonly IResourceService resourceService;
+    private readonly IWebHostEnvironment _hostingEnvironment;
 
-    public PayrollTransactionAppService(IRepository<PayrollTransaction, Guid> repository, EmailAppService emailAppService) : base(repository)
+    public PayrollTransactionAppService(IRepository<PayrollTransaction, Guid> repository, EmailAppService emailAppService, IWebHostEnvironment hostingEnvironment) : base(repository)
     {
         _emailAppService = emailAppService;
+        _hostingEnvironment = hostingEnvironment;
     }
 
     public override async Task<PayrollTransactionDto> CreateAsync(PayrollTransactionDto input)
@@ -73,14 +78,29 @@ public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransacti
     [Route("api/payroll/download-pdf/{id}")]
     public async Task<FileDto> DownloadPayrollPdfAsync(Guid id)
     {
-        var entity = await Repository.GetAsync(id);
+        //var entity = await Repository.GetAsync(id);
+
+        var entity = await Repository
+        .GetAllIncluding(t => t.PayrollProfile, t => t.PayrollProfile.Employee, t => t.PayrollProfile.Employee.User)
+        .FirstOrDefaultAsync(t => t.Id == id);
+
+
         if (entity == null)
         {
             throw new EntityNotFoundException(typeof(PayrollTransaction), id);
         }
 
         var dto = MapToEntityDto(entity);
-        var fileDto = GeneratePdf(dto);
+
+        // Get employee name
+        string employeeName = "Unknown Employee";
+        if (entity.PayrollProfile?.Employee?.User != null)
+        {
+            employeeName = $"{entity.PayrollProfile.Employee.User.Name} {entity.PayrollProfile.Employee.User.Surname}";
+        }
+
+
+        var fileDto = GeneratePdf(dto, employeeName);
 
         // Ensure the fileDto is being properly returned
         if (fileDto == null || fileDto.FileBytes == null || fileDto.FileBytes.Length == 0)
@@ -88,15 +108,100 @@ public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransacti
             throw new UserFriendlyException("Error: PDF generation failed or empty.");
         }
 
+
+
         return fileDto;
     }
-    private FileDto GeneratePdf(PayrollTransactionDto payroll)
+    //private FileDto GeneratePdf(PayrollTransactionDto payroll, string employeeName)
+    //{
+    //    using (var memoryStream = new MemoryStream())
+    //    {
+    //        Document document = new Document(PageSize.A4, 50, 50, 50, 50);
+    //        PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
+    //        document.Open();
+
+    //        // Add title
+    //        Paragraph title = new Paragraph("Payroll Transaction",
+    //            new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD));
+    //        title.Alignment = Element.ALIGN_CENTER;
+    //        title.SpacingAfter = 20;
+    //        document.Add(title);
+
+    //        // Add transaction details table
+    //        PdfPTable table = new PdfPTable(2);
+    //        table.WidthPercentage = 100;
+    //        table.SetWidths(new float[] { 1f, 2f });
+
+    //        // Add rows
+    //        AddTableRow(table, "Transaction ID:", payroll.Id.ToString());
+    //        // Add employee name if you have it in your DTO
+    //        AddTableRow(table, "Employee Name:", employeeName);
+    //        AddTableRow(table, "Gross Amount:", payroll.GrossAmount.ToString("C"));
+    //        AddTableRow(table, "Tax Amount:", payroll.TaxAmount.ToString("C"));
+    //        AddTableRow(table, "Net Amount:", payroll.NetAmount.ToString("C"));
+
+    //        document.Add(table);
+    //        document.Close();
+
+    //        // Create file DTO for download
+    //        return new FileDto
+    //        {
+    //            FileName = $"Payroll_{payroll.Id}_{DateTime.Now:yyyyMMdd}.pdf",
+    //            ContentType = "application/pdf",
+    //            FileBytes = memoryStream.ToArray()
+    //        };
+    //    }
+    //}
+
+    //private void AddTableRow(PdfPTable table, string label, string value)
+    //{
+    //    PdfPCell cell1 = new PdfPCell(new Phrase(label, new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+    //    cell1.Border = Rectangle.NO_BORDER;
+    //    cell1.HorizontalAlignment = Element.ALIGN_LEFT;
+    //    cell1.PaddingBottom = 8f;
+
+    //    PdfPCell cell2 = new PdfPCell(new Phrase(value, new Font(Font.FontFamily.HELVETICA, 12)));
+    //    cell2.Border = Rectangle.NO_BORDER;
+    //    cell2.HorizontalAlignment = Element.ALIGN_LEFT;
+    //    cell2.PaddingBottom = 8f;
+
+    //    table.AddCell(cell1);
+    //    table.AddCell(cell2);
+    //}
+
+
+    private FileDto GeneratePdf(PayrollTransactionDto payroll, string employeeName)
     {
         using (var memoryStream = new MemoryStream())
         {
             Document document = new Document(PageSize.A4, 50, 50, 50, 50);
             PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
             document.Open();
+
+            // Add company logo
+            try
+            {
+                // Get the web root path
+                string webRootPath = _hostingEnvironment.WebRootPath;
+                string logoPath = Path.Combine(webRootPath, "images", "hrlogo.png");
+
+                if (File.Exists(logoPath))
+                {
+                    Image logo = Image.GetInstance(logoPath);
+
+                    // Resize logo if needed
+                    logo.ScaleToFit(150, 70);
+                    logo.Alignment = Element.ALIGN_CENTER;
+
+                    document.Add(logo);
+                    document.Add(new Paragraph(" ")); // Add some space after logo
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log exception but continue without logo
+                Logger.Error("Error adding company logo to PDF", ex);
+            }
 
             // Add title
             Paragraph title = new Paragraph("Payroll Transaction",
@@ -105,20 +210,39 @@ public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransacti
             title.SpacingAfter = 20;
             document.Add(title);
 
-            // Add transaction details table
+            // Add transaction details table with borders
             PdfPTable table = new PdfPTable(2);
             table.WidthPercentage = 100;
             table.SetWidths(new float[] { 1f, 2f });
+            table.SpacingBefore = 10f;
+            table.SpacingAfter = 10f;
 
-            // Add rows
-            AddTableRow(table, "Transaction ID:", payroll.Id.ToString());
-            // Add employee name if you have it in your DTO
-            // AddTableRow(table, "Employee Name:", payroll.EmployeeName);
-            AddTableRow(table, "Gross Amount:", payroll.GrossAmount.ToString("C"));
-            AddTableRow(table, "Tax Amount:", payroll.TaxAmount.ToString("C"));
-            AddTableRow(table, "Net Amount:", payroll.NetAmount.ToString("C"));
+            // Table header
+            PdfPCell headerCell1 = new PdfPCell(new Phrase("Details", new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD)));
+            headerCell1.BackgroundColor = new BaseColor(220, 220, 220);
+            headerCell1.HorizontalAlignment = Element.ALIGN_CENTER;
+            headerCell1.VerticalAlignment = Element.ALIGN_MIDDLE;
+            headerCell1.Padding = 8f;
+            headerCell1.Colspan = 2;
+            table.AddCell(headerCell1);
+
+            // Add rows with borders
+            AddTableRowWithBorder(table, "Transaction ID:", payroll.Id.ToString());
+            AddTableRowWithBorder(table, "Employee Name:", employeeName);
+            AddTableRowWithBorder(table, "Date:", DateTime.Now.ToString("dd/MM/yyyy"));
+            AddTableRowWithBorder(table, "Gross Amount:", payroll.GrossAmount.ToString("C", new CultureInfo("en-ZA")));
+            AddTableRowWithBorder(table, "Tax Amount:", payroll.TaxAmount.ToString("C", new CultureInfo("en-ZA")));
+            AddTableRowWithBorder(table, "Net Amount:", payroll.NetAmount.ToString("C", new CultureInfo("en-ZA")), true);
 
             document.Add(table);
+
+            // Add footer
+            Paragraph footer = new Paragraph("This is an official payroll document. Tax rate applied: 15%",
+                new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC));
+            footer.Alignment = Element.ALIGN_CENTER;
+            footer.SpacingBefore = 30f;
+            document.Add(footer);
+
             document.Close();
 
             // Create file DTO for download
@@ -131,17 +255,21 @@ public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransacti
         }
     }
 
-    private void AddTableRow(PdfPTable table, string label, string value)
+    private void AddTableRowWithBorder(PdfPTable table, string label, string value, bool highlight = false)
     {
+        BaseColor backgroundColor = highlight ? new BaseColor(245, 245, 245) : BaseColor.WHITE;
+
         PdfPCell cell1 = new PdfPCell(new Phrase(label, new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
-        cell1.Border = Rectangle.NO_BORDER;
+        cell1.BackgroundColor = backgroundColor;
         cell1.HorizontalAlignment = Element.ALIGN_LEFT;
-        cell1.PaddingBottom = 8f;
+        cell1.VerticalAlignment = Element.ALIGN_MIDDLE;
+        cell1.Padding = 8f;
 
         PdfPCell cell2 = new PdfPCell(new Phrase(value, new Font(Font.FontFamily.HELVETICA, 12)));
-        cell2.Border = Rectangle.NO_BORDER;
+        cell2.BackgroundColor = backgroundColor;
         cell2.HorizontalAlignment = Element.ALIGN_LEFT;
-        cell2.PaddingBottom = 8f;
+        cell2.VerticalAlignment = Element.ALIGN_MIDDLE;
+        cell2.Padding = 8f;
 
         table.AddCell(cell1);
         table.AddCell(cell2);
