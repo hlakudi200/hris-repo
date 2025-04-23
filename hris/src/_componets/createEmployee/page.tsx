@@ -28,9 +28,7 @@ import moment from "moment";
 
 const { Option } = Select;
 
-
 const { Search } = Input;
-
 
 const EmployeeManagement = () => {
   const { message } = App.useApp();
@@ -142,12 +140,15 @@ const EmployeeManagement = () => {
 
       if (isEditing && currentEmployeeId) {
         debugger;
-        await updateEmployee( {
+        await updateEmployee({
           id: currentEmployeeId,
           ...employeeData,
         });
       } else {
-        await createEmployee({...employeeData, email: employeeData.emailAddress});
+        await createEmployee({
+          ...employeeData,
+          email: employeeData.emailAddress,
+        });
       }
     } catch (error) {
       setLocalSubmitting(false);
@@ -422,25 +423,41 @@ const EmployeeManagement = () => {
               </Form.Item>
             </div>
 
-            <Form.Item
-              name="roleNames"
-              label="Roles"
-              rules={[
-                { required: true, message: "Please select at least one role" },
-              ]}
-            >
-              <Select
-                mode="multiple"
-                placeholder="Select roles"
-                style={{ width: "100%" }}
+            <div style={{ display: "flex", gap: "20px" }}>
+              {!isEditing && (
+                <Form.Item
+                  name="basicSalary"
+                  label="Basic Salary"
+                  rules={[{ required: true, message: "Please enter salary" }]}
+                  style={{ flex: 1 }}
+                >
+                  <Input placeholder="Enter salary" />
+                </Form.Item>
+              )}
+              <Form.Item
+                name="roleNames"
+                label="Roles"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select at least one role",
+                  },
+                ]}
+                style={{ flex: 1 }}
               >
-                {availableRoles.map((role) => (
-                  <Option key={role} value={role}>
-                    {role}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
+                <Select
+                  mode="multiple"
+                  placeholder="Select roles"
+                  style={{ width: "100%" }}
+                >
+                  {availableRoles.map((role) => (
+                    <Option key={role} value={role}>
+                      {role}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </div>
 
             <Form.Item>
               <div

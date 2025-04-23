@@ -21,7 +21,7 @@ namespace hrisApi.Domains.Employee_Management
         private readonly IRepository<PayrollProfile, Guid> _payrollProfileRepository;
         private readonly IRepository<Leave, Guid> _leaveRepository;
 
-        public EmployeeManager(UserManager userManager, IRepository<Employee, Guid> employeeRepository, IRepository<PayrollProfile, Guid> payrollProfileRepository, IRepository<Leave, Guid>  leaveRepository)
+        public EmployeeManager(UserManager userManager, IRepository<Employee, Guid> employeeRepository, IRepository<PayrollProfile, Guid> payrollProfileRepository, IRepository<Leave, Guid> leaveRepository)
         {
             _userManager = userManager;
             _employeeRepository = employeeRepository;
@@ -43,7 +43,8 @@ namespace hrisApi.Domains.Employee_Management
             DateTime HireDate,
             string Position,
             string Department,
-            Guid ManagerId
+            Guid ManagerId,
+            decimal basicSalary
             )
         {
             var user = new User
@@ -91,7 +92,7 @@ namespace hrisApi.Domains.Employee_Management
             var payrollProfile = new PayrollProfile
             {
                 EmployeeId = employee.Id,
-                BasicSalary = 0,
+                BasicSalary = basicSalary,
                 TaxRate = 10
             };
 
@@ -191,7 +192,7 @@ namespace hrisApi.Domains.Employee_Management
         }
 
         public async Task<List<Employee>> GetAllAsync()
-        {    
+        {
             return await _employeeRepository.GetAllListAsync();
         }
 
