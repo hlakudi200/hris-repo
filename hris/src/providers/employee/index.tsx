@@ -46,10 +46,8 @@ export const EmployeeProvider = ({
     const endpoint = "/api/services/app/Employee/Create";
 
     try {
-      debugger;
       const response = await instance.post(endpoint, employee);
       if (response.status === 200) {
-        console.log(response.data.result);
         dispatch(createEmployeeSuccess(response.data.result));
 
         await getAllEmployees();
@@ -132,7 +130,6 @@ export const EmployeeProvider = ({
       const response = await instance.get(endpoint);
 
       if (response.status === 200 && response.data && response.data.result) {
-        debugger;
         // Ensure we're getting the items array from the response
         const employees = Array.isArray(response.data.result.items)
           ? response.data.result.items

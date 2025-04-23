@@ -21,7 +21,7 @@ import {
 import moment from "moment";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import styles from "./styles/styles.module.css"
+import styles from "./styles/styles.module.css";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -34,7 +34,6 @@ const InterviewManagement = ({ jobApplicationId: propJobApplicationId }) => {
   const [currentInterviewId, setCurrentInterviewId] = useState(null);
   const [localSubmitting, setLocalSubmitting] = useState(false);
   const [isFiltered, setIsFiltered] = useState(false);
-  
 
   const searchParams = useSearchParams();
   const urlJobApplicationId = searchParams.get("jobApplicationId");
@@ -60,9 +59,7 @@ const InterviewManagement = ({ jobApplicationId: propJobApplicationId }) => {
     }
   }, [jobApplicationId]);
 
-  useEffect(() => {
-    console.log("Interviews updated:", interviews);
-  }, [interviews]);
+  useEffect(() => {}, [interviews]);
 
   useEffect(() => {
     if (isSuccess && !isPending && localSubmitting) {
