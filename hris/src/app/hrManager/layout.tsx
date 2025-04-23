@@ -23,6 +23,7 @@ import { EmployeeProvider } from "@/providers/employee";
 import styels from "./styles/global.module.css";
 import { EmailProvider } from "@/providers/email";
 import { useAuthActions, useAuthState } from "@/providers/auth";
+import withAuth from "../hoc/withAuth";
 
 const { Header, Sider, Content } = Layout;
 
@@ -143,4 +144,4 @@ const HrManager = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default HrManager;
+export default withAuth(HrManager);

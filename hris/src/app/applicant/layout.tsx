@@ -10,6 +10,7 @@ import { Button, Dropdown, Layout } from "antd";
 import { useRouter } from "next/navigation";
 import { useAuthActions, useAuthState } from "@/providers/auth";
 import styles from "./styles/global.module.css"; 
+import withAuth from "../hoc/withAuth";
 
 const { Header, Content } = Layout;
 
@@ -68,4 +69,4 @@ const Applicant = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default Applicant;
+export default withAuth(Applicant);

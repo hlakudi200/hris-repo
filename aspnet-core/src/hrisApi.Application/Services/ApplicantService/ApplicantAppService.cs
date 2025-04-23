@@ -9,7 +9,6 @@ using hrisApi.Users.Dto;
 
 namespace hrisApi.Services.ApplicantService
 {
-    [AbpAuthorize]
     public class ApplicantAppService : AsyncCrudAppService<User, UserDto, long>, IApplicantAppService
     {
         private readonly UserManager _userManager;
@@ -29,8 +28,10 @@ namespace hrisApi.Services.ApplicantService
                 IsEmailConfirmed = false,
                 TenantId = AbpSession.TenantId
             };
-
             var result = await _userManager.CreateAsync(user, input.Password);
+
+            await _userManager.AddToRoleAsync(user, "APPLICANT");
+
 
             if (!result.Succeeded)
             {
