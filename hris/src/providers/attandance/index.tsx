@@ -109,6 +109,7 @@ export const AttandanceProvider = ({
       .post(endpoint, Attandance)
       .then((response) => {
         dispatch(createAttandanceSuccess(response.data));
+        getWeeklyHours(Attandance.employeeId);
       })
       .catch((error) => {
         console.error(error);
