@@ -10,6 +10,7 @@ using Abp.Domain.Services;
 using Abp.UI;
 using hrisApi.Authorization.Users;
 using hrisApi.Domains.Attendance_Management;
+using hrisApi.Domains.Employee_Management.Helpers;
 using hrisApi.Domains.Payroll_Processing;
 
 namespace hrisApi.Domains.Employee_Management
@@ -21,7 +22,7 @@ namespace hrisApi.Domains.Employee_Management
         private readonly IRepository<PayrollProfile, Guid> _payrollProfileRepository;
         private readonly IRepository<Leave, Guid> _leaveRepository;
 
-        public EmployeeManager(UserManager userManager, IRepository<Employee, Guid> employeeRepository, IRepository<PayrollProfile, Guid> payrollProfileRepository, IRepository<Leave, Guid>  leaveRepository)
+        public EmployeeManager(UserManager userManager, IRepository<Employee, Guid> employeeRepository, IRepository<PayrollProfile, Guid> payrollProfileRepository, IRepository<Leave, Guid> leaveRepository)
         {
             _userManager = userManager;
             _employeeRepository = employeeRepository;
@@ -43,7 +44,8 @@ namespace hrisApi.Domains.Employee_Management
             DateTime HireDate,
             string Position,
             string Department,
-            Guid ManagerId
+            Guid ManagerId,
+            decimal basicSalary
             )
         {
             var user = new User
@@ -91,8 +93,8 @@ namespace hrisApi.Domains.Employee_Management
             var payrollProfile = new PayrollProfile
             {
                 EmployeeId = employee.Id,
-                BasicSalary = 0,
-                TaxRate = 10
+                BasicSalary = basicSalary,
+                TaxRate = TaxCalculator.GetAnnualTaxRate(basicSalary),
             };
 
             await _payrollProfileRepository.InsertAsync(payrollProfile);
@@ -191,7 +193,7 @@ namespace hrisApi.Domains.Employee_Management
         }
 
         public async Task<List<Employee>> GetAllAsync()
-        {    
+        {
             return await _employeeRepository.GetAllListAsync();
         }
 

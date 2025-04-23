@@ -91,8 +91,8 @@ namespace hrisApi.Services.Employee_Management
                  input.HireDate,
                  input.Position,
                  input.Department,
-                 input.ManagerId
-
+                 input.ManagerId,
+                 input.BasicSalary
                  );
 
             await SendEmployeeCredentialsEmail(

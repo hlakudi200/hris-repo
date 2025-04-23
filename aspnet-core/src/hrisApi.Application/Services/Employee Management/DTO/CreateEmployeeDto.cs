@@ -51,6 +51,7 @@ namespace hrisApi.Services.Employee_Management.DTO
         public Guid ManagerId { get; set; }
 
         public string[] RoleNames { get; set; }
+        public decimal BasicSalary { get; set; }
 
 
 

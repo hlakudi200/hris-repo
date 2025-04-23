@@ -35,6 +35,7 @@ export interface ICreateEmployeeRequest {
   department: string;
   managerId: string;
   roleNames: string[];
+  basicSalary: number;
 }
 
 export interface IEmployeeDocument {
