@@ -13,7 +13,7 @@ namespace hrisApi.Services.PayrollProfileService.DTO
         public string EmployeeName { get; set; }
         public string EmployeePosition { get; set; }
         public decimal BasicSalary { get; set; }
-        public decimal TaxRate { get; } = 15.5m;
+        public decimal TaxRate { get; set; }
         public ICollection<PayrollTransaction> Transactions { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Abp.Application.Services;
+using Abp.Authorization;
 using Abp.Collections.Extensions;
 using Abp.Domain.Repositories;
 using Abp.UI;
@@ -27,8 +28,10 @@ namespace hrisApi.Services.ApplicantService
                 IsEmailConfirmed = false,
                 TenantId = AbpSession.TenantId
             };
-
             var result = await _userManager.CreateAsync(user, input.Password);
+
+            await _userManager.AddToRoleAsync(user, "APPLICANT");
+
 
             if (!result.Succeeded)
             {

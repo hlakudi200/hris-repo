@@ -21,6 +21,7 @@ import styels from "./styles/global.module.css";
 import { PayrollTransactionProvider } from "@/providers/payrolltransaction";
 import { EmailProvider } from "@/providers/email";
 import { LeaveProvider } from "@/providers/leaves";
+import withAuth from "../hoc/withAuth";
 
 const { Header, Sider, Content } = Layout;
 
@@ -139,4 +140,4 @@ const Employee = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default Employee;
+export default withAuth(Employee);

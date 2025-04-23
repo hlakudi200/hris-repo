@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useReducer } from "react";
+import { useContext, useEffect, useReducer } from "react";
 import { AuthReducer } from "./reducer";
 import {
   AuthActionContext,
@@ -29,6 +29,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
   const instance = getAxiosInstace();
 
+  useEffect(() => {
+    const token = sessionStorage.getItem("accessToken");
+    if (token) {
+      const role = getRole(token);
+      updateRole(role);
+      getCurrentUser(token);
+      dispatch(loginUserSuccess());
+    }
+  }, []);
+
   const loginUser = async (loginData: ILoginData) => {
     dispatch(loginUserPending());
 
@@ -37,6 +47,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await instance
       .post(endpoint, loginData)
       .then((response) => {
+        sessionStorage.setItem("accessToken", response.data.result.accessToken);
         const role = getRole(response.data.result.accessToken);
         updateRole(role);
         getCurrentUser(response.data.result.accessToken);
@@ -87,6 +98,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signOut = () => {
+    sessionStorage.clear();
     dispatch(signOutUser());
   };
 

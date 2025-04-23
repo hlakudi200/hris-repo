@@ -15,11 +15,15 @@ import { LeaveRequestProvider } from "@/providers/leaveRequest";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import { useRouter } from "next/navigation";
 import { useAuthActions, useAuthState } from "@/providers/auth";
+
 import styels from "./styles/global.module.css";
 import { PayrollTransactionProvider } from "@/providers/payrolltransaction";
 import { EmailProvider } from "@/providers/email";
 import { LeaveProvider } from "@/providers/leaves";
 import { ApplicantProvider } from "@/providers/jobApplicant";
+import styles from "./styles/global.module.css"; 
+import withAuth from "../hoc/withAuth";
+
 const { Header, Sider, Content } = Layout;
 
 const siderItems: ItemType<MenuItemType>[] = [
@@ -136,4 +140,4 @@ const Applicant = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default Applicant;
+export default withAuth(Applicant);

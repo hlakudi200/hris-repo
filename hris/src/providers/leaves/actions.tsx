@@ -10,6 +10,10 @@ export enum LeavesActionEnums {
   updateLeavesSuccess = "UPDATE_LEAVES_SUCCESS",
   updateLeavesError = "UPDATE_LEAVES_ERROR",
 
+  getAllLeavesPending = "GET_ALL_LEAVES_PENDING",
+  getAllLeavesSuccess = "GET_ALL_LEAVES_SUCCESS",
+  getAllLeavesError = "GET_ALL_LEAVES_ERROR",
+
   resetStateFlagsAction = "RESET_STATE_FLAGS",
 }
 
@@ -46,6 +50,24 @@ export const updateLeavesSuccess = createAction<ILeavesStateContext, ILeaves>(
 );
 export const updateLeavesError = createAction<ILeavesStateContext>(
   LeavesActionEnums.updateLeavesError,
+  () => ({ isPending: false, isSuccess: false, isError: true })
+);
+
+export const getAllLeavesPending = createAction<ILeavesStateContext>(
+  LeavesActionEnums.getAllLeavesPending,
+  () => ({ isPending: true, isSuccess: false, isError: false })
+);
+export const getAllLeavesSuccess = createAction<ILeavesStateContext, ILeaves>(
+  LeavesActionEnums.getAllLeavesSuccess,
+  (leavesList: ILeaves[]) => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+    leavesList,
+  })
+);
+export const getAllLeavesError = createAction<ILeavesStateContext>(
+  LeavesActionEnums.getAllLeavesError,
   () => ({ isPending: false, isSuccess: false, isError: true })
 );
 

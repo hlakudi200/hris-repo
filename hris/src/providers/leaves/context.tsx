@@ -2,6 +2,7 @@ import { createContext } from "react";
 
 export interface ILeaves {
   id?: string;
+  employeeId?: string;
   annual: number;
   sick: number;
   study: number;
@@ -13,9 +14,11 @@ export interface ILeavesStateContext {
   isSuccess: boolean;
   isError: boolean;
   leaves?: ILeaves;
+  leavesList?: ILeaves[];
 }
 export interface ILeavesActionContext {
   getLeaves: (employeeId: string) => Promise<void>;
+  getAllLeaves: () => Promise<void>;
   updateLeaves: (leaves: ILeaves) => Promise<void>;
   resetStateFlags: () => void;
 }

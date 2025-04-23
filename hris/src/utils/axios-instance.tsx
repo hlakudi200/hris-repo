@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://hrsystem-ntu7.onrender.com";
+const baseURL = "https://localhost:44311";
 
 export const getAxiosInstace = () => {
   const instance = axios.create({
@@ -11,9 +11,9 @@ export const getAxiosInstace = () => {
   });
 
   instance.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("accessToken");
     if (token) {
-      config.headers.Authorization = token;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   });
