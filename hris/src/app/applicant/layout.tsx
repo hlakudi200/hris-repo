@@ -6,9 +6,10 @@ import {
   UploadOutlined,
   FileFilled,
   HomeOutlined,
-  ClockCircleFilled,
+  FileSearchOutlined,
   LogoutOutlined,
   UserOutlined,
+  FormOutlined,
 } from "@ant-design/icons";
 import { Button, Dropdown, Layout, Menu } from "antd";
 import { EmployeeProvider, useEmployeeActions } from "@/providers/employee";
@@ -25,24 +26,24 @@ const { Header, Sider, Content } = Layout;
 
 const siderItems: ItemType<MenuItemType>[] = [
   {
-    key: "/employee",
+    key: "/applicant",
     icon: <HomeOutlined />,
     label: "Home",
   },
   {
-    key: "/employee/logHours",
-    icon: <ClockCircleFilled />,
+    key: "/applicant/applications",
+    icon: <FormOutlined />,
     label: "Applicantions",
   },
   {
-    key: "/employee/leave",
-    icon: <UploadOutlined />,
-    label: "Profile",
+    key: "/applicant/interviews",
+    icon: <FileSearchOutlined/>,
+    label: "Interviews",
   },
   {
-    key: "/employee/payroll",
-    icon: <FileFilled />,
-    label: "Sign out",
+    key: "/applicant/profile",
+    icon: <UserOutlined/>,
+    label: "Profile",
   },
   
 ];

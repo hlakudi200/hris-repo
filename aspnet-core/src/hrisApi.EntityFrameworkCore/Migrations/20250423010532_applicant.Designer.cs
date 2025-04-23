@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using hrisApi.EntityFrameworkCore;
@@ -11,9 +12,11 @@ using hrisApi.EntityFrameworkCore;
 namespace hrisApi.Migrations
 {
     [DbContext(typeof(hrisApiDbContext))]
-    partial class hrisApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423010532_applicant")]
+    partial class applicant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2109,56 +2112,7 @@ namespace hrisApi.Migrations
                     b.ToTable("Reimbursements");
                 });
 
-            modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.Interview", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Feedback")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Interviewer")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid>("JobApplicationId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Mode")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("ScheduledDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobApplicationId");
-
-                    b.ToTable("Interviews");
-                });
-
-            modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.JobApplicant", b =>
+            modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.Applicant", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -2261,13 +2215,65 @@ namespace hrisApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("JobApplicants");
+                    b.ToTable("Applicant");
+                });
+
+            modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.Interview", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Feedback")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Interviewer")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("JobApplicationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Mode")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ScheduledDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobApplicationId");
+
+                    b.ToTable("Interviews");
                 });
 
             modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.JobApplication", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ApplicantId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ApplicantName")
@@ -2291,9 +2297,6 @@ namespace hrisApi.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid?>("JobApplicantId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("JobPostingId")
                         .HasColumnType("uuid");
 
@@ -2311,7 +2314,7 @@ namespace hrisApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("JobApplicantId");
+                    b.HasIndex("ApplicantId");
 
                     b.HasIndex("JobPostingId");
 
@@ -2808,16 +2811,7 @@ namespace hrisApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.Interview", b =>
-                {
-                    b.HasOne("hrisApi.Domains.Recruitment_Module.JobApplication", null)
-                        .WithMany("Interviews")
-                        .HasForeignKey("JobApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.JobApplicant", b =>
+            modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.Applicant", b =>
                 {
                     b.HasOne("hrisApi.Authorization.Users.User", "User")
                         .WithMany()
@@ -2828,11 +2822,20 @@ namespace hrisApi.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.Interview", b =>
+                {
+                    b.HasOne("hrisApi.Domains.Recruitment_Module.JobApplication", null)
+                        .WithMany("Interviews")
+                        .HasForeignKey("JobApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.JobApplication", b =>
                 {
-                    b.HasOne("hrisApi.Domains.Recruitment_Module.JobApplicant", "Applicant")
+                    b.HasOne("hrisApi.Domains.Recruitment_Module.Applicant", "Applicant")
                         .WithMany()
-                        .HasForeignKey("JobApplicantId");
+                        .HasForeignKey("ApplicantId");
 
                     b.HasOne("hrisApi.Domains.Recruitment_Module.JobPosting", "JobPosting")
                         .WithMany("Applications")

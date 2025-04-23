@@ -21,6 +21,7 @@ public class hrisApiDbContext : AbpZeroDbContext<Tenant, Role, User, hrisApiDbCo
     public DbSet<LeaveRequest> LeaveRequests { get; set; }
     public DbSet<AttendanceRecord> AttendanceRecords { get; set; }
     public DbSet<JobApplication> jobApplications { get; set; }
+    public DbSet<JobApplicant> JobApplicants { get; set; }
     public DbSet<JobPosting> jobPostings { get; set; }
     public DbSet<OfferLetter> offerLetters { get; set; }
     public DbSet<PayrollProfile> PayrollProfiles { get; set; }

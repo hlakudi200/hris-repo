@@ -89,6 +89,9 @@ namespace hrisApi.Web.Host.Startup
                     )
                 )
             );
+
+            services.AddControllers();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
