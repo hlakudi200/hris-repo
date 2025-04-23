@@ -2,7 +2,7 @@ import React from 'react'
 
 const  ApplicationsStatus=()=> {
   return (
-    <div>Application Satus</div>
+    <div>Application Status</div>
   )
 }
 
