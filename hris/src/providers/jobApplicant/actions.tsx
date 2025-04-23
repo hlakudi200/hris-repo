@@ -52,7 +52,7 @@ export const createApplicantSuccess = createAction<
   applicant,
 }));
 
-export const createProjecError = createAction<ApplicantStateContext>(
+export const createApplicantError = createAction<ApplicantStateContext>(
   ApplicantActionEnums.createApplicantError,
   () => ({ isPending: false, isSuccess: false, isError: true })
 );
@@ -73,7 +73,7 @@ export const updateApplicantSuccess = createAction<
   applicant,
 }));
 
-export const updateApplicantrror = createAction<ApplicantStateContext>(
+export const updateApplicantError = createAction<ApplicantStateContext>(
   ApplicantActionEnums.updateApplicantError,
   () => ({ isPending: false, isSuccess: false, isError: true })
 );

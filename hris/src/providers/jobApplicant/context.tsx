@@ -40,7 +40,7 @@ export interface IJobApplicant {
   export interface ApplicantActionContext {
     getApplicantById: (userId: number) => void;
     createApplicant: (applicant: IJobApplicant) => void;
-    updateApplicant: (Attandance: IJobApplicant) => void;
+    updateApplicant: (applicant: IJobApplicant) => void;
   }
   
   export const INITIAL_STATE: ApplicantStateContext = {
@@ -49,8 +49,8 @@ export interface IJobApplicant {
     isError: false,
   };
   
-  export const AttandanceStateContext =
+  export const JobApplicantStateContext =
     createContext<ApplicantStateContext>(INITIAL_STATE);
   
-  export const AttandanceActionContext =
+  export const JobApplicantActionContext =
     createContext<ApplicantActionContext>(undefined);
