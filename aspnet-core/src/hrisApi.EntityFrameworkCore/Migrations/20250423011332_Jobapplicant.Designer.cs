@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using hrisApi.EntityFrameworkCore;
@@ -11,9 +12,11 @@ using hrisApi.EntityFrameworkCore;
 namespace hrisApi.Migrations
 {
     [DbContext(typeof(hrisApiDbContext))]
-    partial class hrisApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423011332_Jobapplicant")]
+    partial class Jobapplicant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2270,6 +2273,9 @@ namespace hrisApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("ApplicantId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("ApplicantName")
                         .HasColumnType("text");
 
@@ -2291,9 +2297,6 @@ namespace hrisApi.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid?>("JobApplicantId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("JobPostingId")
                         .HasColumnType("uuid");
 
@@ -2311,7 +2314,7 @@ namespace hrisApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("JobApplicantId");
+                    b.HasIndex("ApplicantId");
 
                     b.HasIndex("JobPostingId");
 
@@ -2832,7 +2835,7 @@ namespace hrisApi.Migrations
                 {
                     b.HasOne("hrisApi.Domains.Recruitment_Module.JobApplicant", "Applicant")
                         .WithMany()
-                        .HasForeignKey("JobApplicantId");
+                        .HasForeignKey("ApplicantId");
 
                     b.HasOne("hrisApi.Domains.Recruitment_Module.JobPosting", "JobPosting")
                         .WithMany("Applications")

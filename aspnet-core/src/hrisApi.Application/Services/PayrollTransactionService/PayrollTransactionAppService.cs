@@ -564,6 +564,14 @@ public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransacti
     }
 
 
+    public async Task<List<PayrollTransactionDto>> GetAllPayrollTrasactionsAsync()
+    {
+        var query = await Repository.GetAllAsync();
+        var transactions = await query.ToListAsync();
+        var results = ObjectMapper.Map<List<PayrollTransactionDto>>(transactions);
+
+        return results;
+    }
 
 
 }

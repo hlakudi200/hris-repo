@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Authorization;
@@ -24,6 +25,18 @@ namespace hrisApi.Services.JobPostingService
             // Load all JobPostings including Applications
             var jobPostings = await _repository
                 .GetAllIncluding(p => p.Applications)
+                .ToListAsync();
+
+            var result = ObjectMapper.Map<List<JobPostingDto>>(jobPostings);
+
+            return result;
+        }
+
+        public async Task<List<JobPostingDto>> GetAllOpenInclude()
+        {
+            var jobPostings = await _repository
+                .GetAllIncluding(p => p.Applications)
+                .Where(p => p.CloseDate > DateTime.UtcNow)
                 .ToListAsync();
 
             var result = ObjectMapper.Map<List<JobPostingDto>>(jobPostings);

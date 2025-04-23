@@ -11,7 +11,7 @@ import { JobApplicationProvider } from "@/providers/jobApplication";
 import { InterviewProvider } from "@/providers/Interview";
 import { PayrollProvider } from "@/providers/payrollProfile";
 import { EmailProvider } from "@/providers/email";
-
+import { ApplicantProvider } from "@/providers/jobApplicant";
 export const metadata: Metadata = {
   title: "Ubuntu HR",
   description: "Ubuntu HR Information System",
@@ -80,6 +80,7 @@ export default function RootLayout({
               <ToastProvider />
               <JobPostingProvider>
                 <EmployeeProvider>
+                  <ApplicantProvider>
                   <AttandanceProvider>
                     <JobApplicationProvider>
                       <PayrollProvider>
@@ -87,6 +88,7 @@ export default function RootLayout({
                       </PayrollProvider>
                     </JobApplicationProvider>
                   </AttandanceProvider>
+                  </ApplicantProvider>
                 </EmployeeProvider>
               </JobPostingProvider>
             </AuthProvider>
