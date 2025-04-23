@@ -1,6 +1,7 @@
 
 'use client';
 import { createContext } from "react";
+import { IJobApplication } from "../jobApplication/context";
 
 export interface IJobApplicant {
     id?: string; 
@@ -34,7 +35,8 @@ export interface IJobApplicant {
     isPending: boolean;
     isSuccess: boolean;
     isError: boolean;
-    applicat?:IJobApplicant
+    applicant?:IJobApplicant;
+    JobApplications?:IJobApplication[]
   }
   
   export interface ApplicantActionContext {

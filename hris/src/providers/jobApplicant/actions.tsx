@@ -52,7 +52,7 @@ export const getApplicantJobApplicationsSuccess = createAction<
   IJobApplication[]
 >(
   ApplicantActionEnums.getApplicantJobApplicationsSuccess,
-  (jobApplications: IJobApplicant[]) => ({
+  (jobApplications: IJobApplication[]) => ({
     isPending: false,
     isSuccess: true,
     isError: false,

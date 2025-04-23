@@ -39,7 +39,7 @@ export const ApplicantProvider = ({
     await instance
       .get(endpoint)
       .then((response) => {
-        dispatch(getApplicantByIdSuccess(response.data.results));
+        dispatch(getApplicantByIdSuccess(response.data.result));
       })
       .catch((error) => {
         console.error(error);
@@ -53,7 +53,7 @@ export const ApplicantProvider = ({
     await instance
       .post(endpoint, applicant)
       .then((response) => {
-        dispatch(createApplicantSuccess(response.data));
+        dispatch(createApplicantSuccess(response.data.result));
       })
       .catch((error) => {
         console.error(error);
@@ -82,7 +82,7 @@ export const ApplicantProvider = ({
     await instance
       .put(endpoint, applicant)
       .then((response) => {
-        dispatch(updateApplicantSuccess(response.data));
+        dispatch(updateApplicantSuccess(response.data.result));
       })
       .catch((error) => {
         console.error(error);
