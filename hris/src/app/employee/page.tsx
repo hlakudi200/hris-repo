@@ -8,7 +8,7 @@ import LeaveCalendar from "@/_componets/leaveCalendar/leaveCalendar";
 
 const Employee = () => {
   return (
-    <div className={styles.container} style={{marginTop: -40 }}>
+    <div className={styles.container} style={{marginTop: -20 }}>
       <div className={styles.leftSection}>
         <Profile />
       </div>

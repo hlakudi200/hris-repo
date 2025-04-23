@@ -40,7 +40,7 @@ const AttendanceOverview = ({ showRecordButton = true }: AttendanceOverviewProps
       isActive = false;
       controller.abort();
     };
-  }, []);
+  }, [currentEmployee]);
 
   const currentDate = moment().format("YYYY MMMM D");
 

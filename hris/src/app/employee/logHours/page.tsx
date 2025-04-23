@@ -7,7 +7,7 @@ import LeaveCalendar from "@/_componets/leaveCalendar/leaveCalendar";
 
 const LogHoursPage: React.FC = () => {
   return (
-    <div className={styles.mainContainer} style={{ marginTop: -40 }}>
+    <div className={styles.mainContainer} style={{ marginTop: -20 }}>
       <div className={styles.subSection}>
         <AttendanceForm />
       </div>
