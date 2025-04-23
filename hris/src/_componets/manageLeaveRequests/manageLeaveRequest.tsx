@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Input, Table, Spin, Tag, Button, Modal} from "antd";
+import { Input, Table, Spin, Tag, Button, Modal } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
   useLeaveRequestActions,
@@ -14,23 +14,36 @@ import { toast } from "@/providers/toast/toast";
 import { useEmailActions } from "@/providers/email";
 import { rejectLeaveTemplate } from "@/providers/email/emailTemplates/rejectLeaveTemplate";
 import { approveLeaveTemplate } from "@/providers/email/emailTemplates/approveLeaveTemplate";
+import { useLeaveActions, useLeaveState } from "@/providers/leaves";
+import { ILeaves } from "@/providers/leaves/context";
+import { addLeave } from "@/utils/subtractLeaves";
+import dayjs from "dayjs";
 
 const { Search } = Input;
 
 const ManageLeaveRequest = () => {
-  const{sendEmail}=useEmailActions();
+  const { sendEmail } = useEmailActions();
   const { getLeaveRequests, updateLeaveRequest } = useLeaveRequestActions();
   const { leaveRequests, isPending, isSuccess } = useLeaveRequestState();
+  const { getAllLeaves, updateLeaves } = useLeaveActions();
+  const { leavesList } = useLeaveState();
   const [filteredData, setFilteredData] = useState<ILeaveRequest[]>([]);
   const [searchText, setSearchText] = useState("");
   const [processingId, setProcessingId] = useState<string | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalAction, setModalAction] = useState<"approve" | "decline" | null>(null);
-  const [selectedRequest, setSelectedRequest] = useState<ILeaveRequest | null>(null);
+  const [modalAction, setModalAction] = useState<"approve" | "decline" | null>(
+    null
+  );
+  const [selectedRequest, setSelectedRequest] = useState<ILeaveRequest | null>(
+    null
+  );
+  const [selectedLeaveProfile, setSelectedLeaveProfile] =
+    useState<ILeaves | null>(null);
 
   useEffect(() => {
     getLeaveRequests();
+    getAllLeaves();
   }, []);
 
   useEffect(() => {
@@ -54,15 +67,23 @@ const ManageLeaveRequest = () => {
   const openModal = (action: "approve" | "decline", record: ILeaveRequest) => {
     setModalAction(action);
     setSelectedRequest(record);
+    setCurrentLeaveProfile(record.employeeId);
     setIsModalOpen(true);
+  };
+
+  const setCurrentLeaveProfile = (employeeId: string) => {
+    const leaveProfile: ILeaves = leavesList.find(
+      (leaveProfile) => leaveProfile.employeeId === employeeId
+    );
+    setSelectedLeaveProfile(leaveProfile);
   };
 
   const handleConfirm = async () => {
     if (!modalAction || !selectedRequest) return;
-  
+
     try {
       setProcessingId(selectedRequest.id ?? "processing");
-  
+
       // Update the leave request
       const updatedRequest: ILeaveRequest = {
         id: selectedRequest.id,
@@ -73,9 +94,25 @@ const ManageLeaveRequest = () => {
         reason: selectedRequest.reason,
         status: modalAction === "approve" ? "approved" : "declined",
       };
-  
+
       await updateLeaveRequest(updatedRequest);
-  
+      if (modalAction !== "approve") {
+        const leaveType = selectedRequest.leaveType as keyof Omit<
+          ILeaves,
+          "id" | "employeeId"
+        >;
+        const start = dayjs(selectedRequest.startDate);
+        const end = dayjs(selectedRequest.endDate);
+        const leaveDays = end.diff(start, "days") + 1;
+
+        const updatedLeaveProfile: ILeaves = addLeave(
+          selectedLeaveProfile,
+          leaveType,
+          leaveDays
+        );
+        updateLeaves(updatedLeaveProfile);
+      }
+
       const body =
         modalAction === "approve"
           ? approveLeaveTemplate(
@@ -91,17 +128,19 @@ const ManageLeaveRequest = () => {
               moment(selectedRequest.endDate).format("YYYY-MM-DD"),
               selectedRequest.reason
             );
-  
+
       // Send the email
       await sendEmail({
         to: selectedRequest.employee?.user?.emailAddress || "",
-        subject: `Leave Request ${modalAction === "approve" ? "Approved" : "Declined"}`,
+        subject: `Leave Request ${
+          modalAction === "approve" ? "Approved" : "Declined"
+        }`,
         body,
         isBodyHtml: true,
       });
-  
+
       toast(`Leave request ${modalAction}d successfully`, "success");
-      await getLeaveRequests();  
+      await getLeaveRequests();
     } catch (error) {
       console.error(error);
       toast(`Failed to ${modalAction} leave request`, "error");
@@ -110,14 +149,16 @@ const ManageLeaveRequest = () => {
       setIsModalOpen(false);
     }
   };
-  
+
   const columns: ColumnsType<ILeaveRequest> = [
     {
       title: "Employee Name",
       dataIndex: ["employee", "user", "name"],
       key: "employeeName",
       sorter: (a, b) =>
-        (a.employee?.user?.name || "").localeCompare(b.employee?.user?.name || ""),
+        (a.employee?.user?.name || "").localeCompare(
+          b.employee?.user?.name || ""
+        ),
     },
     {
       title: "Leave Type",
@@ -145,7 +186,11 @@ const ManageLeaveRequest = () => {
       key: "status",
       render: (status: string) => {
         const color =
-          status === "approved" ? "green" : status === "pending" ? "orange" : "red";
+          status === "approved"
+            ? "green"
+            : status === "pending"
+            ? "orange"
+            : "red";
         return <Tag color={color}>{status.toUpperCase()}</Tag>;
       },
     },
@@ -219,7 +264,8 @@ const ManageLeaveRequest = () => {
           Are you sure you want to <b>{modalAction}</b> this leave request?
         </p>
         <p>
-          <strong>Employee:</strong> {selectedRequest?.employee?.user?.name} <br />
+          <strong>Employee:</strong> {selectedRequest?.employee?.user?.name}{" "}
+          <br />
           <strong>Leave Type:</strong> {selectedRequest?.leaveType}
         </p>
       </Modal>

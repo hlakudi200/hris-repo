@@ -29,6 +29,20 @@ export const LeaveReducer = handleActions<ILeavesStateContext>(
       ...state,
       ...action.payload,
     }),
+
+    [LeavesActionEnums.getAllLeavesPending]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [LeavesActionEnums.getAllLeavesSuccess]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    [LeavesActionEnums.getAllLeavesError]: (state, action) => ({
+      ...state,
+      ...action.payload,
+    }),
+    
     [LeavesActionEnums.resetStateFlagsAction]: (state, action) => ({
       ...state,
       ...action.payload,

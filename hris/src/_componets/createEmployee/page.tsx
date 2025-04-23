@@ -139,7 +139,6 @@ const EmployeeManagement = () => {
       };
 
       if (isEditing && currentEmployeeId) {
-        debugger;
         await updateEmployee({
           id: currentEmployeeId,
           ...employeeData,
