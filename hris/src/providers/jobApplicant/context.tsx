@@ -41,6 +41,7 @@ export interface IJobApplicant {
     getApplicantById: (userId: number) => void;
     createApplicant: (applicant: IJobApplicant) => void;
     updateApplicant: (applicant: IJobApplicant) => void;
+    getApplicantJobApplications:(appplicantId:string)=>void;
   }
   
   export const INITIAL_STATE: ApplicantStateContext = {

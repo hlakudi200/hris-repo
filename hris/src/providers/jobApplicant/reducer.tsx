@@ -20,7 +20,20 @@ export const ApplicantReducer = handleActions<
       ...state,
       ...action.payload,
     }),
-
+    //Get Jobapplications by Id 
+    [ApplicantActionEnums.getApplicantJobApplicationsPending]: (state, action) => ({
+        ...state,
+        ...action.payload,
+      }),
+      [ApplicantActionEnums.getApplicantJobApplicationsSuccess]: (state, action) => ({
+        ...state,
+        ...action.payload,
+      }),
+      [ApplicantActionEnums.getApplicantJobApplicationsError]: (state, action) => ({
+        ...state,
+        ...action.payload,
+      }),
+  
     //Create Applicant 
     [ApplicantActionEnums.createApplicantPending]: (state, action) => ({
       ...state,

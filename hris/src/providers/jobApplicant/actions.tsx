@@ -1,10 +1,15 @@
 import { createAction } from "redux-actions";
 import { IJobApplicant, ApplicantStateContext } from "./context";
+import { IJobApplication } from "../jobPost/interfaces";
 
 export enum ApplicantActionEnums {
   getApplicantByIdPending = "GET_APPLICANT_BY_ID_PENDING",
   getApplicantByIdSuccess = "GET_APPLICANT_BY_ID_SUCCESS",
-  getApplicantByIdError = "GET_APPLICANT_BY_IDERROR",
+  getApplicantByIdError = "GET_APPLICANT_BY_ID_ERROR",
+
+  getApplicantJobApplicationsPending = "GET_APPLICANT_JOB_APPLICATIONS_PENDING",
+  getApplicantJobApplicationsSuccess = "GET_APPLICANT_JOB_APPLICATIONS_SUCCESS",
+  getApplicantJobApplicationsError = "GET_APPLICANT_JOB_APPLICATIONS_ERROR",
 
   createApplicantPending = "CREATE_APPLICANT_PENDING",
   createApplicantSuccess = "CREATE_APPLICANT_SUCCESS",
@@ -34,6 +39,31 @@ export const getApplicantByIdError = createAction<ApplicantStateContext>(
   ApplicantActionEnums.getApplicantByIdError,
   () => ({ isPending: false, isSuccess: false, isError: true })
 );
+
+//Get Applicant Job Applications
+export const getApplicantJobApplicationsPending =
+  createAction<ApplicantStateContext>(
+    ApplicantActionEnums.getApplicantJobApplicationsPending,
+    () => ({ isPending: true, isSuccess: false, isError: false })
+  );
+
+export const getApplicantJobApplicationsSuccess = createAction<
+  ApplicantStateContext,
+  IJobApplication[]
+>(
+  ApplicantActionEnums.getApplicantJobApplicationsSuccess,
+  (jobApplications: IJobApplicant[]) => ({
+    isPending: false,
+    isSuccess: true,
+    isError: false,
+    jobApplications,
+  })
+);
+export const getApplicantJobApplicationsError =
+  createAction<ApplicantStateContext>(
+    ApplicantActionEnums.getApplicantJobApplicationsError,
+    () => ({ isPending: false, isSuccess: false, isError: true })
+  );
 
 //create applicant
 

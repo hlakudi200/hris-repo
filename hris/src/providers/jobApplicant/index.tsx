@@ -17,7 +17,10 @@ import {
  createApplicantError,
  updateApplicantPending,
  updateApplicantSuccess,
- updateApplicantError
+ updateApplicantError,
+ getApplicantJobApplicationsPending,
+ getApplicantJobApplicationsSuccess,
+ getApplicantJobApplicationsError
 } from "./actions";
 
 export const ApplicantProvider = ({
@@ -36,7 +39,7 @@ export const ApplicantProvider = ({
     await instance
       .get(endpoint)
       .then((response) => {
-        dispatch(getApplicantByIdSuccess(response.data));
+        dispatch(getApplicantByIdSuccess(response.data.results));
       })
       .catch((error) => {
         console.error(error);
@@ -57,7 +60,20 @@ export const ApplicantProvider = ({
         dispatch(createApplicantError());
       });
   };
-  
+  const getApplicantJobApplications=async(applicantId:string)=>{
+    dispatch(getApplicantJobApplicationsPending());
+       const endpoint =`/api/services/app/JobApplication/GetAllJobApplicationsById?applicantId=${applicantId}`;
+       
+       await instance
+       .get(endpoint)
+       .then((response)=>{
+        dispatch(getApplicantJobApplicationsSuccess(response.data.result))
+       })
+       .catch((err)=>{
+        console.error(err)
+        dispatch(getApplicantJobApplicationsError())
+       })
+  } 
 
 
   const updateApplicant = async (applicant: IJobApplicant) => {
@@ -82,6 +98,7 @@ export const ApplicantProvider = ({
             getApplicantById,
             createApplicant,
             updateApplicant,
+            getApplicantJobApplications
         }}
       >
         {children}
