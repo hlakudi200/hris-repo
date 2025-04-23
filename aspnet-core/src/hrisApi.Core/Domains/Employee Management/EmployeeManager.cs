@@ -10,6 +10,7 @@ using Abp.Domain.Services;
 using Abp.UI;
 using hrisApi.Authorization.Users;
 using hrisApi.Domains.Attendance_Management;
+using hrisApi.Domains.Employee_Management.Helpers;
 using hrisApi.Domains.Payroll_Processing;
 
 namespace hrisApi.Domains.Employee_Management
@@ -93,7 +94,7 @@ namespace hrisApi.Domains.Employee_Management
             {
                 EmployeeId = employee.Id,
                 BasicSalary = basicSalary,
-                TaxRate = 10
+                TaxRate = TaxCalculator.GetAnnualTaxRate(basicSalary),
             };
 
             await _payrollProfileRepository.InsertAsync(payrollProfile);
