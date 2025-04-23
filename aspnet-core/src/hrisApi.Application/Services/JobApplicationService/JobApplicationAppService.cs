@@ -21,9 +21,7 @@ namespace hrisApi.Services.JobApplicationService
         {
             var query = await Repository.GetAllAsync();
             var JobApplications = await query.Include(x => x.JobPosting).Where(x => x.ApplicantId == applicantId).ToListAsync();
-
             var results = ObjectMapper.Map<List<JobApplicationDto>>(JobApplications);
-
             return results;
 
         }

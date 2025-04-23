@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Domain.Repositories;
 using hrisApi.Domains.Payroll_Processing;
@@ -13,6 +14,14 @@ namespace hrisApi.Services.JobApllicantService
         public JobApplicantAppService(IRepository<JobApplicant, Guid> repository) : base(repository)
         {
             _repository = repository;
+        }
+        public async Task<JobApplicantDto> GetJobApplicantById(long UserId)
+        {
+            var query = await _repository.FirstOrDefaultAsync(p => p.UserId == UserId);
+
+            var jobApplicant = ObjectMapper.Map<JobApplicantDto>(query);
+
+            return jobApplicant;
         }
     }
 }

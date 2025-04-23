@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
-  FileFilled,
   HomeOutlined,
   FileSearchOutlined,
   LogoutOutlined,
