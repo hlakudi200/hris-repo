@@ -41,6 +41,7 @@ export const LeaveRequestProvider = ({
       .post(endpoint, request)
       .then((response) => {
         if (response.status === 200) {
+          getByEmpId(request.employeeId);
           dispatch(submitLeaveRequestSuccess());
         }
       })
