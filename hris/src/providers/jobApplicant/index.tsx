@@ -68,6 +68,7 @@ export const ApplicantProvider = ({
        .get(endpoint)
        .then((response)=>{
         dispatch(getApplicantJobApplicationsSuccess(response.data.result))
+        console.log("responseData:",response.data.result)
        })
        .catch((err)=>{
         console.error(err)
@@ -77,12 +78,14 @@ export const ApplicantProvider = ({
 
 
   const updateApplicant = async (applicant: IJobApplicant) => {
+    debugger;
     dispatch(updateApplicantPending());
     const endpoint = `/api/services/app/JobApplicant/Update`;
     await instance
       .put(endpoint, applicant)
       .then((response) => {
         dispatch(updateApplicantSuccess(response.data.result));
+        
       })
       .catch((error) => {
         console.error(error);

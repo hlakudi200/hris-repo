@@ -1,9 +1,13 @@
-import React from 'react'
+"use client";
 
-const  ApplicationsStatus=()=> {
+import TrackJobApplications from "@/_componets/trackJobApplications/trackJobApplications";
+
+const ApplicationsStatus = () => {
   return (
-    <div>Application Status</div>
-  )
-}
+    <div>
+      <TrackJobApplications></TrackJobApplications>
+    </div>
+  );
+};
 
 export default ApplicationsStatus;

@@ -4,23 +4,24 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   HomeOutlined,
-  FileSearchOutlined,
   LogoutOutlined,
   UserOutlined,
   FormOutlined,
 } from "@ant-design/icons";
 import { Button, Dropdown, Layout, Menu } from "antd";
-import { EmployeeProvider, useEmployeeActions } from "@/providers/employee";
+import { EmployeeProvider } from "@/providers/employee";
 import { LeaveRequestProvider } from "@/providers/leaveRequest";
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import { useRouter } from "next/navigation";
 import { useAuthActions, useAuthState } from "@/providers/auth";
-
 import styels from "./styles/global.module.css";
 import { PayrollTransactionProvider } from "@/providers/payrolltransaction";
 import { EmailProvider } from "@/providers/email";
 import { LeaveProvider } from "@/providers/leaves";
-import { ApplicantProvider } from "@/providers/jobApplicant";
+import {
+  ApplicantProvider,
+  useApplicantActions,
+} from "@/providers/jobApplicant";
 
 import withAuth from "../hoc/withAuth";
 
@@ -38,29 +39,28 @@ const siderItems: ItemType<MenuItemType>[] = [
     label: "Applicantions",
   },
   {
-    key: "/applicant/interviews",
-    icon: <FileSearchOutlined/>,
-    label: "Interviews",
-  },
-  {
     key: "/applicant/profile",
-    icon: <UserOutlined/>,
+    icon: <UserOutlined />,
     label: "Profile",
   },
-  
+  {
+    key: "/applicant/createProfile",
+    icon: <UserOutlined />,
+    label: "Create Profile",
+  },
 ];
 
 const Applicant = ({ children }: { children: React.ReactNode }) => {
   const { currentUser } = useAuthState();
   const { signOut } = useAuthActions();
-  const { getEmployee } = useEmployeeActions();
+  const { getApplicantById } = useApplicantActions();
+  const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
     if (currentUser !== null) {
-      getEmployee(currentUser.id);
+      getApplicantById(currentUser.id);
     }
-  }, []);
-  const [collapsed, setCollapsed] = useState(false);
+  }, [currentUser]);
   const router = useRouter();
   const userMenu = {
     items: [
@@ -80,60 +80,59 @@ const Applicant = ({ children }: { children: React.ReactNode }) => {
     <EmailProvider>
       <PayrollTransactionProvider>
         <EmployeeProvider>
-        <ApplicantProvider>
-        <LeaveProvider>
-            <LeaveRequestProvider>
-              <Layout className={styels.layout}>
-                <Sider trigger={null} collapsible collapsed={collapsed}>
-                  <div className="demo-logo-vertical" />
-                  <Menu
-                    onClick={({ key }) => router.push(key)}
-                    theme="dark"
-                    mode="inline"
-                    defaultSelectedKeys={["/employee"]}
-                    items={siderItems}
-                  />
-                </Sider>
-                <Layout>
-                  <Header
-                    style={{
-                      padding: 0,
-                      backgroundColor: "white",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Button
-                      type="text"
-                      icon={
-                        collapsed ? (
-                          <MenuUnfoldOutlined />
-                        ) : (
-                          <MenuFoldOutlined />
-                        )
-                      }
-                      onClick={() => setCollapsed(!collapsed)}
-                      style={{
-                        fontSize: "16px",
-                        width: 64,
-                        height: 64,
-                      }}
+          <ApplicantProvider>
+            <LeaveProvider>
+              <LeaveRequestProvider>
+                <Layout className={styels.layout}>
+                  <Sider trigger={null} collapsible collapsed={collapsed}>
+                    <div className="demo-logo-vertical" />
+                    <Menu
+                      onClick={({ key }) => router.push(key)}
+                      theme="dark"
+                      mode="inline"
+                      defaultSelectedKeys={["/employee"]}
+                      items={siderItems}
                     />
-                    <div className={styels.profileMenu}>
-                      <Dropdown menu={userMenu} trigger={["click"]}>
-                        <Button type="text" icon={<UserOutlined />}>
-                          {currentUser?.emailAddress ?? "User"}
-                        </Button>
-                      </Dropdown>
-                    </div>
-                  </Header>
-                  <Content className={styels.content}>{children}</Content>
+                  </Sider>
+                  <Layout>
+                    <Header
+                      style={{
+                        padding: 0,
+                        backgroundColor: "white",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Button
+                        type="text"
+                        icon={
+                          collapsed ? (
+                            <MenuUnfoldOutlined />
+                          ) : (
+                            <MenuFoldOutlined />
+                          )
+                        }
+                        onClick={() => setCollapsed(!collapsed)}
+                        style={{
+                          fontSize: "16px",
+                          width: 64,
+                          height: 64,
+                        }}
+                      />
+                      <div className={styels.profileMenu}>
+                        <Dropdown menu={userMenu} trigger={["click"]}>
+                          <Button type="text" icon={<UserOutlined />}>
+                            {currentUser?.emailAddress ?? "User"}
+                          </Button>
+                        </Dropdown>
+                      </div>
+                    </Header>
+                    <Content className={styels.content}>{children}</Content>
+                  </Layout>
                 </Layout>
-              </Layout>
-            </LeaveRequestProvider>
-          </LeaveProvider>
-        </ApplicantProvider>
-          
+              </LeaveRequestProvider>
+            </LeaveProvider>
+          </ApplicantProvider>
         </EmployeeProvider>
       </PayrollTransactionProvider>
     </EmailProvider>
