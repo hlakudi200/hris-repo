@@ -93,7 +93,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       })
       .catch((error) => {
         console.error(error);
+        const backendMessage = error.response?.data?.error?.message;
         dispatch(signUpError());
+        throw new Error(backendMessage);
       });
   };
 
