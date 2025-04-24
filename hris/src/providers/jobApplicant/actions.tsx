@@ -47,16 +47,15 @@ export const getApplicantJobApplicationsPending =
     () => ({ isPending: true, isSuccess: false, isError: false })
   );
 
-export const getApplicantJobApplicationsSuccess = createAction<
-  ApplicantStateContext,
-  IJobApplication[]
+  export const getApplicantJobApplicationsSuccess = createAction<
+  { JobApplications: IJobApplication[] }
 >(
   ApplicantActionEnums.getApplicantJobApplicationsSuccess,
-  (jobApplications: IJobApplication[]) => ({
+  (jobApplications) => ({
     isPending: false,
     isSuccess: true,
     isError: false,
-    jobApplications,
+    JobApplications: jobApplications,
   })
 );
 export const getApplicantJobApplicationsError =

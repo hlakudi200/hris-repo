@@ -28,7 +28,7 @@ using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace hrisApi.Services.Employee_Management
 {
-    [AbpAuthorize]
+   
     public class EmployeeAppService : AsyncCrudAppService<
         Employee,
         EmployeeDto,

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hrisApi.Services.PayrollProfileService
 {
-    [AbpAuthorize]
+   
     public class PayrollProfileAppService : AsyncCrudAppService<PayrollProfile, PayrollProfileDto, Guid>, IPayrollProfileAppService
     {
         private readonly IRepository<PayrollProfile, Guid> _repository;

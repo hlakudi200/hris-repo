@@ -4,23 +4,23 @@ import {
   INITIAL_STATE,
   IJobApplicant,
   JobApplicantActionContext,
-  JobApplicantStateContext
+  JobApplicantStateContext,
 } from "./context";
 import { ApplicantReducer } from "./reducer";
 import { useContext, useReducer } from "react";
 import {
-    createApplicantPending,
- createApplicantSuccess,
- getApplicantByIdError,
- getApplicantByIdPending,
- getApplicantByIdSuccess,
- createApplicantError,
- updateApplicantPending,
- updateApplicantSuccess,
- updateApplicantError,
- getApplicantJobApplicationsPending,
- getApplicantJobApplicationsSuccess,
- getApplicantJobApplicationsError
+  createApplicantPending,
+  createApplicantSuccess,
+  getApplicantByIdError,
+  getApplicantByIdPending,
+  getApplicantByIdSuccess,
+  createApplicantError,
+  updateApplicantPending,
+  updateApplicantSuccess,
+  updateApplicantError,
+  getApplicantJobApplicationsPending,
+  getApplicantJobApplicationsSuccess,
+  getApplicantJobApplicationsError,
 } from "./actions";
 
 export const ApplicantProvider = ({
@@ -30,8 +30,6 @@ export const ApplicantProvider = ({
 }) => {
   const [state, dispatch] = useReducer(ApplicantReducer, INITIAL_STATE);
   const instance = getAxiosInstace();
-
-
 
   const getApplicantById = async (userId: number) => {
     dispatch(getApplicantByIdPending());
@@ -60,21 +58,20 @@ export const ApplicantProvider = ({
         dispatch(createApplicantError());
       });
   };
-  const getApplicantJobApplications=async(applicantId:string)=>{
+  const getApplicantJobApplications = async (applicantId: string) => {
     dispatch(getApplicantJobApplicationsPending());
-       const endpoint =`/api/services/app/JobApplication/GetAllJobApplicationsById?applicantId=${applicantId}`;
-       
-       await instance
-       .get(endpoint)
-       .then((response)=>{
-        dispatch(getApplicantJobApplicationsSuccess(response.data.result))
-       })
-       .catch((err)=>{
-        console.error(err)
-        dispatch(getApplicantJobApplicationsError())
-       })
-  } 
+    const endpoint = `/api/services/app/JobApplication/GetAllJobApplicationsById?applicantId=${applicantId}`;
 
+    await instance
+      .get(endpoint)
+      .then((response) => {
+        dispatch(getApplicantJobApplicationsSuccess(response.data.result));
+      })
+      .catch((err) => {
+        console.error(err);
+        dispatch(getApplicantJobApplicationsError());
+      });
+  };
 
   const updateApplicant = async (applicant: IJobApplicant) => {
     dispatch(updateApplicantPending());
@@ -90,15 +87,14 @@ export const ApplicantProvider = ({
       });
   };
 
-  
   return (
     <JobApplicantStateContext.Provider value={state}>
       <JobApplicantActionContext.Provider
         value={{
-            getApplicantById,
-            createApplicant,
-            updateApplicant,
-            getApplicantJobApplications
+          getApplicantById,
+          createApplicant,
+          updateApplicant,
+          getApplicantJobApplications,
         }}
       >
         {children}

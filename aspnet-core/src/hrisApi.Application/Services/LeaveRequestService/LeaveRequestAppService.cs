@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hrisApi.Services.LeaveService
 {
-    [AbpAuthorize]
+    
     public class LeaveRequestAppService : AsyncCrudAppService<LeaveRequest, LeaveRequestRequestDto, Guid>, ILeaveRequestAppService
     {
         private readonly IRepository<LeaveRequest, Guid> _repository;

@@ -3,6 +3,7 @@ import { createContext } from "react";
 export interface IJobApplication {
   id?: string;
   jobPostingId: string;
+  applicantId?:string;
   applicantName: string;
   email: string;
   resumePath: string;

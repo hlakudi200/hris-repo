@@ -1,33 +1,27 @@
-﻿using Abp.Application.Services;
-using Abp.Domain.Repositories;
-using hrisApi.Domains.Payroll_Processing;
-using hrisApi.Services.PayrollTransactionService.DTO;
-using hrisApi.Services.PayrollTransactionService;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System;
-using System.Linq;
-using Abp.UI;
-using hrisApi.Domains.Employee_Management;
 using System.ComponentModel.Design;
-using Abp.Application.Services.Dto;
-using Abp;
-using static System.Net.Mime.MediaTypeNames;
+using System.Globalization;
 using System.IO;
-using System.Xml.Linq;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
+using System.Threading.Tasks;
+using Abp.Application.Services;
+using Abp.Authorization;
 using Abp.Domain.Entities;
-using Font = iTextSharp.text.Font;
-using Microsoft.AspNetCore.Mvc;
+using Abp.Domain.Repositories;
+using Abp.EntityFrameworkCore.Repositories;
+using Abp.UI;
+using hrisApi.Domains.Payroll_Processing;
 using hrisApi.Services.EmailService;
 using hrisApi.Services.EmailService.DTO;
-using Microsoft.EntityFrameworkCore;
-using Abp.EntityFrameworkCore.Repositories;
-using Abp.Authorization;
+using hrisApi.Services.PayrollTransactionService;
+using hrisApi.Services.PayrollTransactionService.DTO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Font = iTextSharp.text.Font;
 using Image = iTextSharp.text.Image;
-using System.Globalization;
 
 [AbpAuthorize]
 public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransaction, PayrollTransactionDto, Guid>, IPayrollTransactionAppService
@@ -112,62 +106,6 @@ public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransacti
 
         return fileDto;
     }
-    //private FileDto GeneratePdf(PayrollTransactionDto payroll, string employeeName)
-    //{
-    //    using (var memoryStream = new MemoryStream())
-    //    {
-    //        Document document = new Document(PageSize.A4, 50, 50, 50, 50);
-    //        PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
-    //        document.Open();
-
-    //        // Add title
-    //        Paragraph title = new Paragraph("Payroll Transaction",
-    //            new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD));
-    //        title.Alignment = Element.ALIGN_CENTER;
-    //        title.SpacingAfter = 20;
-    //        document.Add(title);
-
-    //        // Add transaction details table
-    //        PdfPTable table = new PdfPTable(2);
-    //        table.WidthPercentage = 100;
-    //        table.SetWidths(new float[] { 1f, 2f });
-
-    //        // Add rows
-    //        AddTableRow(table, "Transaction ID:", payroll.Id.ToString());
-    //        // Add employee name if you have it in your DTO
-    //        AddTableRow(table, "Employee Name:", employeeName);
-    //        AddTableRow(table, "Gross Amount:", payroll.GrossAmount.ToString("C"));
-    //        AddTableRow(table, "Tax Amount:", payroll.TaxAmount.ToString("C"));
-    //        AddTableRow(table, "Net Amount:", payroll.NetAmount.ToString("C"));
-
-    //        document.Add(table);
-    //        document.Close();
-
-    //        // Create file DTO for download
-    //        return new FileDto
-    //        {
-    //            FileName = $"Payroll_{payroll.Id}_{DateTime.Now:yyyyMMdd}.pdf",
-    //            ContentType = "application/pdf",
-    //            FileBytes = memoryStream.ToArray()
-    //        };
-    //    }
-    //}
-
-    //private void AddTableRow(PdfPTable table, string label, string value)
-    //{
-    //    PdfPCell cell1 = new PdfPCell(new Phrase(label, new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
-    //    cell1.Border = Rectangle.NO_BORDER;
-    //    cell1.HorizontalAlignment = Element.ALIGN_LEFT;
-    //    cell1.PaddingBottom = 8f;
-
-    //    PdfPCell cell2 = new PdfPCell(new Phrase(value, new Font(Font.FontFamily.HELVETICA, 12)));
-    //    cell2.Border = Rectangle.NO_BORDER;
-    //    cell2.HorizontalAlignment = Element.ALIGN_LEFT;
-    //    cell2.PaddingBottom = 8f;
-
-    //    table.AddCell(cell1);
-    //    table.AddCell(cell2);
-    //}
 
 
     private FileDto GeneratePdf(PayrollTransactionDto payroll, string employeeName)
