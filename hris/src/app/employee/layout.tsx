@@ -6,7 +6,6 @@ import {
   UploadOutlined,
   FileFilled,
   HomeOutlined,
-  FileSearchOutlined,
   ClockCircleFilled,
   LogoutOutlined,
   UserOutlined,
@@ -45,11 +44,6 @@ const siderItems: ItemType<MenuItemType>[] = [
     key: "/employee/payroll",
     icon: <FileFilled />,
     label: "Payroll",
-  },
-  {
-    key: "/employee/jobPost",
-    icon: <FileSearchOutlined />,
-    label: "Job post",
   },
 ];
 
