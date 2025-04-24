@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Form, Button, Steps, Card, Row, Col} from "antd";
+import { Form, Button, Steps, Card, Row, Col } from "antd";
 import {
   UserOutlined,
   IdcardOutlined,
@@ -23,7 +23,7 @@ import { useAuthState } from "@/providers/auth";
 const { Step } = Steps;
 
 const JobApplicationPage: React.FC = () => {
- const router = useRouter();
+  const router = useRouter();
   const [form] = Form.useForm();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<Partial<IJobApplicant>>({});
@@ -31,7 +31,7 @@ const JobApplicationPage: React.FC = () => {
   const [resumeUrl, setResumeUrl] = useState<string | null>(null);
   const [coverletter, setCoverletter] = useState<string | null>(null);
   const { createApplicant } = useApplicantActions();
-  const{currentUser}=useAuthState();
+  const { currentUser } = useAuthState();
   const steps = [
     {
       title: "Personal Information",
@@ -88,7 +88,6 @@ const JobApplicationPage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-  
     try {
       setIsSubmitting(true);
       const values = await form.validateFields();
@@ -97,14 +96,15 @@ const JobApplicationPage: React.FC = () => {
         ...values,
         resumeUrl,
         coverletter,
-        
       };
-      
+
       const request: IJobApplicant = {
         userId: currentUser.id,
         nationalIdNo: fullFormData.nationalIdNo,
         gender: fullFormData.gender,
-        dateofBirth: new Date(`${fullFormData.dateofBirth}T00:00:00.000Z`).toISOString(),
+        dateofBirth: new Date(
+          `${fullFormData.dateofBirth}T00:00:00.000Z`
+        ).toISOString(),
         cellphoneNo: fullFormData.cellphoneNo,
         alternativePhone: fullFormData.alternativePhone,
         addressLine1: fullFormData.addressLine1,
@@ -113,10 +113,12 @@ const JobApplicationPage: React.FC = () => {
         province: fullFormData.province,
         country: fullFormData.country,
         postalCode: fullFormData.postalCode,
-        highestQualification: fullFormData.highestQualification, 
+        highestQualification: fullFormData.highestQualification,
         fieldOfStudy: fullFormData.fieldOfStudy,
         institution: fullFormData.institution,
-        graduationYear: new Date(`${fullFormData.graduationYear}-01-01T00:00:00Z`).toISOString(),
+        graduationYear: new Date(
+          `${fullFormData.graduationYear}-01-01T00:00:00Z`
+        ).toISOString(),
         yearsOfExperience: fullFormData.yearsOfExperience,
         currentEmployer: fullFormData.currentEmployer,
         currentPosition: fullFormData.currentPosition,
@@ -124,18 +126,16 @@ const JobApplicationPage: React.FC = () => {
         resumeUrl: fullFormData.resumeUrl,
         coverletter: fullFormData.coverletter,
         isWillingToRelocate: fullFormData.isWillingToRelocate,
-        hasCriminalRecord: fullFormData.hasCriminalRecord??false,
+        hasCriminalRecord: fullFormData.hasCriminalRecord ?? false,
       };
-  
-      
+
       createApplicant(request);
 
-      console.log("requestBody:", request);
-      toast("Application Porfile Created.","success")
-      router.push("/applicant")
+      toast("Application Porfile Created.", "success");
+      router.push("/applicant");
     } catch (error) {
       console.error("Submission failed:", error);
-      toast("Application Porfile Creation failed.","error")
+      toast("Application Porfile Creation failed.", "error");
     } finally {
       setIsSubmitting(false);
     }

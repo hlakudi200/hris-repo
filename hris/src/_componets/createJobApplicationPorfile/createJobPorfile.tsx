@@ -130,7 +130,6 @@ const JobApplicationPage: React.FC = () => {
       
       createApplicant(request);
 
-      console.log("requestBody:", request);
       toast("Application Porfile Created.","success")
       router.push("/applicant")
     } catch (error) {

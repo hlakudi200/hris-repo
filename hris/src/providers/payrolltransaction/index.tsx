@@ -75,7 +75,6 @@ export const PayrollTransactionProvider = ({
       .get(endpoint)
       .then((response) => {
         dispatch(getPayrollTransactionSuccess(response.data.result));
-        console.log("transactions:",response.data.result)
       })
       .catch((err) => {
         getPayrollTransactionError();
