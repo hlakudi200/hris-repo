@@ -36,7 +36,7 @@ const siderItems: ItemType<MenuItemType>[] = [
   {
     key: "/applicant/applications",
     icon: <FormOutlined />,
-    label: "Applicantions",
+    label: "Applications",
   },
   {
     key: "/applicant/profile",
@@ -90,7 +90,7 @@ const Applicant = ({ children }: { children: React.ReactNode }) => {
                       onClick={({ key }) => router.push(key)}
                       theme="dark"
                       mode="inline"
-                      defaultSelectedKeys={["/employee"]}
+                      defaultSelectedKeys={["/applicant"]}
                       items={siderItems}
                     />
                   </Sider>
