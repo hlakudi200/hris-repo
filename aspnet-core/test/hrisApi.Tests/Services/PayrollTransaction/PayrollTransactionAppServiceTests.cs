@@ -10,6 +10,7 @@ using Abp.Domain.Uow;
 using hrisApi.Domains.Payroll_Processing;
 using hrisApi.Services.EmailService;
 using hrisApi.Services.PayrollTransactionService.DTO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace hrisApi.Tests.Services
 {
@@ -39,18 +40,19 @@ namespace hrisApi.Tests.Services
 
         private PayrollTransactionAppService CreateService()
         {
-           
+            var hostingEnvironment = Substitute.For<IWebHostEnvironment>(); // Mock IWebHostEnvironment  
             var service = new TestPayrollTransactionAppService(
                 _mockRepository,
                 _mockEmailAppService,
                 _mockObjectMapper,
                 _mockUnitOfWorkManager,
-                _mockCurrentUowProvider);
+                _mockCurrentUowProvider,
+                hostingEnvironment); // Pass the mocked IWebHostEnvironment  
 
             return service;
         }
 
-        // Test class to override the ObjectMapper and UnitOfWorkManager
+        // Test class to override the ObjectMapper and UnitOfWorkManager  
         private class TestPayrollTransactionAppService : PayrollTransactionAppService
         {
             public TestPayrollTransactionAppService(
@@ -58,18 +60,18 @@ namespace hrisApi.Tests.Services
                 EmailAppService emailAppService,
                 IObjectMapper objectMapper,
                 IUnitOfWorkManager unitOfWorkManager,
-                ICurrentUnitOfWorkProvider currentUnitOfWorkProvider)
-                : base(repository, emailAppService)
+                ICurrentUnitOfWorkProvider currentUnitOfWorkProvider,
+                IWebHostEnvironment hostingEnvironment) // Add IWebHostEnvironment parameter  
+                : base(repository, emailAppService, hostingEnvironment) // Pass hostingEnvironment to base constructor  
             {
                 // Set the required dependencies through protected properties  
                 ObjectMapper = objectMapper;
                 UnitOfWorkManager = unitOfWorkManager;
-                CurrentUnitOfWorkProvider = currentUnitOfWorkProvider;  
+                CurrentUnitOfWorkProvider = currentUnitOfWorkProvider;
             }
- 
+
             protected ICurrentUnitOfWorkProvider CurrentUnitOfWorkProvider { get; }
         }
-
         [Fact]
         public async Task CreateAsync_WithPositiveGrossAmount_CalculatesTaxAndNetAmount()
         {
@@ -79,16 +81,17 @@ namespace hrisApi.Tests.Services
             var input = new PayrollTransactionDto
             {
                 GrossAmount = grossAmount
-               
+
             };
 
-           
+
             _mockUnitOfWorkManager.Begin().Returns(_mockUnitOfWork);
             _mockUnitOfWorkManager.Begin(Arg.Any<UnitOfWorkOptions>()).Returns(_mockUnitOfWork);
 
             //dto mapping
             _mockObjectMapper.Map<PayrollTransaction>(Arg.Any<PayrollTransactionDto>())
-                .Returns(callInfo => {
+                .Returns(callInfo =>
+                {
                     var dto = callInfo.Arg<PayrollTransactionDto>();
                     return new PayrollTransaction
                     {
@@ -99,7 +102,8 @@ namespace hrisApi.Tests.Services
                 });
 
             _mockObjectMapper.Map<PayrollTransactionDto>(Arg.Any<PayrollTransaction>())
-                .Returns(callInfo => {
+                .Returns(callInfo =>
+                {
                     var entity = callInfo.Arg<PayrollTransaction>();
                     return new PayrollTransactionDto
                     {
@@ -111,7 +115,8 @@ namespace hrisApi.Tests.Services
 
             // Set up repository to return the saved entity
             _mockRepository.InsertAsync(Arg.Any<PayrollTransaction>())
-                .Returns(callInfo => {
+                .Returns(callInfo =>
+                {
                     var entity = callInfo.Arg<PayrollTransaction>();
                     // The service should set these values during CreateAsync
                     entity.TaxAmount = Math.Round(entity.GrossAmount * 0.15m, 2);
