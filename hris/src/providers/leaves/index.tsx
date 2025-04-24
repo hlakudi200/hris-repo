@@ -9,6 +9,9 @@ import {
   LeaveStateContext,
 } from "./context";
 import {
+  getAllLeavesError,
+  getAllLeavesPending,
+  getAllLeavesSuccess,
   getLeavesError,
   getLeavesPending,
   getLeavesSuccess,
@@ -53,13 +56,40 @@ export const LeaveProvider = ({ children }: { children: React.ReactNode }) => {
         dispatch(getLeavesError());
       });
   };
+
+  const getAllLeaves = async () => {
+    dispatch(getAllLeavesPending());
+
+    const endpoint = `/api/services/app/Leave/GetAll`;
+
+    instance
+    .get(endpoint,
+      {
+        params: {
+          Sorting: "",
+          SkipCount: 0,
+          MaxResultCount: 100,
+        },
+      })
+    .then((response) => {
+      if (response.status === 200){
+        dispatch(getAllLeavesSuccess(response.data.result.items));
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      dispatch(getAllLeavesError());
+    })
+  }
+
+
   const resetStateFlags = () => {
     dispatch(resetStateFlagsAction());
   };
   return (
     <LeaveStateContext.Provider value={state}>
       <LeaveActionContext.Provider
-        value={{ getLeaves, updateLeaves, resetStateFlags }}
+        value={{ getLeaves, updateLeaves,getAllLeaves, resetStateFlags }}
       >
         {children}
       </LeaveActionContext.Provider>

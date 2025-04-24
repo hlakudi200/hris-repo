@@ -41,16 +41,16 @@ export const JobPostingProvider = ({
     dispatch(getJobPostingsPending());
     try {
       const response = await instance.get(
-        "/api/services/app/JobPosting/GetAll",
+        "/api/services/app/JobPosting/GetAllOpenInclude",
         {
           params: {
             Sorting: "",
             SkipCount: 0,
-            MaxResultCount: 10,
+            MaxResultCount: 100,
           },
         }
       );
-      dispatch(getJobPostingsSuccess(response.data.result.items));
+      dispatch(getJobPostingsSuccess(response.data.result));
     } catch (error) {
       console.error("API Error:", error);
       dispatch(getJobPostingsError());
@@ -62,12 +62,12 @@ export const JobPostingProvider = ({
     dispatch(getJobPostingIncludedPending());
     try {
       const response = await instance.get(
-        "/api/services/app/JobPosting/GetAllInclude",
+        "/api/services/app/JobPosting/GetAllOpenInclude",
         {
           params: {
             Sorting: "",
             SkipCount: 0,
-            MaxResultCount: 10,
+            MaxResultCount: 100,
           },
         }
       );

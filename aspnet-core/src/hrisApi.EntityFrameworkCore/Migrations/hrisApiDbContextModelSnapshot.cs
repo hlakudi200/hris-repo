@@ -2158,6 +2158,112 @@ namespace hrisApi.Migrations
                     b.ToTable("Interviews");
                 });
 
+            modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.JobApplicant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AddressLine1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AddressLine2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AlternativePhone")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CellphoneNo")
+                        .HasColumnType("text");
+
+                    b.Property<string>("City")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Coverletter")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("CreatorUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CurrentEmployer")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CurrentPosition")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("CurrentSalary")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime>("DateofBirth")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("DeleterUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FieldOfStudy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("GraduationYear")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("HasCriminalRecord")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("HighestQualification")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Institution")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsWillingToRelocate")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("LastModifierUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("NationalIdNo")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Province")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ResumeUrl")
+                        .HasColumnType("text");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("YearsOfExperience")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("JobApplicants");
+                });
+
             modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.JobApplication", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2185,6 +2291,9 @@ namespace hrisApi.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<Guid?>("JobApplicantId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("JobPostingId")
                         .HasColumnType("uuid");
 
@@ -2201,6 +2310,8 @@ namespace hrisApi.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("JobApplicantId");
 
                     b.HasIndex("JobPostingId");
 
@@ -2679,11 +2790,13 @@ namespace hrisApi.Migrations
 
             modelBuilder.Entity("hrisApi.Domains.Payroll_Processing.PayrollTransaction", b =>
                 {
-                    b.HasOne("hrisApi.Domains.Payroll_Processing.PayrollProfile", null)
+                    b.HasOne("hrisApi.Domains.Payroll_Processing.PayrollProfile", "PayrollProfile")
                         .WithMany("Transactions")
                         .HasForeignKey("PayrollProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PayrollProfile");
                 });
 
             modelBuilder.Entity("hrisApi.Domains.Payroll_Processing.Reimbursement", b =>
@@ -2704,13 +2817,30 @@ namespace hrisApi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.JobApplicant", b =>
+                {
+                    b.HasOne("hrisApi.Authorization.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("hrisApi.Domains.Recruitment_Module.JobApplication", b =>
                 {
+                    b.HasOne("hrisApi.Domains.Recruitment_Module.JobApplicant", "Applicant")
+                        .WithMany()
+                        .HasForeignKey("JobApplicantId");
+
                     b.HasOne("hrisApi.Domains.Recruitment_Module.JobPosting", "JobPosting")
                         .WithMany("Applications")
                         .HasForeignKey("JobPostingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Applicant");
 
                     b.Navigation("JobPosting");
                 });

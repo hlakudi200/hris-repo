@@ -27,8 +27,6 @@ export interface ICreateEmployeeRequest {
   surname: string;
   email: string;
   username: string;
-  password: string;
-  employeeNumber?: string;
   contactNo: string;
   dateOfBirth: Date | string;
   nationalIdNumber: string;
@@ -37,6 +35,7 @@ export interface ICreateEmployeeRequest {
   department: string;
   managerId: string;
   roleNames: string[];
+  basicSalary: number;
 }
 
 export interface IEmployeeDocument {

@@ -27,7 +27,8 @@ import {
 import moment from "moment";
 
 const { Option } = Select;
-const { Password } = Input;
+
+const { Search } = Input;
 
 const EmployeeManagement = () => {
   const { message } = App.useApp();
@@ -36,6 +37,8 @@ const EmployeeManagement = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentEmployeeId, setCurrentEmployeeId] = useState(null);
   const [localSubmitting, setLocalSubmitting] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
 
   const { isPending, isSuccess, isError, errorMessage, employees } =
     useEmployeeState();
@@ -77,6 +80,28 @@ const EmployeeManagement = () => {
     }
   }, [isError, errorMessage]);
 
+  useEffect(() => {
+    if (Array.isArray(employees)) {
+      setFilteredData(employees);
+    }
+  }, [employees]);
+
+  const handleSearch = (value) => {
+    setSearchText(value);
+    const lowerSearch = value.toLowerCase();
+    const filtered = Array.isArray(employees)
+      ? employees.filter(
+          (employee) =>
+            (employee.user?.name + " " + employee.user?.surname)
+              .toLowerCase()
+              .includes(lowerSearch) ||
+            employee.position?.toLowerCase().includes(lowerSearch) ||
+            employee.department?.toLowerCase().includes(lowerSearch)
+        )
+      : [];
+    setFilteredData(filtered);
+  };
+
   const showCreateModal = () => {
     form.resetFields();
     setIsEditing(false);
@@ -89,6 +114,7 @@ const EmployeeManagement = () => {
     setCurrentEmployeeId(employee.id);
     form.setFieldsValue({
       ...employee,
+      ...employee.user,
       dateOfBirth: employee.dateOfBirth ? moment(employee.dateOfBirth) : null,
       hireDate: employee.hireDate ? moment(employee.hireDate) : null,
     });
@@ -107,7 +133,7 @@ const EmployeeManagement = () => {
     try {
       const employeeData = {
         ...values,
-        employeeNumber:" ",
+
         dateOfBirth: values.dateOfBirth?.format("YYYY-MM-DD"),
         hireDate: values.hireDate?.format("YYYY-MM-DD"),
       };
@@ -118,7 +144,10 @@ const EmployeeManagement = () => {
           ...employeeData,
         });
       } else {
-        await createEmployee(employeeData);
+        await createEmployee({
+          ...employeeData,
+          email: employeeData.emailAddress,
+        });
       }
     } catch (error) {
       setLocalSubmitting(false);
@@ -172,6 +201,7 @@ const EmployeeManagement = () => {
       dataIndex: "email",
       key: "email",
       ellipsis: true,
+      render: (_, record) => record.user.emailAddress,
     },
     {
       title: "Hire Date",
@@ -217,6 +247,15 @@ const EmployeeManagement = () => {
         }}
       >
         <h2 style={{ margin: 0 }}>Employees</h2>
+        <Search
+          placeholder="Search by name, position or department"
+          onSearch={handleSearch}
+          onChange={(e) => handleSearch(e.target.value)}
+          value={searchText}
+          enterButton
+          allowClear
+          style={{ maxWidth: 400, marginBottom: 20 }}
+        />
         <Space>
           <Button
             icon={<ReloadOutlined />}
@@ -225,6 +264,7 @@ const EmployeeManagement = () => {
           >
             Refresh
           </Button>
+
           <Button
             type="primary"
             icon={<PlusOutlined />}
@@ -247,7 +287,7 @@ const EmployeeManagement = () => {
 
       <Table
         columns={columns}
-        dataSource={Array.isArray(employees) ? employees : []}
+        dataSource={filteredData}
         rowKey="id"
         loading={isPending}
         pagination={{
@@ -290,7 +330,7 @@ const EmployeeManagement = () => {
 
             <div style={{ display: "flex", gap: "20px" }}>
               <Form.Item
-                name="email"
+                name="emailAddress"
                 label="Email"
                 rules={[
                   { required: true, message: "Please enter email" },
@@ -315,26 +355,13 @@ const EmployeeManagement = () => {
 
             <div style={{ display: "flex", gap: "20px" }}>
               <Form.Item
-                name="username"
+                name="userName"
                 label="Username"
                 rules={[{ required: true, message: "Please enter username" }]}
                 style={{ flex: 1 }}
               >
                 <Input placeholder="Enter username" />
               </Form.Item>
-
-              {!isEditing && (
-                <Form.Item
-                  name="password"
-                  label="Password"
-                  rules={[
-                    { required: !isEditing, message: "Please enter password" },
-                  ]}
-                  style={{ flex: 1 }}
-                >
-                  <Password placeholder="Enter password" />
-                </Form.Item>
-              )}
             </div>
 
             <div style={{ display: "flex", gap: "20px" }}>
@@ -351,20 +378,6 @@ const EmployeeManagement = () => {
               >
                 <Input placeholder="Enter national ID number" />
               </Form.Item>
-
-              {/* <Form.Item
-                name="employeeNumber"
-                label="Employee Number"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter employee number",
-                  },
-                ]}
-                style={{ flex: 1 }}
-              >
-                <Input placeholder="Enter employee number" />
-              </Form.Item> */}
             </div>
 
             <div style={{ display: "flex", gap: "20px" }}>
@@ -409,25 +422,41 @@ const EmployeeManagement = () => {
               </Form.Item>
             </div>
 
-            <Form.Item
-              name="roleNames"
-              label="Roles"
-              rules={[
-                { required: true, message: "Please select at least one role" },
-              ]}
-            >
-              <Select
-                mode="multiple"
-                placeholder="Select roles"
-                style={{ width: "100%" }}
+            <div style={{ display: "flex", gap: "20px" }}>
+              {!isEditing && (
+                <Form.Item
+                  name="basicSalary"
+                  label="Basic Salary"
+                  rules={[{ required: true, message: "Please enter salary" }]}
+                  style={{ flex: 1 }}
+                >
+                  <Input placeholder="Enter salary" />
+                </Form.Item>
+              )}
+              <Form.Item
+                name="roleNames"
+                label="Roles"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select at least one role",
+                  },
+                ]}
+                style={{ flex: 1 }}
               >
-                {availableRoles.map((role) => (
-                  <Option key={role} value={role}>
-                    {role}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
+                <Select
+                  mode="multiple"
+                  placeholder="Select roles"
+                  style={{ width: "100%" }}
+                >
+                  {availableRoles.map((role) => (
+                    <Option key={role} value={role}>
+                      {role}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </div>
 
             <Form.Item>
               <div

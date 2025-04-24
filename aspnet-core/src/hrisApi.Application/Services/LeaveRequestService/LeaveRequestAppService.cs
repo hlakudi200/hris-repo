@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abp.Application.Services;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using hrisApi.Domains.Attendance_Management;
 using hrisApi.Services.LeaveRequestService.DTO;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace hrisApi.Services.LeaveService
 {
+    
     public class LeaveRequestAppService : AsyncCrudAppService<LeaveRequest, LeaveRequestRequestDto, Guid>, ILeaveRequestAppService
     {
         private readonly IRepository<LeaveRequest, Guid> _repository;

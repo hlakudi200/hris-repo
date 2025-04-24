@@ -70,11 +70,11 @@ export const PayrollTransactionProvider = ({
 
   const getAllTrasactions = async () => {
     dispatch(getPayrollTransactionPending());
-    const endpoint = `/api/services/app/PayrollTransaction/GetAll`;
+    const endpoint = `/api/services/app/PayrollTransaction/GetAllPayrollTrasactions`;
     await instance
       .get(endpoint)
       .then((response) => {
-        dispatch(getPayrollTransactionSuccess(response.data.result.items));
+        dispatch(getPayrollTransactionSuccess(response.data.result));
       })
       .catch((err) => {
         getPayrollTransactionError();

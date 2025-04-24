@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using hrisApi.Domains.Attendance_Management;
@@ -11,6 +12,7 @@ namespace hrisApi.Services.LeaveService.DTO
     public class LeaveRequestDto : EntityDto<Guid>
     {
         public Guid EmployeeId { get; set; }
+
         public EmployeeDto Employee { get; set; }
         public string LeaveType { get; set; }
         public DateTime StartDate { get; set; }

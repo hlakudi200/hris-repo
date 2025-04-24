@@ -39,7 +39,7 @@ const LeaveForm = () => {
       status: "pending",
     };
 
-    const leaveType = values.leaveType as keyof Omit<ILeaves, "id">;
+    const leaveType = values.leaveType as keyof Omit<ILeaves, "id" | "employeeId">;
     const leaveDays = values.dateRange[1].diff(values.dateRange[0], "days") + 1;
 
     const updatedLeave = {
