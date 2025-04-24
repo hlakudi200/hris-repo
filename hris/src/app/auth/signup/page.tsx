@@ -24,17 +24,13 @@ const SignUp = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const { signUp, resetStateFlags } = useAuthActions();
-  const { isSuccess, isError } = useAuthState();
+  const { isSuccess } = useAuthState();
   const router = useRouter();
 
   if (isSuccess) {
     toast("Signup successful!", "success");
     resetStateFlags();
     router.push("/auth/login");
-  }
-
-  if (isError) {
-    toast("Signup failed. Please try again.", "error");
   }
 
   const handleSignUp = async (values: IApplicantSignUp) => {
@@ -70,7 +66,7 @@ const SignUp = () => {
 
       await signUp(userPayload);
     } catch (error) {
-      console.error(error);
+      toast(error.message, "error");
     }
     setLoading(false);
   };
