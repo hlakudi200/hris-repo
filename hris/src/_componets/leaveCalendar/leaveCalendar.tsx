@@ -15,51 +15,57 @@ const LeaveCalendar: React.FC = () => {
   const { currentUser } = useAuthState();
 
   useEffect(() => {
-    if(currentEmployee && leaveRequests === undefined){
+    if (currentEmployee && leaveRequests === undefined) {
       getByEmpId(currentEmployee.id);
     }
   }, [currentUser, currentEmployee, leaveRequests]);
+  
+  const leaveDateStatusMap: Record<string, "pending" | "approved" | "declined"> = {};
 
-  const getLeaveDates = (): string[] => {
-    if (!leaveRequests) return [];
+  leaveRequests?.forEach((request: ILeaveRequest) => {
+    const status = request.status.toLowerCase() as "pending" | "approved" | "declined";
+    const start = dayjs(request.startDate);
+    const end = dayjs(request.endDate);
 
-    const allDates: string[] = [];
+    for (
+      let d = start;
+      d.isBefore(end) || d.isSame(end);
+      d = d.add(1, "day")
+    ) {
+      const date = d.format("YYYY-MM-DD");
+      leaveDateStatusMap[date] = status;
+    }
+  });
 
-    leaveRequests.forEach((request: ILeaveRequest) => {
-      const start = dayjs(request.startDate);
-      const end = dayjs(request.endDate);
-
-      for (
-        let d = start;
-        d.isBefore(end) || d.isSame(end);
-        d = d.add(1, "day")
-      ) {
-        allDates.push(d.format("YYYY-MM-DD"));
-      }
-    });
-
-    return allDates;
+  const backgroundColors: Record<string, string> = {
+    approved: "#f6ffed", // light green
+    pending: "#fffbe6",  // light orange
+    declined: "#fff1f0", // light red
   };
 
-  const leaveDates = getLeaveDates();
+  const badgeStatuses: Record<string, "success" | "warning" | "error"> = {
+    approved: "success",
+    pending: "warning",
+    declined: "error",
+  };
 
   const fullCellRender = (current: Dayjs) => {
     const date = current.format("YYYY-MM-DD");
-    const isLeave = leaveDates.includes(date);
+    const status = leaveDateStatusMap[date];
 
     return (
       <div
         style={{
           height: "100%",
           padding: 4,
-          background: isLeave ? "#fff1f0" : undefined,
+          backgroundColor: status ? backgroundColors[status] : undefined,
         }}
       >
         <div>{current.date()}</div>
-        {isLeave && (
-          <div>
-            <Badge status="processing" />
-          </div>
+        {status && (
+          <Badge
+            status={badgeStatuses[status]}
+          />
         )}
       </div>
     );
