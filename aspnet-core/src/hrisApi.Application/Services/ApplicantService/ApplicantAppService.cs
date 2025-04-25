@@ -19,6 +19,20 @@ namespace hrisApi.Services.ApplicantService
 
         public async Task<UserDto> CreateApplicant(CreateUserDto input)
         {
+            // Check if the username is already taken
+            var existingUser = await _userManager.FindByNameAsync(input.UserName);
+            if (existingUser != null)
+            {
+                throw new UserFriendlyException($"Username '{input.UserName}' is already taken.");
+            }
+
+            // Check if the email is already used
+            var existingEmailUser = await _userManager.FindByEmailAsync(input.EmailAddress);
+            if (existingEmailUser != null)
+            {
+                throw new UserFriendlyException($"Email '{input.EmailAddress}' is already in use.");
+            }
+
             var user = new User
             {
                 UserName = input.UserName,
@@ -28,17 +42,18 @@ namespace hrisApi.Services.ApplicantService
                 IsEmailConfirmed = false,
                 TenantId = AbpSession.TenantId
             };
+
             var result = await _userManager.CreateAsync(user, input.Password);
-
-            await _userManager.AddToRoleAsync(user, "APPLICANT");
-
 
             if (!result.Succeeded)
             {
                 throw new UserFriendlyException($"Could not create the user: {result.Errors.JoinAsString(", ")}");
             }
 
+            await _userManager.AddToRoleAsync(user, "APPLICANT");
+
             return ObjectMapper.Map<UserDto>(user);
         }
+
     }
 }
