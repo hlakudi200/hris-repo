@@ -106,8 +106,6 @@ const ApplicantProfile = () => {
         hasCriminalRecord: values.hasCriminalRecord || false
       };
       
-      console.log("Sending to backend:", request);
-      
       // Call the update function
       await updateApplicant(request);
       

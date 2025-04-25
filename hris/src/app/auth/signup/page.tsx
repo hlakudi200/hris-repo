@@ -24,17 +24,13 @@ const SignUp = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const { signUp, resetStateFlags } = useAuthActions();
-  const { isSuccess, isError } = useAuthState();
+  const { isSuccess } = useAuthState();
   const router = useRouter();
 
   if (isSuccess) {
     toast("Signup successful!", "success");
     resetStateFlags();
     router.push("/auth/login");
-  }
-
-  if (isError) {
-    toast("Signup failed. Please try again.", "error");
   }
 
   const handleSignUp = async (values: IApplicantSignUp) => {
@@ -70,7 +66,7 @@ const SignUp = () => {
 
       await signUp(userPayload);
     } catch (error) {
-      console.error(error);
+      toast(error.message, "error");
     }
     setLoading(false);
   };
@@ -92,8 +88,12 @@ const SignUp = () => {
       </div>
 
       <div className={styles.rightContainer}>
-       
-        <h1 style={{ fontSize: 40, marginBottom: 20 } } className={styles.heading}>Sign Up.</h1>
+        <h1
+          style={{ fontSize: 40, marginBottom: 20 }}
+          className={styles.heading}
+        >
+          Sign Up.
+        </h1>
 
         <Form form={form} className={styles.signUpForm} onFinish={handleSignUp}>
           <div>
@@ -129,7 +129,37 @@ const SignUp = () => {
             </Form.Item>
             <Form.Item
               name="password"
-              rules={[{ required: true, message: "Password is required!" }]}
+              rules={[
+                { required: true, message: "Password is required!" },
+                {
+                  validator: (_, value) => {
+                    if (!value) return Promise.resolve();
+
+                    const hasUpperCase = /[A-Z]/.test(value);
+                    const hasLowerCase = /[a-z]/.test(value);
+                    const hasNumber = /[0-9]/.test(value);
+                    const hasSpecialChar = /[^A-Za-z0-9]/.test(value);
+                    const isLongEnough = value.length >= 8;
+
+                    if (
+                      hasUpperCase &&
+                      hasLowerCase &&
+                      hasNumber &&
+                      hasSpecialChar &&
+                      isLongEnough
+                    ) {
+                      return Promise.resolve();
+                    }
+
+                    return Promise.reject(
+                      new Error(
+                        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
+                      )
+                    );
+                  },
+                },
+              ]}
+              hasFeedback
             >
               <Input.Password placeholder="Password" />
             </Form.Item>
