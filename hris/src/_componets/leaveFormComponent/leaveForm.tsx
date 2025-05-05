@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
-import { Form, DatePicker, Select, Button, Flex, Spin } from "antd";
+import { Form, DatePicker, Select, Button, Flex, Spin, Input } from "antd";
 import globals from "../globals.module.css";
+import "./leaveForm.css";
 import moment from "moment";
 import { useEmployeeState } from "@/providers/employee";
 import {
@@ -16,10 +17,12 @@ import { useLeaveActions, useLeaveState } from "@/providers/leaves";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
+const { TextArea } = Input;
 
 type LeaveFormValues = {
   leaveType: string;
   dateRange: [moment.Moment, moment.Moment];
+  reason: string;
 };
 
 const LeaveForm = () => {
@@ -37,6 +40,7 @@ const LeaveForm = () => {
       startDate: values.dateRange[0].format("YYYY-MM-DD"),
       endDate: values.dateRange[1].format("YYYY-MM-DD"),
       status: "pending",
+      reason: values.reason, // Include the reason in the request
     };
 
     const leaveType = values.leaveType as keyof Omit<ILeaves, "id" | "employeeId">;
@@ -47,10 +51,10 @@ const LeaveForm = () => {
       id: leaves.id,
     };
 
-
     submitLeaveRequest(request);
     updateLeaves(updatedLeave);
   };
+  
   if (isPending) {
     return (
       <Flex justify="center" style={{ marginBottom: 20 }}>
@@ -58,6 +62,7 @@ const LeaveForm = () => {
       </Flex>
     );
   }
+  
   if (isSuccess) {
     toast("Request successfully submitted", "success");
     resetStateFlags();
@@ -74,6 +79,8 @@ const LeaveForm = () => {
           layout="vertical"
           onFinish={onFinish}
           style={{ maxWidth: 400, margin: "0 auto", padding: 24 }}
+          size="large" 
+          className="compact-form"
         >
           <Form.Item
             label="Leave Type"
@@ -97,6 +104,18 @@ const LeaveForm = () => {
           >
             <RangePicker
               style={{ width: "100%", height: 50, borderRadius: 16 }}
+            />
+          </Form.Item>
+
+          <Form.Item
+            label="Reason for Leave"
+            name="reason"
+            rules={[{ required: true, message: "Please provide a reason for your leave" }]}
+          >
+            <TextArea 
+              rows={4} 
+              placeholder="Please explain the reason for your leave request"
+              style={{ borderRadius: 8 }}
             />
           </Form.Item>
 
