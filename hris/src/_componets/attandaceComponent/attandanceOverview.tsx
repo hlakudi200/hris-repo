@@ -69,7 +69,7 @@ const AttendanceOverview = ({ showRecordButton = true }: AttendanceOverviewProps
         <div>
           {isPending && <Spin size="small" />}
           {isError && <Alert message="Error loading hours" type="error" />}
-          {!isPending && !isError && `${weeklyHours?.result ?? 0} hours`}
+          {!isPending && !isError && `${(weeklyHours?.result ?? 0).toFixed(1)} hours`}
         </div>
       </div>
 

@@ -1,0 +1,15 @@
+.compact-form .ant-form-item {
+    margin-bottom: 8px;
+  }
+  
+  .compact-form .ant-form-item-label {
+    padding-bottom: 2px;
+  }
+  
+  .compact-form .ant-picker {
+    margin-bottom: 4px;
+  }
+  
+  .compact-form .ant-form-item:last-child {
+    margin-top: 12px;
+  }
