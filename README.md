@@ -17,13 +17,13 @@ This Ubuntu HR is a Human Resources (HR) system that allows users to interact wi
 
 ### 1. **Applicants**
 - View job listings  
-- Apply for jobs  
+- Apply for jobs
+- View applied jobs status
 
 ### 2. **Employees**
 - Log hours for attendance  
 - View and apply for leave  
-- View and download payslips  
-- View and apply for job posts  
+- View and download payslips   
 - keep track of logged ours per week
 
 ### 3. **HR Managers**
