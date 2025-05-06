@@ -12,8 +12,8 @@ interface SubmissionSummaryProps {
 const SubmissionSummary: React.FC<SubmissionSummaryProps> = ({ formData }) => {
   return (
     <div className="submission-summary">
-      <Title level={4}>Review Your Application</Title>
-      <Paragraph>Please review all the information you have provided before submitting your application.</Paragraph>
+      <Title level={4}>Review Your Profile</Title>
+      <Paragraph>Please review all the information you have provided before submitting your profile.</Paragraph>
       
       <Divider orientation="left">Personal Information</Divider>
       <Descriptions bordered column={{ xs: 1, sm: 2 }}>
