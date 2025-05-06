@@ -242,7 +242,7 @@ const HrCharts: React.FC = () => {
   };
 
   return (
-    <div style={{ width: "100%", marginTop: -60, height: '90vh' }}>
+    <div style={{ width: "100%", marginTop: -20, height: '90vh' }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 15 }}>
         <h2 className={globals.heading}>
           HR Dashboard
