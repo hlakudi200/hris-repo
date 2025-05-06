@@ -182,7 +182,7 @@ const JobApplicationPage: React.FC = () => {
                   onClick={handleSubmit}
                   loading={isSubmitting}
                 >
-                  Submit Application
+                  Submit Profile
                 </Button>
               )}
             </Col>

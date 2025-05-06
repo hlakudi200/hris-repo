@@ -517,9 +517,9 @@ const ApplicantJobView: React.FC = () => {
             <Divider orientation="left">Application Details</Divider>
 
             <Descriptions bordered column={1}>
-              <Descriptions.Item label="Applicant ID">
+              {/* <Descriptions.Item label="Applicant ID">
                 {applicant.id}
-              </Descriptions.Item>
+              </Descriptions.Item> */}
               {applicant.resumeUrl && (
                 <Descriptions.Item label="Resume">
                   <Space>
