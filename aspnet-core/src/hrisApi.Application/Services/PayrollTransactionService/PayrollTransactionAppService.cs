@@ -142,7 +142,7 @@ public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransacti
             }
 
             // Add title
-            Paragraph title = new Paragraph("Payroll Transaction",
+            Paragraph title = new Paragraph("Employee Payslip",
                 new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD));
             title.Alignment = Element.ALIGN_CENTER;
             title.SpacingAfter = 20;
@@ -165,7 +165,6 @@ public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransacti
             table.AddCell(headerCell1);
 
             // Add rows with borders
-            AddTableRowWithBorder(table, "Transaction ID:", payroll.Id.ToString());
             AddTableRowWithBorder(table, "Employee Name:", employeeName);
             AddTableRowWithBorder(table, "Date:", DateTime.Now.ToString("dd/MM/yyyy"));
             AddTableRowWithBorder(table, "Gross Amount:", payroll.GrossAmount.ToString("C", new CultureInfo("en-ZA")));
@@ -175,7 +174,7 @@ public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransacti
             document.Add(table);
 
             // Add footer
-            Paragraph footer = new Paragraph("This is an official payroll document. Tax rate applied: 15%",
+            Paragraph footer = new Paragraph("This is an official payroll document.",
                 new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC));
             footer.Alignment = Element.ALIGN_CENTER;
             footer.SpacingBefore = 30f;
@@ -287,7 +286,6 @@ public class PayrollTransactionAppService : AsyncCrudAppService<PayrollTransacti
             table.AddCell(new PdfPCell(new Phrase("Description", boldFont)) { BackgroundColor = new BaseColor(240, 240, 240) });
             table.AddCell(new PdfPCell(new Phrase("Amount", boldFont)) { BackgroundColor = new BaseColor(240, 240, 240), HorizontalAlignment = Element.ALIGN_RIGHT });
 
-            AddTableRow(table, "Transaction ID", transaction.Id.ToString(), normalFont);
             AddTableRow(table, "Gross Amount", transaction.GrossAmount.ToString("C"), normalFont);
             AddTableRow(table, "Tax Amount", transaction.TaxAmount.ToString("C"), normalFont);
             AddTableRow(table, "Net Amount", transaction.NetAmount.ToString("C"), boldFont);
