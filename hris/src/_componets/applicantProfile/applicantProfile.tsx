@@ -45,7 +45,7 @@ const { Title, Text } = Typography;
 const { useBreakpoint } = Grid;
 
 const ApplicantProfile = () => {
-  const { applicant,isPending } = useApplicantState();
+  const { applicant, isPending } = useApplicantState();
   const { updateApplicant } = useApplicantActions();
   const { uploadResume } = useJobApplicationActions();
   const [isEditing, setIsEditing] = useState(false);
@@ -68,14 +68,16 @@ const ApplicantProfile = () => {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-      
+
       // Format date of birth to ISO string format
-      const dob = values.dateofBirth ? values.dateofBirth.toISOString() : (applicant?.dateofBirth || new Date().toISOString());
-      
+      const dob = values.dateofBirth
+        ? values.dateofBirth.toISOString()
+        : applicant?.dateofBirth || new Date().toISOString();
+
       // Format graduation year to ISO string format (first day of the year)
-      const gradYear = values.graduationYear 
-        ? new Date(`${values.graduationYear}-01-01`).toISOString() 
-        : (applicant?.graduationYear || new Date().toISOString());
+      const gradYear = values.graduationYear
+        ? new Date(`${values.graduationYear}-01-01`).toISOString()
+        : applicant?.graduationYear || new Date().toISOString();
 
       // Create the request object to match the backend DTO
       const request = {
@@ -100,15 +102,15 @@ const ApplicantProfile = () => {
         currentEmployer: values.currentEmployer || "string",
         currentPosition: values.currentPosition || "string",
         currentSalary: values.currentSalary || 0,
-        resumeUrl: resumeUrl || (applicant?.resumeUrl || "string"),
+        resumeUrl: resumeUrl || applicant?.resumeUrl || "string",
         coverletter: values.coverletter || "string",
         isWillingToRelocate: values.isWillingToRelocate || false,
-        hasCriminalRecord: values.hasCriminalRecord || false
+        hasCriminalRecord: values.hasCriminalRecord || false,
       };
-      
+
       // Call the update function
       await updateApplicant(request);
-      
+
       // Show success message
       toast("Profile updated successfully", "success");
       setIsEditing(false);
@@ -125,8 +127,8 @@ const ApplicantProfile = () => {
       ...applicant,
       dateofBirth: applicant?.dateofBirth ? dayjs(applicant.dateofBirth) : null,
       // Convert graduation year from ISO to just the year number for form
-      graduationYear: applicant?.graduationYear 
-        ? parseInt(dayjs(applicant.graduationYear).format('YYYY')) 
+      graduationYear: applicant?.graduationYear
+        ? parseInt(dayjs(applicant.graduationYear).format("YYYY"))
         : null,
     };
     form.setFieldsValue(formValues);
@@ -173,7 +175,7 @@ const ApplicantProfile = () => {
           minHeight: "80vh",
         }}
       >
-        <Spin size="large" tip="Loading profile data..." />
+        <Spin size="large" tip="Loading job posts..." />
       </div>
     );
   }
@@ -188,7 +190,9 @@ const ApplicantProfile = () => {
           <Form.Item
             label="National ID"
             name="nationalIdNo"
-            rules={[{ required: true, message: "Please enter your National ID" }]}
+            rules={[
+              { required: true, message: "Please enter your National ID" },
+            ]}
           >
             <Input placeholder="Enter your National ID" />
           </Form.Item>
@@ -648,8 +652,8 @@ const ApplicantProfile = () => {
                 </div>
                 <div>
                   {applicant.institution && `${applicant.institution}`}
-                  {applicant.graduationYear && 
-                    ` (${dayjs(applicant.graduationYear).format('YYYY')})`}
+                  {applicant.graduationYear &&
+                    ` (${dayjs(applicant.graduationYear).format("YYYY")})`}
                 </div>
               </Space>
             ) : (
